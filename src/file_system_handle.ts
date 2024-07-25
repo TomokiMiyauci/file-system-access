@@ -1,13 +1,16 @@
 import { isSameLocator } from "./algorithm.ts";
 import { FileSystemLocator } from "./type.ts";
+import { locator } from "./symbol.ts";
 
 export class FileSystemHandle implements globalThis.FileSystemHandle {
   get kind(): FileSystemHandleKind {
-    return this.locator.kind;
+    // steps are to return this's locator's kind.
+    return this[locator].kind;
   }
 
   get name(): string {
-    return this.locator.path[this.locator.path.length - 1];
+    // steps are to return the last item (a string) of this's locator's path.
+    return this[locator].path[this[locator].path.length - 1];
   }
 
   isSameEntry(other: FileSystemHandle): Promise<boolean> {
@@ -19,7 +22,7 @@ export class FileSystemHandle implements globalThis.FileSystemHandle {
     // 3. Enqueue the following steps to the file system queue:
     queueMicrotask(() => {
       // 1. If this's locator is the same locator as other’s locator, resolve p with true.
-      if (isSameLocator(this.locator, other.locator)) resolve(true);
+      if (isSameLocator(this[locator], other[locator])) resolve(true);
       // 2. Otherwise resolve p with false.
       else resolve(false);
     });
@@ -28,5 +31,5 @@ export class FileSystemHandle implements globalThis.FileSystemHandle {
     return promise;
   }
 
-  locator!: FileSystemLocator;
+  [locator]!: FileSystemLocator;
 }
