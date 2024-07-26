@@ -1,4 +1,5 @@
 import {
+  AccessMode,
   DirectoryEntry,
   DirectoryLocator,
   FileEntry,
@@ -28,23 +29,44 @@ export function locateEntry(
 function createFileEntry(locator: FileLocator, io: IO): FileEntry {
   const name = locator.path[locator.path.length - 1];
 
-  return {
-    sharedLockCount: 0,
-    queryAccess(mode) {
-      return io.queryAccess(locator, mode);
-    },
-    requestAccess(mode) {
-      return io.requestAccess(locator, mode);
-    },
-    name,
-    lock: "open",
-    get modificationTimestamp(): number {
-      return io.modificationTimestamp(locator);
-    },
-    get binaryData(): ArrayBuffer {
-      return io.binaryData(locator);
-    },
-  };
+  return new FileEntryImpl(name, io, locator);
+}
+
+class FileEntryImpl implements FileEntry {
+  constructor(
+    public name: string,
+    private io: IO,
+    private locator: FileLocator,
+  ) {}
+  sharedLockCount: number = 0;
+  queryAccess(mode: AccessMode) {
+    return this.io.queryAccess(this.locator, mode);
+  }
+  requestAccess(mode: AccessMode) {
+    return this.io.requestAccess(this.locator, mode);
+  }
+  lock: "open" | "taken-exclusive" | "taken-shared" = "open";
+
+  #timestamp: number | undefined;
+  #binaryData: ArrayBuffer | undefined;
+
+  get modificationTimestamp(): number {
+    return this.#timestamp ??
+      (this.#timestamp = this.io.modificationTimestamp(this.locator));
+  }
+
+  set modificationTimestamp(value: number) {
+    this.#timestamp = value;
+  }
+
+  get binaryData(): ArrayBuffer {
+    return this.#binaryData ??
+      (this.#binaryData = this.io.binaryData(this.locator));
+  }
+
+  set binaryData(value: ArrayBuffer) {
+    this.#binaryData = value;
+  }
 }
 
 function createDirectoryEntry(
