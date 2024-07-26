@@ -69,32 +69,49 @@ class FileEntryImpl implements FileEntry {
   }
 }
 
+class DirectoryEntryImpl implements DirectoryEntry {
+  constructor(
+    public name: string,
+    private io: IO,
+    private locator: DirectoryLocator,
+  ) {}
+  queryAccess(mode: AccessMode) {
+    return this.io.queryAccess(this.locator, mode);
+  }
+  requestAccess(mode: AccessMode) {
+    return this.io.requestAccess(this.locator, mode);
+  }
+
+  #children: (FileEntry | DirectoryEntry)[] | undefined;
+
+  get children(): (FileEntry | DirectoryEntry)[] {
+    if (this.#children) return this.#children;
+
+    const childLocators = this.io.children(this.locator);
+
+    this.#children = childLocators.map((childLocator) => {
+      if (childLocator.kind === "file") {
+        return createFileEntry(childLocator, this.io);
+      }
+
+      return createDirectoryEntry(childLocator, this.io);
+    });
+
+    return this.#children;
+  }
+
+  set children(value: (FileEntry | DirectoryEntry)[]) {
+    this.#children = value;
+  }
+}
+
 function createDirectoryEntry(
   locator: DirectoryLocator,
   io: IO,
 ): DirectoryEntry {
   const name = locator.path[locator.path.length - 1];
 
-  return {
-    get children() {
-      const childLocators = io.children(locator);
-
-      return childLocators.map((childLocator) => {
-        if (childLocator.kind === "file") {
-          return createFileEntry(childLocator, io);
-        }
-
-        return createDirectoryEntry(childLocator, io);
-      });
-    },
-    name,
-    queryAccess: (mode) => {
-      return io.queryAccess(locator, mode);
-    },
-    requestAccess: (mode) => {
-      return io.requestAccess(locator, mode);
-    },
-  };
+  return new DirectoryEntryImpl(name, io, locator);
 }
 
 export function isValidFileName(fileName: string): boolean {
