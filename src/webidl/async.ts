@@ -1,3 +1,5 @@
+// deno-lint-ignore-file no-explicit-any
+
 export interface AsynchronouslyIterable<
   T,
   C extends object = object,
@@ -29,40 +31,48 @@ export interface PairAsyncIterable<K, V>
 export function asynciterator<
   K,
   V,
-  C extends object = object,
+  T extends new (...args: any) => any,
   I = unknown,
 >(
-  definition: AsynchronouslyIterable<[K, V], object, I>,
-): (target: object, context: ClassDecoratorContext) => void {
-  return (target, context) => {
-    function iter(this: object) {
-      const scopedThis = this;
+  definition: AsynchronouslyIterable<[K, V], InstanceType<T>, I>,
+): (target: T, context: ClassDecoratorContext) => void {
+  return (target) => {
+    return class extends target {
+      [Symbol.asyncIterator]() {
+        const _this = this as InstanceType<T>;
 
-      const iterator = {
-        next() {
-          return definition.next(scopedThis, this);
-        },
-        [Symbol.asyncIterator]() {
-          return this;
-        },
-      } satisfies AsyncIterableIterator<[K, V]>;
+        const iterator = {
+          next() {
+            return definition.next(
+              _this,
+              this as AsyncIterableIterator<[K, V]> & I,
+            );
+          },
+          [Symbol.asyncIterator]() {
+            return this;
+          },
+        } satisfies AsyncIterableIterator<[K, V]> as
+          & AsyncIterableIterator<[K, V]>
+          & I;
 
-      definition.init(this, iterator);
+        definition.init(this as InstanceType<T>, iterator);
 
-      return iterator;
-    }
+        return iterator;
+      }
 
-    async function* keys(this: object) {
-      for await (const [key] of iter.bind(this)()) yield key;
-    }
+      async *keys() {
+        for await (const [key] of this[Symbol.asyncIterator]()) yield key;
+      }
 
-    async function* values(this: object) {
-      for await (const [_, value] of iter.bind(this)()) yield value;
-    }
+      async *values() {
+        for await (const [_, value] of this[Symbol.asyncIterator]()) {
+          yield value;
+        }
+      }
 
-    target.prototype[Symbol.asyncIterator] = iter;
-    target.prototype.keys = keys;
-    target.prototype.values = values;
-    target.prototype.entries = target.prototype[Symbol.asyncIterator];
+      entries() {
+        return this[Symbol.asyncIterator];
+      }
+    };
   };
 }

@@ -29,7 +29,7 @@ interface IterationContext {
 function next(
   handle: FileSystemDirectoryHandle,
   iterator:
-    & AsyncIterableIterator<[string, FileSystemFileHandle]>
+    & AsyncIterableIterator<[string, FileSystemHandle]>
     & IterationContext,
 ): Promise<IteratorResult<[string, FileSystemHandle]>> {
   const fsLocator = handle[locator];
@@ -109,8 +109,8 @@ function next(
 
 @asynciterator<
   string,
-  FileSystemFileHandle,
-  FileSystemDirectoryHandle,
+  FileSystemHandle,
+  typeof FileSystemDirectoryHandle,
   IterationContext
 >({
   init(_, iterator): void {
@@ -128,10 +128,10 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
   getDirectoryHandle(
     name: string,
     options?: FileSystemGetDirectoryOptions,
-  ): Promise<globalThis.FileSystemDirectoryHandle> {
+  ): Promise<FileSystemDirectoryHandle> {
     // 1. Let result be a new promise.
     const { promise, reject, resolve } = Promise.withResolvers<
-      globalThis.FileSystemDirectoryHandle
+      FileSystemDirectoryHandle
     >();
 
     // 2. Let realm be this's relevant Realm.
