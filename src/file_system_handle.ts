@@ -1,8 +1,9 @@
 import { isSameLocator } from "./algorithm.ts";
-import { FileSystemLocator } from "./type.ts";
+import { FileSystemLocator, IO, UnderlyingFileSystem } from "./type.ts";
 import { locator } from "./symbol.ts";
 
 export class FileSystemHandle implements globalThis.FileSystemHandle {
+  constructor(protected fs: UnderlyingFileSystem, protected io: IO) {}
   get kind(): FileSystemHandleKind {
     // steps are to return this's locator's kind.
     return this[locator].kind;

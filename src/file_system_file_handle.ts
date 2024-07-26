@@ -1,8 +1,16 @@
 import { FileSystemHandle } from "./file_system_handle.ts";
-import { FileEntry, FileSystemEntry } from "./type.ts";
+import {
+  FileEntry,
+  FileSystemEntry,
+  FileSystemLocator,
+  IO,
+  UnderlyingFileSystem,
+} from "./type.ts";
 import { locateEntry, takeLock } from "./algorithm.ts";
 import { createFileSystemWritableFileStream } from "./file_system_writable_file_stream.ts";
 import { locator } from "./symbol.ts";
+import { extname } from "@std/path";
+import { typeByExtension } from "@std/media-types";
 
 export class FileSystemFileHandle extends FileSystemHandle
   implements globalThis.FileSystemFileHandle {
@@ -22,7 +30,7 @@ export class FileSystemFileHandle extends FileSystemHandle
     // 4. Enqueue the following steps to the file system queue:
     queueMicrotask(() => {
       // 1. Let entry be the result of locating an entry given locator.
-      const entry = locateEntry(fsLocator);
+      const entry = locateEntry(fsLocator, this.io);
 
       // 2. Let accessResult be the result of running entry’s query access given "read".
       const accessResult = entry?.queryAccess("read");
@@ -41,24 +49,27 @@ export class FileSystemFileHandle extends FileSystemHandle
       assertFileEntry(entry);
 
       // 4. Let f be a new File.
-
       // 5. Set f’s snapshot state to the current state of entry.
-
       // 6. Set f’s underlying byte sequence to a copy of entry’s binary data.
-
       // 7. Set f’s name to entry’s name.
-
       // 8. Set f’s lastModified to entry’s modification timestamp.
-
       // 9. Set f’s type to an implementation-defined value, based on for example entry’s name or its file extension.
-
-      // 10. Resolve result with f.
-
-      const file = new File([entry.binaryData], entry.name, {
+      const blob = new BlobDataItem({
+        locator: fsLocator,
         lastModified: entry.modificationTimestamp,
-        type: "",
+        entry,
+        fs: this.fs,
+        io: this.io,
       });
 
+      const type = typeByExtension(extname(entry.name));
+
+      const file = new File([blob], entry.name, {
+        lastModified: entry.modificationTimestamp,
+        type,
+      });
+
+      // 10. Resolve result with f.
       resolve(file);
     });
 
@@ -85,7 +96,7 @@ export class FileSystemFileHandle extends FileSystemHandle
     // 5. Enqueue the following steps to the file system queue:
     queueMicrotask(() => {
       // 1. Let entry be the result of locating an entry given locator.
-      const entry = locateEntry(fsLocator);
+      const entry = locateEntry(fsLocator, this.io);
 
       // 2. Let accessResult be the result of running entry’s request access given "readwrite".
       const accessResult = entry?.requestAccess("readwrite");
@@ -129,3 +140,54 @@ export class FileSystemFileHandle extends FileSystemHandle
 }
 
 function assertFileEntry(_: FileSystemEntry): asserts _ is FileEntry {}
+
+interface BlobDataItemOptions {
+  lastModified: number;
+  locator: FileSystemLocator;
+  entry: FileEntry;
+  fs: UnderlyingFileSystem;
+  io: IO;
+}
+
+class BlobDataItem extends Blob {
+  lastModified: number;
+  locator: FileSystemLocator;
+  entry: FileEntry;
+  fs: UnderlyingFileSystem;
+  io: IO;
+
+  constructor(options: BlobDataItemOptions) {
+    super([options.entry.binaryData]);
+
+    this.lastModified = options.lastModified;
+    this.locator = options.locator;
+    this.entry = options.entry;
+    this.fs = options.fs;
+    this.io = options.io;
+  }
+
+  slice(start: number = 0, end?: number): Blob {
+    const binaryData = this.entry.binaryData.slice(start, end);
+
+    return new BlobDataItem({
+      lastModified: this.lastModified,
+      locator: this.locator,
+      entry: { ...this.entry, binaryData },
+      fs: this.fs,
+      io: this.io,
+    });
+  }
+
+  stream(): ReadableStream<Uint8Array> {
+    const timestamp = this.io.modificationTimestamp(this.locator);
+
+    if (timestamp > this.lastModified) {
+      throw new DOMException(
+        "The requested file could not be read, typically due to permission problems that have occurred after a reference to a file was acquired.",
+        "NotReadableError",
+      );
+    }
+
+    return this.fs.stream(this.entry, this.locator);
+  }
+}

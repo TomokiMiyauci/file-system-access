@@ -7,13 +7,15 @@ interface BaseEntry {
   /**
    * @see https://fs.spec.whatwg.org/#entry-query-access
    */
-  queryAccess(mode: "read" | "readwrite"): FileSystemAccessResult;
+  queryAccess(mode: AccessMode): FileSystemAccessResult;
 
   /**
    * @see https://fs.spec.whatwg.org/#entry-request-access
    */
-  requestAccess(mode: "read" | "readwrite"): FileSystemAccessResult;
+  requestAccess(mode: AccessMode): FileSystemAccessResult;
 }
+
+export type AccessMode = "read" | "readwrite";
 
 export interface FileEntry extends BaseEntry {
   /**
@@ -105,4 +107,27 @@ export interface FileLocator extends BaseLocator {
    * @see https://fs.spec.whatwg.org/#locator-kind
    */
   kind: "file";
+}
+
+export interface UnderlyingFileSystem {
+  create(entry: FileSystemEntry, locator: FileSystemLocator): void;
+  remove(entry: FileSystemEntry, locator: FileSystemLocator): void;
+  stream(
+    entry: FileEntry,
+    locator: FileSystemLocator,
+  ): ReadableStream<Uint8Array>;
+}
+
+export interface IO {
+  binaryData(locator: FileSystemLocator): ArrayBuffer;
+  modificationTimestamp(locator: FileSystemLocator): number;
+  queryAccess(
+    locator: FileSystemLocator,
+    mode: AccessMode,
+  ): FileSystemAccessResult;
+  requestAccess(
+    locator: FileSystemLocator,
+    mode: AccessMode,
+  ): FileSystemAccessResult;
+  children(locator: FileSystemLocator): FileSystemLocator[];
 }
