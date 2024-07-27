@@ -107,12 +107,7 @@ function next(
   return promise;
 }
 
-@asynciterator<
-  string,
-  FileSystemHandle,
-  typeof FileSystemDirectoryHandle,
-  IterationContext
->({
+@asynciterator({
   init(_, iterator): void {
     // 1. Set iterator’s past results to an empty set.
     iterator.pastResults = new Set();
