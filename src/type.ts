@@ -21,7 +21,7 @@ export interface FileEntry extends BaseEntry {
   /**
    * @see https://fs.spec.whatwg.org/#file-entry-binary-data
    */
-  binaryData: ArrayBuffer;
+  binaryData: Uint8Array;
 
   /** A number representing the number of milliseconds since the Unix Epoch.
    * @see https://fs.spec.whatwg.org/#file-entry-modification-timestamp
@@ -119,7 +119,7 @@ export interface UnderlyingFileSystem {
 }
 
 export interface IO {
-  binaryData(locator: FileSystemLocator): ArrayBuffer;
+  binaryData(locator: FileSystemLocator): Uint8Array;
   modificationTimestamp(locator: FileSystemLocator): number;
   queryAccess(
     locator: FileSystemLocator,
