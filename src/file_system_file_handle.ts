@@ -11,6 +11,7 @@ import { createFileSystemWritableFileStream } from "./file_system_writable_file_
 import { buffer, locator } from "./symbol.ts";
 import { extname } from "@std/path";
 import { typeByExtension } from "@std/media-types";
+import { createFileSystemSyncAccessHandle } from "./file_system_sync_access_handle.ts";
 
 export class FileSystemFileHandle extends FileSystemHandle
   implements globalThis.FileSystemFileHandle {
@@ -138,6 +139,63 @@ export class FileSystemFileHandle extends FileSystemHandle
 
     // 6. Return result.
     return promise;
+  }
+
+  createSyncAccessHandle(): Promise<FileSystemSyncAccessHandle> {
+    // 1. Let result be a new promise.
+    const { promise: result, reject, resolve } = Promise.withResolvers<
+      FileSystemSyncAccessHandle
+    >();
+
+    // 2. Let locator be this's locator.
+    const fsLocator = this[locator];
+
+    // 3. Let realm be this's relevant Realm.
+
+    // 4. Let global be this's relevant global object.
+
+    // 5. Let isInABucketFileSystem be true if this is in a bucket file system; otherwise false.
+
+    // 6. Enqueue the following steps to the file system queue:
+    queueMicrotask(async () => {
+      // 1. Let entry be the result of locating an entry given locator.
+      const entry = locateEntry(fsLocator, this.io, this.fs);
+
+      // 2. Let accessResult be the result of running entry’s request access given "readwrite".
+      const accessResult = await entry?.requestAccess("readwrite");
+
+      // 3. If accessResult’s permission state is not "granted", queue a storage task with global to reject result with a DOMException of accessResult’s error name and abort these steps.
+      if (accessResult && accessResult.permissionState !== "granted") {
+        return reject(new DOMException(accessResult.errorName));
+      }
+
+      // 4. If isInABucketFileSystem is false, queue a storage task with global to reject result with an "InvalidStateError" DOMException and abort these steps.
+
+      // 5. If entry is null, queue a storage task with global to reject result with a "NotFoundError" DOMException and abort these steps.
+      if (entry === null) return reject(new DOMException("NotFoundError"));
+
+      // 6. Assert: entry is a file entry.
+      assertFileEntry(entry);
+
+      // 7. Let lockResult be the result of taking a lock with "exclusive" on entry.
+      const lockResult = takeLock("exclusive", entry);
+
+      // 8. Queue a storage task with global to run these steps:
+
+      // 1. If lockResult is "failure", reject result with a "NoModificationAllowedError" DOMException and abort these steps.
+      if (lockResult === "failure") {
+        return reject(new DOMException("NoModificationAllowedError"));
+      }
+
+      // 2. Let handle be the result of creating a new FileSystemSyncAccessHandle for entry in realm.
+      const handle = createFileSystemSyncAccessHandle(entry);
+
+      // 3. Resolve result with handle.
+      resolve(handle);
+    });
+
+    // 7. Return result.
+    return result;
   }
 }
 
