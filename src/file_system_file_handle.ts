@@ -8,7 +8,7 @@ import {
 } from "./type.ts";
 import { locateEntry, takeLock } from "./algorithm.ts";
 import { createFileSystemWritableFileStream } from "./file_system_writable_file_stream.ts";
-import { locator } from "./symbol.ts";
+import { buffer, locator } from "./symbol.ts";
 import { extname } from "@std/path";
 import { typeByExtension } from "@std/media-types";
 
@@ -128,6 +128,7 @@ export class FileSystemFileHandle extends FileSystemHandle
       // 3. If options["keepExistingData"] is true:
       if (options?.keepExistingData) {
         // 1. Set stream’s [[buffer]] to a copy of entry’s binary data.
+        stream[buffer] = entry.binaryData.slice(0);
       }
 
       // 4. Resolve result with stream.

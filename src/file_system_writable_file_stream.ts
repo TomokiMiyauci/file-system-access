@@ -1,13 +1,18 @@
 import { releaseLock } from "./algorithm.ts";
 import { FileEntry } from "./type.ts";
 import { $file, buffer, seekOffset } from "./symbol.ts";
+import { concat } from "@std/bytes";
 
 export class FileSystemWritableFileStream
   extends WritableStream<FileSystemWriteChunkType>
   implements globalThis.FileSystemWritableFileStream {
   [$file]!: FileEntry;
   [seekOffset]: number = 0;
-  [buffer]: ArrayBuffer = new ArrayBuffer(0);
+
+  /**
+   * @see https://fs.spec.whatwg.org/#filesystemwritablefilestream-buffer
+   */
+  [buffer]: Uint8Array = new Uint8Array(0);
 
   seek(position: number): Promise<void> {
     // 1. Let writer be the result of getting a writer for this.
@@ -118,7 +123,7 @@ export function createFileSystemWritableFileStream(
     abort: abortAlgorithm,
     close: closeAlgorithm,
     write: writeAlgorithm,
-  }, { highWaterMark: 1, size: sizeAlgorithm });
+  }, { highWaterMark, size: sizeAlgorithm });
 
   // 2. Set stream’s [[file]] to file.
   stream[$file] = file;
@@ -184,12 +189,12 @@ export function writeChunk(
       // 5. Let oldSize be stream’s [[buffer]]'s length.
       const oldSize = stream[buffer].byteLength;
 
-      let dataBytes: ArrayBuffer;
+      let dataBytes: Uint8Array;
       // 6. If data is a BufferSource, let dataBytes be a copy of data.
       // 7. Otherwise, if data is a Blob:
       if (data instanceof Blob) {
         // 1. Let dataBytes be the result of performing the read operation on data. If this throws an exception, reject p with that exception and abort these steps.
-        dataBytes = await data.arrayBuffer();
+        dataBytes = await data.bytes();
         // 8. Otherwise:
       } else if (typeof data === "string") {
         // 1. Assert: data is a USVString.
@@ -198,28 +203,42 @@ export function writeChunk(
         dataBytes = new TextEncoder().encode(data);
       } else {
         if (data instanceof ArrayBuffer) {
-          dataBytes = data.slice(0);
+          dataBytes = new Uint8Array(data);
         } else {
-          dataBytes = data.buffer.slice(0);
+          dataBytes = new Uint8Array(data.buffer);
         }
       }
 
       // 9. If writePosition is larger than oldSize, append writePosition - oldSize 0x00 (NUL) bytes to the end of stream’s [[buffer]].
+      if (writePosition > oldSize) {
+        const size = writePosition - oldSize;
+
+        stream[buffer] = concat([stream[buffer], new Uint8Array(size)]);
+      }
 
       // 10. Let head be a byte sequence containing the first writePosition bytes of stream’s[[buffer]].
+      const head = stream[buffer].slice(0, writePosition);
 
       // 11. Let tail be an empty byte sequence.
-      const tail = new ArrayBuffer(0);
+      let tail = new Uint8Array(0);
 
       // 12. If writePosition + data’s length is smaller than oldSize:
+      if (writePosition + length(data) < oldSize) {
+        // 1. Let tail be a byte sequence containing the last oldSize - (writePosition + data’s length) bytes of stream’s [[buffer]].
+        const index = oldSize - (writePosition + length(data));
 
-      // 1. Let tail be a byte sequence containing the last oldSize - (writePosition + data’s length) bytes of stream’s [[buffer]].
+        tail = stream[buffer].slice(-index);
+      }
 
       // 13. Set stream’s [[buffer]] to the concatenation of head, data and tail.
+      const i = concat([head, dataBytes, tail]);
+
+      stream[buffer] = i;
 
       // 14. If the operations modifying stream’s [[buffer]] in the previous steps failed due to exceeding the storage quota, reject p with a "QuotaExceededError" DOMException and abort these steps, leaving stream’s [[buffer]] unmodified.
 
       // 15. Set stream’s [[seekOffset]] to writePosition + data’s length.
+      stream[seekOffset] = writePosition + length(data);
 
       // 16. Resolve p.
       resolve();
