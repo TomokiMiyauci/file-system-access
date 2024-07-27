@@ -54,7 +54,7 @@ class FileEntryImpl implements FileEntry {
   lock: "open" | "taken-exclusive" | "taken-shared" = "open";
 
   #timestamp: number | Promise<number> | undefined;
-  #binaryData: Uint8Array | undefined;
+  #binaryData: Uint8Array | Promise<Uint8Array> | undefined;
 
   get modificationTimestamp(): number | Promise<number> {
     return this.#timestamp ??
@@ -65,7 +65,7 @@ class FileEntryImpl implements FileEntry {
     this.#timestamp = value;
   }
 
-  get binaryData(): Uint8Array {
+  get binaryData(): Uint8Array | Promise<Uint8Array> {
     return this.#binaryData ??
       (this.#binaryData = this.io.binaryData(this.locator));
   }

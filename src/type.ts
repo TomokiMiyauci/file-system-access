@@ -25,7 +25,7 @@ export interface FileEntry extends BaseEntry {
   /**
    * @see https://fs.spec.whatwg.org/#file-entry-binary-data
    */
-  binaryData: Uint8Array;
+  binaryData: Uint8Array | Promise<Uint8Array>;
 
   /** A number representing the number of milliseconds since the Unix Epoch.
    * @see https://fs.spec.whatwg.org/#file-entry-modification-timestamp
@@ -119,12 +119,12 @@ export interface UnderlyingFileSystem {
   stream(
     entry: FileEntry,
     locator: FileSystemLocator,
-  ): ReadableStream<Uint8Array>;
+  ): ReadableStream<Uint8Array> | Promise<ReadableStream<Uint8Array>>;
   write(locator: FileLocator, data: Uint8Array): void;
 }
 
 export interface IO {
-  binaryData(locator: FileSystemLocator): Uint8Array;
+  binaryData(locator: FileSystemLocator): Uint8Array | Promise<Uint8Array>;
   modificationTimestamp(locator: FileSystemLocator): number | Promise<number>;
   queryAccess(
     locator: FileSystemLocator,

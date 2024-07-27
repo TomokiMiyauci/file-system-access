@@ -60,6 +60,7 @@ export class FileSystemFileHandle extends FileSystemHandle
         entry,
         fs: this.fs,
         io: this.io,
+        binaryData: await entry.binaryData,
       });
 
       const type = typeByExtension(extname(entry.name));
@@ -128,7 +129,7 @@ export class FileSystemFileHandle extends FileSystemHandle
       // 3. If options["keepExistingData"] is true:
       if (options?.keepExistingData) {
         // 1. Set stream’s [[buffer]] to a copy of entry’s binary data.
-        stream[buffer] = entry.binaryData.slice(0);
+        stream[buffer] = (await entry.binaryData).slice(0);
       }
 
       // 4. Resolve result with stream.
@@ -148,6 +149,7 @@ interface BlobDataItemOptions {
   entry: FileEntry;
   fs: UnderlyingFileSystem;
   io: IO;
+  binaryData: Uint8Array;
 }
 
 class BlobDataItem extends Blob {
@@ -156,19 +158,21 @@ class BlobDataItem extends Blob {
   entry: FileEntry;
   fs: UnderlyingFileSystem;
   io: IO;
+  binaryData: Uint8Array;
 
   constructor(options: BlobDataItemOptions) {
-    super([options.entry.binaryData]);
+    super([options.binaryData]);
 
     this.lastModified = options.lastModified;
     this.locator = options.locator;
     this.entry = options.entry;
     this.fs = options.fs;
     this.io = options.io;
+    this.binaryData = options.binaryData;
   }
 
   slice(start: number = 0, end?: number): Blob {
-    const binaryData = this.entry.binaryData.slice(start, end);
+    const binaryData = this.binaryData.slice(start, end);
 
     return new BlobDataItem({
       lastModified: this.lastModified,
@@ -176,6 +180,7 @@ class BlobDataItem extends Blob {
       entry: { ...this.entry, binaryData },
       fs: this.fs,
       io: this.io,
+      binaryData,
     });
   }
 
@@ -191,7 +196,7 @@ class BlobDataItem extends Blob {
           );
         }
 
-        const stream = this.fs.stream(this.entry, this.locator);
+        const stream = await this.fs.stream(this.entry, this.locator);
         const reader = stream.getReader();
 
         await reader.read().then(
