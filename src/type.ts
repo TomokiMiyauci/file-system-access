@@ -25,12 +25,12 @@ export interface FileEntry extends BaseEntry {
   /**
    * @see https://fs.spec.whatwg.org/#file-entry-binary-data
    */
-  binaryData: Uint8Array | Promise<Uint8Array>;
+  binaryData: Uint8Array;
 
   /** A number representing the number of milliseconds since the Unix Epoch.
    * @see https://fs.spec.whatwg.org/#file-entry-modification-timestamp
    */
-  modificationTimestamp: number | Promise<number>;
+  modificationTimestamp: number;
 
   /**
    * @see https://fs.spec.whatwg.org/#file-entry-lock
@@ -47,7 +47,7 @@ export interface DirectoryEntry extends BaseEntry {
   /** File system entries.
    * @see https://fs.spec.whatwg.org/#directory-entry-children
    */
-  children: FileSystemEntry[] | Promise<FileSystemEntry[]>;
+  children: FileSystemEntry[];
 }
 
 /**
@@ -124,8 +124,8 @@ export interface UnderlyingFileSystem {
 }
 
 export interface IO {
-  binaryData(locator: FileSystemLocator): Uint8Array | Promise<Uint8Array>;
-  modificationTimestamp(locator: FileSystemLocator): number | Promise<number>;
+  binaryData(locator: FileSystemLocator): Uint8Array;
+  modificationTimestamp(locator: FileSystemLocator): number;
   queryAccess(
     locator: FileSystemLocator,
     mode: AccessMode,
@@ -134,7 +134,5 @@ export interface IO {
     locator: FileSystemLocator,
     mode: AccessMode,
   ): FileSystemAccessResult | Promise<FileSystemAccessResult>;
-  children(
-    locator: FileSystemLocator,
-  ): FileSystemLocator[] | Promise<FileSystemLocator[]>;
+  children(locator: FileSystemLocator): FileSystemLocator[];
 }

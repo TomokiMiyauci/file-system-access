@@ -67,8 +67,7 @@ function next(
     assertDirectoryEntry(directory);
 
     // // 3. Let child be a file system entry in directory’s children, such that child’s name is not contained in iterator’s past results, or null if no such entry exists.
-    const children = await directory.children;
-    const child = children.find((child) =>
+    const child = directory.children.find((child) =>
       !iterator.pastResults.has(child.name)
     ) ??
       null;
@@ -171,7 +170,7 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
       assertDirectoryEntry(entry);
 
       // 4. For each child of entry’s children:
-      for (const child of await entry.children) {
+      for (const child of entry.children) {
         // 1. If child’s name equals name:
         if (child.name === name) {
           // 1. If child is a file entry:
@@ -208,8 +207,7 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
       } satisfies DirectoryEntry;
 
       // 9. Append child to entry’s children.
-      const children = await entry.children;
-      children.push(child);
+      entry.children.push(child);
 
       // 10. If creating child in the underlying file system throws an exception, reject result with that exception and abort these steps.
       try {
@@ -278,7 +276,7 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
       assertDirectoryEntry(entry);
 
       // 4. For each child of entry’s children:
-      for (const child of await entry.children) {
+      for (const child of entry.children) {
         // 1. If child’s name equals name:
         if (child.name === name) {
           // 1. If child is a directory entry:
@@ -314,9 +312,8 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
         lock: "open",
       } satisfies FileEntry;
 
-      const children = await entry.children;
       // 10. Append child to entry’s children.
-      children.push(child);
+      entry.children.push(child);
 
       // 11. If creating child in the underlying file system throws an exception, reject result with that exception and abort these steps.
       try {
@@ -367,21 +364,22 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
       assertDirectoryEntry(entry);
 
       // 4. For each child of entry’s children:
-      for (const child of await entry.children) {
+      for (const child of entry.children) {
         // 1. If child’s name equals name:
         if (child.name === name) {
           // 1. If child is a directory entry:
           if (isDirectoryEntry(child)) {
             // 1. If child’s children is not empty and options["recursive"] is false:
-            if ((await child.children).length && !options?.recursive) {
+            if (child.children.length && !options?.recursive) {
               // 1. Reject result with an "InvalidModificationError" DOMException and abort these steps.
               return reject(new DOMException("InvalidModificationError"));
             }
           }
 
           // 2. Remove child from entry’s children.
+          // TODO
 
-          // // 3. If removing child in the underlying file system throws an exception, reject result with that exception and abort these steps.
+          // 3. If removing child in the underlying file system throws an exception, reject result with that exception and abort these steps.
           try {
             this.fs.remove(child, fsLocator);
           } catch (e) {

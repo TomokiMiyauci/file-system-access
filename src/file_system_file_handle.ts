@@ -57,17 +57,17 @@ export class FileSystemFileHandle extends FileSystemHandle
       // 9. Set f’s type to an implementation-defined value, based on for example entry’s name or its file extension.
       const blob = new BlobDataItem({
         locator: fsLocator,
-        lastModified: await entry.modificationTimestamp,
+        lastModified: entry.modificationTimestamp,
         entry,
         fs: this.fs,
         io: this.io,
-        binaryData: await entry.binaryData,
+        binaryData: entry.binaryData,
       });
 
       const type = typeByExtension(extname(entry.name));
 
       const file = new File([blob], entry.name, {
-        lastModified: await entry.modificationTimestamp,
+        lastModified: entry.modificationTimestamp,
         type,
       });
 
@@ -130,7 +130,7 @@ export class FileSystemFileHandle extends FileSystemHandle
       // 3. If options["keepExistingData"] is true:
       if (options?.keepExistingData) {
         // 1. Set stream’s [[buffer]] to a copy of entry’s binary data.
-        stream[buffer] = (await entry.binaryData).slice(0);
+        stream[buffer] = entry.binaryData.slice(0);
       }
 
       // 4. Resolve result with stream.
@@ -243,17 +243,17 @@ class BlobDataItem extends Blob {
   }
 
   stream(): ReadableStream<Uint8Array> {
+    const timestamp = this.io.modificationTimestamp(this.locator);
+
+    if (timestamp > this.lastModified) {
+      throw new DOMException(
+        "The requested file could not be read, typically due to permission problems that have occurred after a reference to a file was acquired.",
+        "NotReadableError",
+      );
+    }
+
     return new ReadableStream<Uint8Array>({
       start: async (controller) => {
-        const timestamp = await this.io.modificationTimestamp(this.locator);
-
-        if (timestamp > this.lastModified) {
-          throw new DOMException(
-            "The requested file could not be read, typically due to permission problems that have occurred after a reference to a file was acquired.",
-            "NotReadableError",
-          );
-        }
-
         const stream = await this.fs.stream(this.entry, this.locator);
         const reader = stream.getReader();
 

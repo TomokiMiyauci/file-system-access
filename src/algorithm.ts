@@ -53,19 +53,19 @@ class FileEntryImpl implements FileEntry {
   }
   lock: "open" | "taken-exclusive" | "taken-shared" = "open";
 
-  #timestamp: number | Promise<number> | undefined;
-  #binaryData: Uint8Array | Promise<Uint8Array> | undefined;
+  #timestamp: number | undefined;
+  #binaryData: Uint8Array | undefined;
 
-  get modificationTimestamp(): number | Promise<number> {
+  get modificationTimestamp(): number {
     return this.#timestamp ??
       (this.#timestamp = this.io.modificationTimestamp(this.locator));
   }
 
-  set modificationTimestamp(value: number | Promise<number>) {
+  set modificationTimestamp(value: number) {
     this.#timestamp = value;
   }
 
-  get binaryData(): Uint8Array | Promise<Uint8Array> {
+  get binaryData(): Uint8Array {
     return this.#binaryData ??
       (this.#binaryData = this.io.binaryData(this.locator));
   }
@@ -91,17 +91,15 @@ class DirectoryEntryImpl implements DirectoryEntry {
     return this.io.requestAccess(this.locator, mode);
   }
 
-  #children: FileSystemEntry[] | Promise<FileSystemEntry[]> | undefined;
+  #children: FileSystemEntry[] | undefined;
 
-  get children(): FileSystemEntry[] | Promise<FileSystemEntry[]> {
+  get children(): FileSystemEntry[] {
     if (this.#children) return this.#children;
 
     const childLocators = this.io.children(this.locator);
     const createEntry = this.createEntry.bind(this);
 
-    this.#children = childLocators instanceof Promise
-      ? childLocators.then((locators) => locators.map(createEntry))
-      : childLocators.map(createEntry);
+    this.#children = childLocators.map(createEntry);
 
     return this.#children;
   }
