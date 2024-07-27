@@ -91,26 +91,31 @@ class DirectoryEntryImpl implements DirectoryEntry {
     return this.io.requestAccess(this.locator, mode);
   }
 
-  #children: (FileEntry | DirectoryEntry)[] | undefined;
+  #children: FileSystemEntry[] | Promise<FileSystemEntry[]> | undefined;
 
-  get children(): (FileEntry | DirectoryEntry)[] {
+  get children(): FileSystemEntry[] | Promise<FileSystemEntry[]> {
     if (this.#children) return this.#children;
 
     const childLocators = this.io.children(this.locator);
+    const createEntry = this.createEntry.bind(this);
 
-    this.#children = childLocators.map((childLocator) => {
-      if (childLocator.kind === "file") {
-        return createFileEntry(childLocator, this.io, this.fs);
-      }
-
-      return createDirectoryEntry(childLocator, this.io, this.fs);
-    });
+    this.#children = childLocators instanceof Promise
+      ? childLocators.then((locators) => locators.map(createEntry))
+      : childLocators.map(createEntry);
 
     return this.#children;
   }
 
   set children(value: (FileEntry | DirectoryEntry)[]) {
     this.#children = value;
+  }
+
+  private createEntry(locator: FileSystemLocator): FileSystemEntry {
+    if (locator.kind === "file") {
+      return createFileEntry(locator, this.io, this.fs);
+    }
+
+    return createDirectoryEntry(locator, this.io, this.fs);
   }
 }
 

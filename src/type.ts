@@ -47,7 +47,7 @@ export interface DirectoryEntry extends BaseEntry {
   /** File system entries.
    * @see https://fs.spec.whatwg.org/#directory-entry-children
    */
-  children: FileSystemEntry[];
+  children: FileSystemEntry[] | Promise<FileSystemEntry[]>;
 }
 
 /**
@@ -134,5 +134,7 @@ export interface IO {
     locator: FileSystemLocator,
     mode: AccessMode,
   ): FileSystemAccessResult | Promise<FileSystemAccessResult>;
-  children(locator: FileSystemLocator): FileSystemLocator[];
+  children(
+    locator: FileSystemLocator,
+  ): FileSystemLocator[] | Promise<FileSystemLocator[]>;
 }
