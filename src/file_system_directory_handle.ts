@@ -46,7 +46,7 @@ function next(
   // // 2. Enqueue the following steps to the file system queue:
   queueMicrotask(() => {
     // // 1. Let directory be the result of locating an entry given handle’s locator.
-    const directory = locateEntry(fsLocator, io);
+    const directory = locateEntry(fsLocator, io, fs);
 
     // // 2. Let accessResult be the result of running directory’s query access given "read".
     const accessResult = directory?.queryAccess("read");
@@ -144,7 +144,7 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
       }
 
       // 2. Let entry be the result of locating an entry given locator.
-      const entry = locateEntry(fsLocator, this.io);
+      const entry = locateEntry(fsLocator, this.io, this.fs);
 
       // 3. If options["create"] is true:
       // 1. Let accessResult be the result of running entry’s request access given "readwrite".
@@ -252,7 +252,7 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
       if (!isValidFileName(name)) return reject(new TypeError());
 
       // 2. Let entry be the result of locating an entry given locator.
-      const entry = locateEntry(fsLocator, this.io);
+      const entry = locateEntry(fsLocator, this.io, this.fs);
 
       // 3. If options["create"] is true:
       // 1. Let accessResult be the result of running entry’s request access given "readwrite".
@@ -303,7 +303,7 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
         // 7. Set child’s name to name.
         name,
         // 8. Set child’s binary data to an empty byte sequence.
-        binaryData: new ArrayBuffer(0),
+        binaryData: new Uint8Array(0),
         queryAccess: entry.queryAccess.bind(entry),
         requestAccess: entry.requestAccess.bind(entry),
         // 9. Set child’s modification timestamp to the current time.
@@ -345,7 +345,7 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
       if (!isValidFileName(name)) return reject();
 
       // 2. Let entry be the result of locating an entry given locator.
-      const entry = locateEntry(fsLocator, this.io);
+      const entry = locateEntry(fsLocator, this.io, this.fs);
 
       // 3. Let accessResult be the result of running entry’s request access given "readwrite".
       const accessResult = entry?.requestAccess("readwrite");

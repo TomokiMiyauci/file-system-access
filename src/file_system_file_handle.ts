@@ -30,7 +30,7 @@ export class FileSystemFileHandle extends FileSystemHandle
     // 4. Enqueue the following steps to the file system queue:
     queueMicrotask(() => {
       // 1. Let entry be the result of locating an entry given locator.
-      const entry = locateEntry(fsLocator, this.io);
+      const entry = locateEntry(fsLocator, this.io, this.fs);
 
       // 2. Let accessResult be the result of running entry’s query access given "read".
       const accessResult = entry?.queryAccess("read");
@@ -96,7 +96,7 @@ export class FileSystemFileHandle extends FileSystemHandle
     // 5. Enqueue the following steps to the file system queue:
     queueMicrotask(() => {
       // 1. Let entry be the result of locating an entry given locator.
-      const entry = locateEntry(fsLocator, this.io);
+      const entry = locateEntry(fsLocator, this.io, this.fs);
 
       // 2. Let accessResult be the result of running entry’s request access given "readwrite".
       const accessResult = entry?.requestAccess("readwrite");

@@ -116,6 +116,7 @@ export interface UnderlyingFileSystem {
     entry: FileEntry,
     locator: FileSystemLocator,
   ): ReadableStream<Uint8Array>;
+  write(locator: FileLocator, data: Uint8Array): void;
 }
 
 export interface IO {

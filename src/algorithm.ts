@@ -16,26 +16,32 @@ import { locator } from "./symbol.ts";
 export function locateEntry(
   locator: FileSystemLocator,
   io: IO,
+  fs: UnderlyingFileSystem,
 ): FileSystemEntry | null {
   switch (locator.kind) {
     case "directory":
-      return createDirectoryEntry(locator, io);
+      return createDirectoryEntry(locator, io, fs);
 
     case "file":
-      return createFileEntry(locator, io);
+      return createFileEntry(locator, io, fs);
   }
 }
 
-function createFileEntry(locator: FileLocator, io: IO): FileEntry {
+function createFileEntry(
+  locator: FileLocator,
+  io: IO,
+  fs: UnderlyingFileSystem,
+): FileEntry {
   const name = locator.path[locator.path.length - 1];
 
-  return new FileEntryImpl(name, io, locator);
+  return new FileEntryImpl(name, io, fs, locator);
 }
 
 class FileEntryImpl implements FileEntry {
   constructor(
     public name: string,
     private io: IO,
+    private fs: UnderlyingFileSystem,
     private locator: FileLocator,
   ) {}
   sharedLockCount: number = 0;
@@ -48,7 +54,7 @@ class FileEntryImpl implements FileEntry {
   lock: "open" | "taken-exclusive" | "taken-shared" = "open";
 
   #timestamp: number | undefined;
-  #binaryData: ArrayBuffer | undefined;
+  #binaryData: Uint8Array | undefined;
 
   get modificationTimestamp(): number {
     return this.#timestamp ??
@@ -59,13 +65,15 @@ class FileEntryImpl implements FileEntry {
     this.#timestamp = value;
   }
 
-  get binaryData(): ArrayBuffer {
+  get binaryData(): Uint8Array {
     return this.#binaryData ??
       (this.#binaryData = this.io.binaryData(this.locator));
   }
 
-  set binaryData(value: ArrayBuffer) {
+  set binaryData(value: Uint8Array) {
     this.#binaryData = value;
+
+    this.fs.write(this.locator, value);
   }
 }
 
@@ -73,6 +81,7 @@ class DirectoryEntryImpl implements DirectoryEntry {
   constructor(
     public name: string,
     private io: IO,
+    private fs: UnderlyingFileSystem,
     private locator: DirectoryLocator,
   ) {}
   queryAccess(mode: AccessMode) {
@@ -91,10 +100,10 @@ class DirectoryEntryImpl implements DirectoryEntry {
 
     this.#children = childLocators.map((childLocator) => {
       if (childLocator.kind === "file") {
-        return createFileEntry(childLocator, this.io);
+        return createFileEntry(childLocator, this.io, this.fs);
       }
 
-      return createDirectoryEntry(childLocator, this.io);
+      return createDirectoryEntry(childLocator, this.io, this.fs);
     });
 
     return this.#children;
@@ -108,10 +117,11 @@ class DirectoryEntryImpl implements DirectoryEntry {
 function createDirectoryEntry(
   locator: DirectoryLocator,
   io: IO,
+  fs: UnderlyingFileSystem,
 ): DirectoryEntry {
   const name = locator.path[locator.path.length - 1];
 
-  return new DirectoryEntryImpl(name, io, locator);
+  return new DirectoryEntryImpl(name, io, fs, locator);
 }
 
 export function isValidFileName(fileName: string): boolean {
@@ -220,7 +230,7 @@ export function resolve(
     const relativePath: string[] = [];
 
     // 8. For each index of the range from rootPath’s size to rootPath’s size, exclusive, append childPath.\[[index]] to relativePath.
-    for (const index of exclusiveRange(rootPath.length, rootPath.length)) {
+    for (const index of exclusiveRange(rootPath.length, childPath.length)) {
       relativePath.push(childPath[index]);
     }
 
@@ -244,9 +254,14 @@ export function isSamePath(a: string[], b: string[]): boolean {
 function exclusiveRange(n: number, m: number): number[] {
   // If m equals n, then it creates an empty ordered set.
   if (m === n) return [];
-  // creates a new ordered set containing all of the integers from n up to and including m − 1 in consecutively increasing order, as long as m is greater than n.
 
-  return [];
+  const items: number[] = [];
+  // creates a new ordered set containing all of the integers from n up to and including m − 1 in consecutively increasing order, as long as m is greater than n.
+  for (let i = n; i < m; i++) {
+    items.push(i);
+  }
+
+  return items;
 }
 
 /**
