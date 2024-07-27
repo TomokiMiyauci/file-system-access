@@ -44,12 +44,12 @@ function next(
   >();
 
   // // 2. Enqueue the following steps to the file system queue:
-  queueMicrotask(() => {
+  queueMicrotask(async () => {
     // // 1. Let directory be the result of locating an entry given handle’s locator.
     const directory = locateEntry(fsLocator, io, fs);
 
     // // 2. Let accessResult be the result of running directory’s query access given "read".
-    const accessResult = directory?.queryAccess("read");
+    const accessResult = await directory?.queryAccess("read");
 
     // // 3. Queue a storage task with handle’s relevant global object to run these steps:
 
@@ -137,7 +137,7 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
     // 4. Let global be this's relevant global object.
 
     // 5. Enqueue the following steps to the file system queue:
-    queueMicrotask(() => {
+    queueMicrotask(async () => {
       // 1. If name is not a valid file name, queue a storage task with global to reject result with a TypeError and abort these steps.
       if (!isValidFileName(name)) {
         return reject();
@@ -151,8 +151,8 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
       // 4. Otherwise:
       // 1. Let accessResult be the result of running entry’s query access given "read".
       const accessResult = options?.create
-        ? entry?.requestAccess("readwrite")
-        : entry?.queryAccess("read");
+        ? await entry?.requestAccess("readwrite")
+        : await entry?.queryAccess("read");
 
       // 5. Queue a storage task with global to run these steps:
 
@@ -247,7 +247,7 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
 
     // 4. Let global be this's relevant global object.
     // 5. Enqueue the following steps to the file system queue:
-    queueMicrotask(() => {
+    queueMicrotask(async () => {
       // 1. If name is not a valid file name, queue a storage task with global to reject result with a TypeError and abort these steps.
       if (!isValidFileName(name)) return reject(new TypeError());
 
@@ -259,8 +259,8 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
       // 4. Otherwise:
       // 1. Let accessResult be the result of running entry’s query access given "read".
       const accessResult = options?.create
-        ? entry?.queryAccess("readwrite")
-        : entry?.queryAccess("read");
+        ? await entry?.queryAccess("readwrite")
+        : await entry?.queryAccess("read");
 
       // 5. Queue a storage task with global to run these steps:
 
@@ -340,7 +340,7 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
     // 3. Let global be this's relevant global object.
 
     // 4. Enqueue the following steps to the file system queue:
-    queueMicrotask(() => {
+    queueMicrotask(async () => {
       // 1. If name is not a valid file name, queue a storage task with global to reject result with a TypeError and abort these steps.
       if (!isValidFileName(name)) return reject();
 
@@ -348,7 +348,7 @@ export class FileSystemDirectoryHandle extends FileSystemHandle
       const entry = locateEntry(fsLocator, this.io, this.fs);
 
       // 3. Let accessResult be the result of running entry’s request access given "readwrite".
-      const accessResult = entry?.requestAccess("readwrite");
+      const accessResult = await entry?.requestAccess("readwrite");
 
       // 4. Queue a storage task with global to run these steps:
 

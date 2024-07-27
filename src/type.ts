@@ -7,12 +7,16 @@ interface BaseEntry {
   /**
    * @see https://fs.spec.whatwg.org/#entry-query-access
    */
-  queryAccess(mode: AccessMode): FileSystemAccessResult;
+  queryAccess(
+    mode: AccessMode,
+  ): FileSystemAccessResult | Promise<FileSystemAccessResult>;
 
   /**
    * @see https://fs.spec.whatwg.org/#entry-request-access
    */
-  requestAccess(mode: AccessMode): FileSystemAccessResult;
+  requestAccess(
+    mode: AccessMode,
+  ): FileSystemAccessResult | Promise<FileSystemAccessResult>;
 }
 
 export type AccessMode = "read" | "readwrite";
@@ -125,10 +129,10 @@ export interface IO {
   queryAccess(
     locator: FileSystemLocator,
     mode: AccessMode,
-  ): FileSystemAccessResult;
+  ): FileSystemAccessResult | Promise<FileSystemAccessResult>;
   requestAccess(
     locator: FileSystemLocator,
     mode: AccessMode,
-  ): FileSystemAccessResult;
+  ): FileSystemAccessResult | Promise<FileSystemAccessResult>;
   children(locator: FileSystemLocator): FileSystemLocator[];
 }

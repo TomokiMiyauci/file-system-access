@@ -75,9 +75,9 @@ export function createFileSystemWritableFileStream(
     >();
 
     // 2. Enqueue the following steps to the file system queue:
-    queueMicrotask(() => {
+    queueMicrotask(async () => {
       // 1. Let accessResult be the result of running file’s query access given "readwrite".
-      const accessResult = file.queryAccess("readwrite");
+      const accessResult = await file.queryAccess("readwrite");
 
       // 2. Queue a storage task with file’s relevant global object to run these steps:
 
@@ -158,7 +158,7 @@ export function writeChunk(
   // 3. Enqueue the following steps to the file system queue:
   queueMicrotask(async () => {
     // 1. Let accessResult be the result of running stream’s [[file]]'s query access given "readwrite".
-    const accessResult = stream[$file].queryAccess("readwrite");
+    const accessResult = await stream[$file].queryAccess("readwrite");
 
     // 2. Queue a storage task with stream’s relevant global object to run these steps:
 

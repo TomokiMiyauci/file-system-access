@@ -28,12 +28,12 @@ export class FileSystemFileHandle extends FileSystemHandle
     // 3. Let global be this's relevant global object.
 
     // 4. Enqueue the following steps to the file system queue:
-    queueMicrotask(() => {
+    queueMicrotask(async () => {
       // 1. Let entry be the result of locating an entry given locator.
       const entry = locateEntry(fsLocator, this.io, this.fs);
 
       // 2. Let accessResult be the result of running entry’s query access given "read".
-      const accessResult = entry?.queryAccess("read");
+      const accessResult = await entry?.queryAccess("read");
 
       // 3. Queue a storage task with global to run these steps:
 
@@ -94,12 +94,12 @@ export class FileSystemFileHandle extends FileSystemHandle
     // 4. Let global be this's relevant global object.
 
     // 5. Enqueue the following steps to the file system queue:
-    queueMicrotask(() => {
+    queueMicrotask(async () => {
       // 1. Let entry be the result of locating an entry given locator.
       const entry = locateEntry(fsLocator, this.io, this.fs);
 
       // 2. Let accessResult be the result of running entry’s request access given "readwrite".
-      const accessResult = entry?.requestAccess("readwrite");
+      const accessResult = await entry?.requestAccess("readwrite");
 
       // 3. If accessResult’s permission state is not "granted", queue a storage task with global to reject result with a DOMException of accessResult’s error name and abort these steps.
       if (accessResult && accessResult.permissionState !== "granted") {
