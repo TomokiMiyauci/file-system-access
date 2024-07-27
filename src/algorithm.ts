@@ -53,15 +53,15 @@ class FileEntryImpl implements FileEntry {
   }
   lock: "open" | "taken-exclusive" | "taken-shared" = "open";
 
-  #timestamp: number | undefined;
+  #timestamp: number | Promise<number> | undefined;
   #binaryData: Uint8Array | undefined;
 
-  get modificationTimestamp(): number {
+  get modificationTimestamp(): number | Promise<number> {
     return this.#timestamp ??
       (this.#timestamp = this.io.modificationTimestamp(this.locator));
   }
 
-  set modificationTimestamp(value: number) {
+  set modificationTimestamp(value: number | Promise<number>) {
     this.#timestamp = value;
   }
 

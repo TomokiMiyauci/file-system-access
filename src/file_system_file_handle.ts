@@ -56,7 +56,7 @@ export class FileSystemFileHandle extends FileSystemHandle
       // 9. Set f’s type to an implementation-defined value, based on for example entry’s name or its file extension.
       const blob = new BlobDataItem({
         locator: fsLocator,
-        lastModified: entry.modificationTimestamp,
+        lastModified: await entry.modificationTimestamp,
         entry,
         fs: this.fs,
         io: this.io,
@@ -65,7 +65,7 @@ export class FileSystemFileHandle extends FileSystemHandle
       const type = typeByExtension(extname(entry.name));
 
       const file = new File([blob], entry.name, {
-        lastModified: entry.modificationTimestamp,
+        lastModified: await entry.modificationTimestamp,
         type,
       });
 
@@ -180,15 +180,31 @@ class BlobDataItem extends Blob {
   }
 
   stream(): ReadableStream<Uint8Array> {
-    const timestamp = this.io.modificationTimestamp(this.locator);
+    return new ReadableStream<Uint8Array>({
+      start: async (controller) => {
+        const timestamp = await this.io.modificationTimestamp(this.locator);
 
-    if (timestamp > this.lastModified) {
-      throw new DOMException(
-        "The requested file could not be read, typically due to permission problems that have occurred after a reference to a file was acquired.",
-        "NotReadableError",
-      );
-    }
+        if (timestamp > this.lastModified) {
+          throw new DOMException(
+            "The requested file could not be read, typically due to permission problems that have occurred after a reference to a file was acquired.",
+            "NotReadableError",
+          );
+        }
 
-    return this.fs.stream(this.entry, this.locator);
+        const stream = this.fs.stream(this.entry, this.locator);
+        const reader = stream.getReader();
+
+        await reader.read().then(
+          function process(result): void | Promise<void> {
+            if (result.done) controller.close();
+            else {
+              controller.enqueue(result.value);
+
+              return reader.read().then(process);
+            }
+          },
+        );
+      },
+    });
   }
 }

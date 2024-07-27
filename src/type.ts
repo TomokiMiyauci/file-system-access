@@ -30,7 +30,7 @@ export interface FileEntry extends BaseEntry {
   /** A number representing the number of milliseconds since the Unix Epoch.
    * @see https://fs.spec.whatwg.org/#file-entry-modification-timestamp
    */
-  modificationTimestamp: number;
+  modificationTimestamp: number | Promise<number>;
 
   /**
    * @see https://fs.spec.whatwg.org/#file-entry-lock
@@ -125,7 +125,7 @@ export interface UnderlyingFileSystem {
 
 export interface IO {
   binaryData(locator: FileSystemLocator): Uint8Array;
-  modificationTimestamp(locator: FileSystemLocator): number;
+  modificationTimestamp(locator: FileSystemLocator): number | Promise<number>;
   queryAccess(
     locator: FileSystemLocator,
     mode: AccessMode,
