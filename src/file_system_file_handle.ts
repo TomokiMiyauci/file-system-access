@@ -252,22 +252,6 @@ class BlobDataItem extends Blob {
       );
     }
 
-    return new ReadableStream<Uint8Array>({
-      start: async (controller) => {
-        const stream = await this.fs.stream(this.entry, this.locator);
-        const reader = stream.getReader();
-
-        await reader.read().then(
-          function process(result): void | Promise<void> {
-            if (result.done) controller.close();
-            else {
-              controller.enqueue(result.value);
-
-              return reader.read().then(process);
-            }
-          },
-        );
-      },
-    });
+    return this.fs.stream(this.entry, this.locator);
   }
 }

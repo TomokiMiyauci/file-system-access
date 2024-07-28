@@ -119,7 +119,7 @@ export interface UnderlyingFileSystem {
   stream(
     entry: FileEntry,
     locator: FileSystemLocator,
-  ): ReadableStream<Uint8Array> | Promise<ReadableStream<Uint8Array>>;
+  ): ReadableStream<Uint8Array>;
   write(locator: FileLocator, data: Uint8Array): void;
 }
 
