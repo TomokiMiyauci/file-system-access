@@ -450,3 +450,22 @@ export function createChildFileSystemDirectoryHandle(
   // 6. Return handle.
   return handle;
 }
+
+export function createFileSystemDirectoryHandle(
+  root: string,
+  path: string[],
+  realm: {
+    FileSystemDirectoryHandle: typeof FileSystemDirectoryHandle;
+    fs: UnderlyingFileSystem;
+    io: IO;
+  },
+): FileSystemDirectoryHandle {
+  const locator = { kind: "directory", root, path } satisfies FileSystemLocator;
+  const handle = new realm.FileSystemDirectoryHandle(
+    locator,
+    realm.fs,
+    realm.io,
+  );
+
+  return handle;
+}
