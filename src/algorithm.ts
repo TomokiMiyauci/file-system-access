@@ -26,15 +26,6 @@ export function locateEntry(
   }
 }
 
-export function getLocator(entry: FileSystemEntry): FileSystemLocator {
-  // - If entry is a file entry, they return a file locator.
-  if (isFileEntry(entry)) return { kind: "file", path: [], root: "" };
-  // - If entry is a directory entry, they return a directory locator.
-  // - If these steps return locator, then:
-  //   - Locating an entry with locator returns entry, provided no intermediate file system operations were run.
-  //   - entry’s name is the last item of locator’s path.
-}
-
 function createFileEntry(
   locator: FileLocator,
   io: IO,

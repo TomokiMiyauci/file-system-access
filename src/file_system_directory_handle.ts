@@ -1,6 +1,5 @@
 import { FileSystemHandle } from "./file_system_handle.ts";
 import {
-  createChildFileSystemFileHandle,
   isDirectoryEntry,
   isFileEntry,
   isValidFileName,
@@ -15,7 +14,10 @@ import type {
   IO,
   UnderlyingFileSystem,
 } from "./type.ts";
-import { FileSystemFileHandle } from "./file_system_file_handle.ts";
+import {
+  createChildFileSystemFileHandle,
+  FileSystemFileHandle,
+} from "./file_system_file_handle.ts";
 import { locator } from "./symbol.ts";
 import { asynciterator, PairAsyncIterable } from "./webidl/async.ts";
 

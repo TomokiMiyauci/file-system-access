@@ -255,3 +255,33 @@ class BlobDataItem extends Blob {
     return this.fs.stream(this.entry, this.locator);
   }
 }
+
+export function createChildFileSystemFileHandle(
+  parentLocator: FileSystemLocator,
+  name: string,
+  realm: {
+    FileSystemFileHandle: typeof FileSystemFileHandle;
+    fs: UnderlyingFileSystem;
+    io: IO;
+  },
+): FileSystemFileHandle {
+  // 2. Let childType be "file".
+  const childType = "file";
+
+  // 3. Let childRoot be a copy of parentLocator’s root.
+  const childRoot = parentLocator.root;
+
+  // 4. Let childPath be the result of cloning parentLocator’s path and appending name.
+  const childPath = parentLocator.path.concat(name);
+  const locator = {
+    kind: childType,
+    root: childRoot,
+    path: childPath,
+  } satisfies FileSystemLocator;
+  // 5. Set handle’s locator to a file system locator whose kind is childType, root is childRoot, and path is childPath.
+  // 1. Let handle be a new FileSystemFileHandle in realm.
+  const handle = new realm.FileSystemFileHandle(locator, realm.fs, realm.io);
+
+  // 6. Return handle.
+  return handle;
+}
