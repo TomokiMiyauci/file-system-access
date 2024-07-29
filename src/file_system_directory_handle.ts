@@ -423,9 +423,6 @@ export function createChildFileSystemDirectoryHandle(
     io: IO;
   },
 ): FileSystemDirectoryHandle {
-  // 1. Let handle be a new FileSystemDirectoryHandle in realm.
-  const handle = new realm.FileSystemDirectoryHandle(realm.fs, realm.io);
-
   // 2. Let childType be "directory".
   const childType = "directory";
 
@@ -434,9 +431,19 @@ export function createChildFileSystemDirectoryHandle(
 
   // 4. Let childPath be the result of cloning parentLocator’s path and appending name.
   const childPath = parentLocator.path.concat(name);
+  const locator = {
+    kind: childType,
+    root: childRoot,
+    path: childPath,
+  } satisfies FileSystemLocator;
 
   // 5. Set handle’s locator to a file system locator whose kind is childType, root is childRoot, and path is childPath.
-  handle[locator] = { kind: childType, root: childRoot, path: childPath };
+  // 1. Let handle be a new FileSystemDirectoryHandle in realm.
+  const handle = new realm.FileSystemDirectoryHandle(
+    locator,
+    realm.fs,
+    realm.io,
+  );
 
   // 6. Return handle.
   return handle;

@@ -3,7 +3,13 @@ import { FileSystemLocator, IO, UnderlyingFileSystem } from "./type.ts";
 import { locator } from "./symbol.ts";
 
 export class FileSystemHandle implements globalThis.FileSystemHandle {
-  constructor(protected fs: UnderlyingFileSystem, protected io: IO) {}
+  constructor(
+    loc: FileSystemLocator,
+    protected fs: UnderlyingFileSystem,
+    protected io: IO,
+  ) {
+    this[locator] = loc;
+  }
   get kind(): FileSystemHandleKind {
     // steps are to return this's locator's kind.
     return this[locator].kind;
@@ -32,5 +38,5 @@ export class FileSystemHandle implements globalThis.FileSystemHandle {
     return promise;
   }
 
-  [locator]!: FileSystemLocator;
+  [locator]: FileSystemLocator;
 }

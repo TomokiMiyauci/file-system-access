@@ -11,7 +11,6 @@ import {
 } from "./type.ts";
 import { type FileSystemDirectoryHandle } from "./file_system_directory_handle.ts";
 import type { FileSystemFileHandle } from "./file_system_file_handle.ts";
-import { locator } from "./symbol.ts";
 
 export function locateEntry(
   locator: FileSystemLocator,
@@ -25,6 +24,15 @@ export function locateEntry(
     case "file":
       return createFileEntry(locator, io, fs);
   }
+}
+
+export function getLocator(entry: FileSystemEntry): FileSystemLocator {
+  // - If entry is a file entry, they return a file locator.
+  if (isFileEntry(entry)) return { kind: "file", path: [], root: "" };
+  // - If entry is a directory entry, they return a directory locator.
+  // - If these steps return locator, then:
+  //   - Locating an entry with locator returns entry, provided no intermediate file system operations were run.
+  //   - entry’s name is the last item of locator’s path.
 }
 
 function createFileEntry(
@@ -159,9 +167,6 @@ export function createChildFileSystemFileHandle(
     io: IO;
   },
 ): FileSystemFileHandle {
-  // 1. Let handle be a new FileSystemFileHandle in realm.
-  const handle = new realm.FileSystemFileHandle(realm.fs, realm.io);
-
   // 2. Let childType be "file".
   const childType = "file";
 
@@ -170,13 +175,14 @@ export function createChildFileSystemFileHandle(
 
   // 4. Let childPath be the result of cloning parentLocator’s path and appending name.
   const childPath = parentLocator.path.concat(name);
-
-  // 5. Set handle’s locator to a file system locator whose kind is childType, root is childRoot, and path is childPath.
-  handle[locator] = {
+  const locator = {
     kind: childType,
     root: childRoot,
     path: childPath,
   } satisfies FileSystemLocator;
+  // 5. Set handle’s locator to a file system locator whose kind is childType, root is childRoot, and path is childPath.
+  // 1. Let handle be a new FileSystemFileHandle in realm.
+  const handle = new realm.FileSystemFileHandle(locator, realm.fs, realm.io);
 
   // 6. Return handle.
   return handle;
@@ -191,9 +197,12 @@ export function createFileSystemDirectoryHandle(
     io: IO;
   },
 ): FileSystemDirectoryHandle {
-  const handle = new realm.FileSystemDirectoryHandle(realm.fs, realm.io);
-
-  handle[locator] = { kind: "directory", root, path };
+  const locator = { kind: "directory", root, path } satisfies FileSystemLocator;
+  const handle = new realm.FileSystemDirectoryHandle(
+    locator,
+    realm.fs,
+    realm.io,
+  );
 
   return handle;
 }
