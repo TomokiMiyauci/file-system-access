@@ -116,10 +116,13 @@ jobs:
           command: build
           args: --release --target ${{ matrix.target }} -p file_dialog
 
-      - name: Publish
-        uses: softprops/action-gh-release@v1
-        with:
-            files: target/${{ matrix.target }}/libfile_dialog*
-            tag_name: ${{ needs.release.outputs.tag_name }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+
+      # - name: Publish
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #       files: target/${{ matrix.target }}/libfile_dialog*
+      #       tag_name: ${{ needs.release.outputs.tag_name }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
