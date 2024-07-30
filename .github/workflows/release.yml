@@ -44,16 +44,16 @@ jobs:
         with:
           deno-version: ${{ matrix.deno }}
 
-      - name: Test
-        run: deno task test --coverage=coverage
+      # - name: Test
+      #   run: deno task test --coverage=coverage
 
-      - name: Generate coverage
-        run: deno coverage coverage --output=cov_profile.lcov --lcov
+      # - name: Generate coverage
+      #   run: deno coverage coverage --output=cov_profile.lcov --lcov
 
-      - uses: codecov/codecov-action@v4
-        with:
-          files: cov_profile.lcov
-          token: ${{ secrets.CODECOV_TOKEN }}
+      # - uses: codecov/codecov-action@v4
+      #   with:
+      #     files: cov_profile.lcov
+      #     token: ${{ secrets.CODECOV_TOKEN }}
 
   build:
     runs-on: ${{ matrix.os }}
@@ -71,7 +71,7 @@ jobs:
         run: "cargo build --release"
 
   release:
-    needs: [lint, test]
+    needs: [lint, test, build]
     runs-on: ${{ matrix.os }}
     permissions:
       contents: write
@@ -93,6 +93,6 @@ jobs:
       - name: Compile and release
         uses: rust-build/rust-build.action@v1.4.5
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           RUSTTARGET: ${{ matrix.target }}

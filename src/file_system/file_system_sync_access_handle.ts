@@ -101,20 +101,20 @@ export class FileSystemSyncAccessHandle
     // 7. If writePosition is larger than oldSize, append writePosition − oldSize 0x00 (NUL) bytes to the end of fileContents.
 
     // 8. Let head be a byte sequence containing the first writePosition bytes of fileContents.
-    const head = fileContents.slice(0, writePosition);
+    // const head = fileContents.slice(0, writePosition);
 
     // 9. Let tail be an empty byte sequence.
-    let tail = new Uint8Array();
+    // let tail = new Uint8Array();
 
     // 10. If writePosition + bufferSize is smaller than oldSize:
     if (writePosition + bufferSize < oldSize) {
-      const lastIndex = oldSize - (writePosition + bufferSize);
+      // const lastIndex = oldSize - (writePosition + bufferSize);
       // 1. Set tail to a byte sequence containing the last oldSize − (writePosition + bufferSize) bytes of fileContents.
-      tail = fileContents.slice(-lastIndex);
+      // tail = fileContents.slice(-lastIndex);
     }
 
     // 11. Let newSize be head’s length + bufferSize + tail’s length.
-    const newSize = head.length + bufferSize + tail.length;
+    // const newSize = head.length + bufferSize + tail.length;
 
     // 12. If newSize − oldSize exceeds the available storage quota, throw a "QuotaExceededError" DOMException.
 
