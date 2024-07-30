@@ -1,3 +1,10 @@
+# [1.0.0-beta.3](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.2...1.0.0-beta.3) (2024-07-30)
+
+
+### Features
+
+* **type:** add file system access interface ([9a74e3a](https://github.com/TomokiMiyauci/file-system-access/commit/9a74e3a277599852b0c3a384fc44632e9b0d6da5))
+
 # [1.0.0-beta.2](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.1...1.0.0-beta.2) (2024-07-30)
 
 
