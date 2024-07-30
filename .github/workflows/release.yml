@@ -75,6 +75,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     permissions:
       contents: write
+    outputs:
+      new_release: ${{ steps.semantic.outputs.new_release_published == 'true' }}
 
     strategy:
       matrix:
@@ -90,10 +92,33 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Compile and release
-        uses: rust-build/rust-build.action@v1.4.5
+  deploy:
+    name: deploy
+    needs: [release]
+    if: ${{ needs.release.outputs.new_release }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [aarch64-unknown-linux-gnu, armv7-unknown-linux-gnueabihf]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          target: ${{ matrix.target }}
+
+      - name: Build target
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --release --target ${{ matrix.target }} -p file_dialog
+
+      - name: Publish
+        uses: softprops/action-gh-release@v1
+        with:
+            files: target/${{ matrix.target }}/libfile_dialog*
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        with:
-          RUSTTARGET: ${{ matrix.target }}
-          SRC_DIR: src/file_dialog
