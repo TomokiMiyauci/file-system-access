@@ -59,8 +59,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
-
+        os: [macOS-latest, windows-latest, ubuntu-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -68,20 +67,25 @@ jobs:
       - uses: actions-rust-lang/setup-rust-toolchain@v1
 
       - name: Build
-        run: "cargo build --release"
+        run: cargo build --release
+
+      - uses: actions/upload-artifact@v4
+        with:
+          path: target
+          overwrite: true
 
   release:
     needs: [lint, test, build]
     runs-on: ${{ matrix.os }}
     permissions:
       contents: write
-    outputs:
-      new_release: ${{ steps.semantic.outputs.new_release_published }}
-      tag_name: ${{ steps.semantic.outputs.new_release_git_tag }}
 
     strategy:
       matrix:
         os: [ubuntu-latest]
+
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
     steps:
       - name: Checkout
@@ -89,38 +93,17 @@ jobs:
 
       - uses: cycjimmy/semantic-release-action@v4
         id: semantic
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
-  deploy:
-    name: deploy
-    needs: [release]
-    if: ${{ needs.release.outputs.new_release == 'true' }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macOS-latest, windows-latest, ubuntu-latest]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
-
-      - name: Build target
-        uses: actions-rs/cargo@v1
+      - uses: actions/download-artifact@v4
         with:
-          use-cross: true
-          command: build
-          args: --release -p file_dialog
+          path: target
 
-      - name: Publish
+      - name: Upload releases
+        if: ${{ steps.semantic.outputs.new_release_published == 'true' }}
         uses: softprops/action-gh-release@v1
         with:
-            files: |
-              target/release/libfile_dialog.dylib
-              target/release/libfile_dialog.dll
-              target/release/libfile_dialog.so
-            tag_name: ${{ needs.release.outputs.tag_name }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          files: |
+            target/release/libfile_dialog.dylib
+            target/release/libfile_dialog.dll
+            target/release/libfile_dialog.so
+          tag_name: ${{ steps.semantic.outputs.new_release_git_tag }}
