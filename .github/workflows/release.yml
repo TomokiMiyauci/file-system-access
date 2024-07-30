@@ -94,33 +94,33 @@ jobs:
 
   deploy:
     name: deploy
-    runs-on: ubuntu-latest
+    needs: [release]
+    if: ${{ needs.release.outputs.new_release == 'true' }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        target: [aarch64-unknown-linux-gnu, armv7-unknown-linux-gnueabihf]
+        os: [macOS-latest, windows-latest, ubuntu-latest]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          target: ${{ matrix.target }}
 
       - name: Build target
         uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: build
-          args: --release --target ${{ matrix.target }} -p file_dialog
+          args: --release -p file_dialog
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-
-      # - name: Publish
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #       files: target/${{ matrix.target }}/libfile_dialog*
-      #       tag_name: ${{ needs.release.outputs.tag_name }}
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Publish
+        uses: softprops/action-gh-release@v1
+        with:
+            files: |
+              target/release/libfile_dialog.dylib
+              target/release/libfile_dialog.dll
+              target/release/libfile_dialog.so
+            tag_name: ${{ needs.release.outputs.tag_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
