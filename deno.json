@@ -16,5 +16,6 @@
     "@miyauci/file-system": "./src/file_system/mod.ts",
     "@miyauci/file-system-access": "./src/mod.ts",
     "@miyauci/file-system-access/deno": "./src/deno/mod.ts"
-  }
+  },
+  "exclude": ["CHANGELOG.md"]
 }
