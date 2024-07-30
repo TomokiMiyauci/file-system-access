@@ -76,7 +76,7 @@ jobs:
     permissions:
       contents: write
     outputs:
-      new_release: ${{ steps.semantic.outputs.new_release_published == 'true' }}
+      new_release: ${{ steps.semantic.outputs.new_release_published }}
 
     strategy:
       matrix:
@@ -94,7 +94,7 @@ jobs:
   deploy:
     name: deploy
     needs: [release]
-    if: ${{ needs.release.outputs.new_release == true }}
+    if: needs.release.outputs.new_release == 'true'
     runs-on: ubuntu-latest
     strategy:
       matrix:
