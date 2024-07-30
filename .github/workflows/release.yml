@@ -94,7 +94,7 @@ jobs:
   deploy:
     name: deploy
     needs: [release]
-    if: ${{ needs.release.outputs.new_release }}
+    if: ${{ needs.release.outputs.new_release == true }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
