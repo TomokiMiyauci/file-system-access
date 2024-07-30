@@ -71,7 +71,6 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ runner.os }}
           path: target
           overwrite: true
 
@@ -102,12 +101,12 @@ jobs:
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
 
-      # - name: Upload releases
-      #   if: ${{ steps.semantic.outputs.new_release_published == 'true' }}
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #     files: |
-      #       target/release/libfile_dialog.dylib
-      #       target/release/libfile_dialog.dll
-      #       target/release/libfile_dialog.so
-      #     tag_name: ${{ steps.semantic.outputs.new_release_git_tag }}
+      - name: Upload releases
+        if: ${{ steps.semantic.outputs.new_release_published == 'true' }}
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            target/artifact/release/libfile_dialog.dylib
+            target/artifact/release/file_dialog.dll
+            target/artifact/release/libfile_dialog.so
+          tag_name: ${{ steps.semantic.outputs.new_release_git_tag }}
