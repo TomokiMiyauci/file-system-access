@@ -1,3 +1,10 @@
+# [1.0.0-beta.4](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.3...1.0.0-beta.4) (2024-07-30)
+
+
+### Features
+
+* **show_directory_picker:** add partial showDirectoryPicker impl ([e8ffdfc](https://github.com/TomokiMiyauci/file-system-access/commit/e8ffdfca6b31fba61a48cf7cc581ae3bd948435b))
+
 # [1.0.0-beta.3](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.2...1.0.0-beta.3) (2024-07-30)
 
 
