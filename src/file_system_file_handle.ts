@@ -285,3 +285,23 @@ export function createChildFileSystemFileHandle(
   // 6. Return handle.
   return handle;
 }
+
+export function createFileSystemFileHandle(
+  root: string,
+  path: string[],
+  fs: UnderlyingFileSystem,
+  io: IO,
+): FileSystemFileHandle {
+  const locator = {
+    kind: "file",
+    root,
+    path,
+  } satisfies FileSystemLocator;
+
+  // 1. Let handle be a new FileSystemFileHandle in realm.
+  // 2. Set handle’s locator to a file system locator whose kind is "file", root is root, and path is path.
+  const handle = new FileSystemFileHandle(locator, fs, io);
+
+  // 3. Return handle.
+  return handle;
+}
