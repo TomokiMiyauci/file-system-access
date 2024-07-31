@@ -4,10 +4,6 @@ import { dlopen, type FetchOptions } from "@denosaurs/plug";
 import { symbols as fli } from "./binding.ts";
 import denoJson from "../../deno.json" with { type: "json" };
 
-if (!("version" in denoJson) || typeof denoJson.version !== "string") {
-  throw new Error("specify 'version' field in deno json");
-}
-
 const baseURL =
   `https://github.com/TomokiMiyauci/file-system-access/releases/download/${denoJson.version}`;
 
