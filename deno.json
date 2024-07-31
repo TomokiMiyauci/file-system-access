@@ -1,4 +1,5 @@
 {
+  "name": "@miyauci/file-system-access",
   "compilerOptions": {
     "lib": [
       "deno.window",
@@ -9,13 +10,17 @@
     "experimentalDecorators": false
   },
   "imports": {
-    "@std/bytes": "jsr:@std/bytes@^1.0.2",
-    "@std/media-types": "jsr:@std/media-types@^1.0.2",
-    "@std/path": "jsr:@std/path@^1.0.1",
-
+    "@denosaurs/plug": "jsr:@denosaurs/plug@^1.0.6",
     "@miyauci/file-system": "./src/file_system/mod.ts",
     "@miyauci/file-system-access": "./src/mod.ts",
-    "@miyauci/file-system-access/deno": "./src/deno/mod.ts"
+    "@miyauci/file-system-access/deno": "./src/deno/mod.ts",
+    "@std/bytes": "jsr:@std/bytes@^1.0.2",
+    "@std/media-types": "jsr:@std/media-types@^1.0.2",
+    "@std/path": "jsr:@std/path@^1.0.1"
   },
-  "exclude": ["CHANGELOG.md"]
+  "exports": {
+    ".": "./src/mod.ts",
+    "./deno": "./src/deno/mod.ts"
+  },
+  "exclude": ["CHANGELOG.md", "target"]
 }
