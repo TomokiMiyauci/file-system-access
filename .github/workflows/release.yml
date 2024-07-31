@@ -60,13 +60,15 @@ jobs:
     strategy:
       matrix:
         targets:
+          - target: x86_64-unknown-linux-musl
+            os: ubuntu-latest
+            cross: true
+
           - target: x86_64-apple-darwin
             os: macos-latest
-            use_cross: false
 
           - target: aarch64-apple-darwin
             os: macos-latest
-            use_cross: false
 
     steps:
       - name: Checkout
@@ -76,13 +78,13 @@ jobs:
         with:
           target: ${{ matrix.targets.target }}
 
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      # - uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       ~/.cargo/registry
+      #       ~/.cargo/git
+      #       target
+      #     key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Install cached cross
         uses: baptiste0928/cargo-install@v3
@@ -90,7 +92,7 @@ jobs:
           crate: cross
 
       - name: Build
-        run: ${{ matrix.targets.use_cross && 'cross' || 'cargo' }} build --release --target ${{ matrix.targets.target }} --locked
+        run: ${{ matrix.targets.cross && 'cross' || 'cargo' }} build --release --target ${{ matrix.targets.target }} --locked
 
       - name: Rename artifacts
         shell: bash
