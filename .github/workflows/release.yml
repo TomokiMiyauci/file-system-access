@@ -137,4 +137,3 @@ jobs:
         with:
           files: target/**/release/*.{dylib,dll,so}
           tag_name: ${{ steps.semantic.outputs.new_release_git_tag }}
-          fail_on_unmatched_files: true
