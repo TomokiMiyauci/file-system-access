@@ -19,7 +19,7 @@ import {
   FileSystemFileHandle,
 } from "./file_system_file_handle.ts";
 import { locator } from "./symbol.ts";
-import { asynciterator, PairAsyncIterable } from "./webidl/async.ts";
+import { asynciterator, type PairAsyncIterable } from "./webidl/async.ts";
 
 interface IterationContext {
   /**

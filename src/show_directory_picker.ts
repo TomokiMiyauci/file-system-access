@@ -1,8 +1,8 @@
 import {
   createFileSystemDirectoryHandle,
   FileSystemDirectoryHandle,
-  IO,
-  UnderlyingFileSystem,
+  type IO,
+  type UnderlyingFileSystem,
 } from "@miyauci/file-system";
 import { isTooSensitiveOrDangerous } from "./algorithm.ts";
 import type { DirectoryPickerOptions, OpenDirectoryPicker } from "./type.ts";

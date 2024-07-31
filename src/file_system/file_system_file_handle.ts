@@ -1,5 +1,5 @@
 import { FileSystemHandle } from "./file_system_handle.ts";
-import {
+import type {
   FileEntry,
   FileSystemEntry,
   FileSystemLocator,

@@ -1,6 +1,6 @@
 /// <reference lib="deno.unstable" />
 
-import {
+import type {
   DirectoryPickerOptions,
   FilePickerAcceptType,
   OpenFilePickerOptions,

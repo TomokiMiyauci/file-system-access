@@ -1,5 +1,5 @@
 import { releaseLock } from "./algorithm.ts";
-import { FileEntry } from "./type.ts";
+import type { FileEntry } from "./type.ts";
 import { $file } from "./symbol.ts";
 import { concat } from "@std/bytes";
 

@@ -1,5 +1,8 @@
 {
   "name": "@miyauci/file-system-access",
+  "tasks": {
+    "test": "deno test --doc"
+  },
   "compilerOptions": {
     "lib": [
       "deno.window",
@@ -22,5 +25,6 @@
     ".": "./src/mod.ts",
     "./deno": "./src/deno/mod.ts"
   },
-  "exclude": ["CHANGELOG.md", "target"]
+  "exclude": ["CHANGELOG.md", "target"],
+  "version": "1.0.0"
 }

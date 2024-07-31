@@ -1,5 +1,5 @@
 import { isSameLocator } from "./algorithm.ts";
-import { FileSystemLocator, IO, UnderlyingFileSystem } from "./type.ts";
+import type { FileSystemLocator, IO, UnderlyingFileSystem } from "./type.ts";
 import { locator } from "./symbol.ts";
 
 export class FileSystemHandle implements globalThis.FileSystemHandle {

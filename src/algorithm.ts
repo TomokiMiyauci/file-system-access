@@ -1,4 +1,4 @@
-import { FilePickerAcceptType, FilePickerOptions } from "./type.ts";
+import type { FilePickerAcceptType, FilePickerOptions } from "./type.ts";
 import { parseMediaType } from "@std/media-types";
 
 export function isTooSensitiveOrDangerous(): boolean {

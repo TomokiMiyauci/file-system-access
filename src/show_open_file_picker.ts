@@ -1,8 +1,8 @@
 import {
   createFileSystemFileHandle,
-  FileSystemFileHandle,
-  IO,
-  UnderlyingFileSystem,
+  type FileSystemFileHandle,
+  type IO,
+  type UnderlyingFileSystem,
 } from "@miyauci/file-system";
 import { isTooSensitiveOrDangerous } from "./algorithm.ts";
 import type { OpenFileDialog, OpenFilePickerOptions } from "./type.ts";

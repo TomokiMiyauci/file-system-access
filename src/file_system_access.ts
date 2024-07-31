@@ -1,6 +1,6 @@
-import { Adaptor } from "./type.ts";
+import type { Adaptor } from "./type.ts";
 import { crateShowOpenFilePicker } from "./show_open_file_picker.ts";
-import { DirectoryPickerOptions, OpenFilePickerOptions } from "./type.ts";
+import type { DirectoryPickerOptions, OpenFilePickerOptions } from "./type.ts";
 import { createShowDirectoryPicker } from "./show_directory_picker.ts";
 
 export class FileSystemAccess {
