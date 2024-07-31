@@ -72,7 +72,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - uses: actions-rust-lang/setup-rust-toolchain@v
+        with:
+          target: ${{ matrix.targets.target }}
 
       - name: Install cached cross
         uses: baptiste0928/cargo-install@v3
