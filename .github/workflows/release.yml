@@ -59,7 +59,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macOS-latest, windows-latest, ubuntu-latest]
+        os: [macos-13, macOS-latest, windows-latest, ubuntu-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -68,6 +68,11 @@ jobs:
 
       - name: Build
         run: cargo build --release
+
+      - name: Rename MacOS lib name
+        if: runner.os == 'MacOS'
+        run: |
+          mv target/release/libfile_dialog.dylib libfile_dialog.$(uname -m).dylib
 
       - uses: actions/upload-artifact@v4
         with:
