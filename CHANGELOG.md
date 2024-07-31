@@ -1,3 +1,10 @@
+# [1.0.0-beta.6](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.5...1.0.0-beta.6) (2024-07-31)
+
+
+### Features
+
+* **show_open_file_picker:** add partial implementation of showOpenFilePicker ([f4885e4](https://github.com/TomokiMiyauci/file-system-access/commit/f4885e41a27d70c68e9e8cad6266efc8e5ad5ab3))
+
 # [1.0.0-beta.5](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.4...1.0.0-beta.5) (2024-07-31)
 
 
