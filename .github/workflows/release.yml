@@ -122,15 +122,11 @@ jobs:
   release:
     needs: [lint, test, build]
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    env:
-      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
     outputs:
       new_release: ${{ steps.semantic.outputs.new_release_published == 'true' }}
-      tag_name: ${{ steps.semantic.outputs.new_release_version }}
+      new_tag: ${{ steps.semantic.outputs.new_release_git_tag }}
+      new_version: ${{ steps.semantic.outputs.new_release_version }}
 
     steps:
       - name: Checkout
@@ -138,6 +134,8 @@ jobs:
 
       - uses: cycjimmy/semantic-release-action@v4
         id: semantic
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
   upload:
     needs: [release]
@@ -154,11 +152,13 @@ jobs:
       - name: Upload releases
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{ needs.release.outputs.new_tag }}
           files: |
             target/**/release/*.dylib
             target/**/release/*.dll
             target/**/release/*.so
-          tag_name: ${{ needs.release.outputs.tag_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
   publish:
     needs: [release]
@@ -180,7 +180,7 @@ jobs:
         uses: maxgfr/github-change-json@main
         with:
           key: version
-          value: ${{ needs.release.outputs.tag_name }}
+          value: ${{ needs.release.outputs.new_version }}
           path: ./deno.json
 
       - name: publish
