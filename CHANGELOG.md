@@ -1,3 +1,10 @@
+# [1.0.0-beta.9](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.8...1.0.0-beta.9) (2024-07-31)
+
+
+### Bug Fixes
+
+* **show_direcotry_picker:** remove unused algorithm ([39d997c](https://github.com/TomokiMiyauci/file-system-access/commit/39d997c62c40764333069a080d4531cf42423094))
+
 # [1.0.0-beta.8](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.7...1.0.0-beta.8) (2024-07-31)
 
 
