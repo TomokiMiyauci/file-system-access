@@ -1,3 +1,10 @@
+# [1.0.0-beta.10](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.9...1.0.0-beta.10) (2024-07-31)
+
+
+### Features
+
+* **generated:** add generated ffi definition ([fd1ac8b](https://github.com/TomokiMiyauci/file-system-access/commit/fd1ac8bd0f51bff8d13871547362cf59e0e547b5))
+
 # [1.0.0-beta.9](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.8...1.0.0-beta.9) (2024-07-31)
 
 
