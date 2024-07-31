@@ -84,12 +84,13 @@ jobs:
       - name: Build
         run: ${{ matrix.targets.use_cross && 'cross' || 'cargo' }} build --release --target ${{ matrix.targets.target }} --locked
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-
       - name: Rename artifacts
         shell: bash
         run: for file in /target/${{ matrix.targets.target }}/release/*.{so,dylib,dll}; do mv "$file" "${file%.*}_${{ matrix.targets.target }}.${file##*.}"; done
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+
 
       - uses: actions/upload-artifact@v4
         with:
