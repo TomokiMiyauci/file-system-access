@@ -74,11 +74,7 @@ jobs:
         run: cargo install cross --git https://github.com/cross-rs/cross
 
       - name: Build
-        uses: actions-rs/cargo@v1
-        with:
-          use-cross: true
-          command: build
-          args: --release --target ${{ matrix.targets.target }}
+        run: cross build --release --target ${{ matrix.targets.target }}
 
       - name: Rename artifacts
         shell: bash
