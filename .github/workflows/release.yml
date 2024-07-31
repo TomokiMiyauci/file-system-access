@@ -126,7 +126,7 @@ jobs:
       contents: write
 
     outputs:
-      new_release: ${{ steps.semantic.outputs.new_release_published == 'true' }}
+      new_release: ${{ steps.semantic.outputs.new_release_published }}
       new_tag: ${{ steps.semantic.outputs.new_release_git_tag }}
       new_version: ${{ steps.semantic.outputs.new_release_version }}
 
@@ -138,8 +138,6 @@ jobs:
         id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
-      - run: echo ${{ steps.semantic.outputs.new_release_published == 'true' }} ${{steps.semantic.outputs.new_release_published}}
 
   upload:
     needs: [release]
