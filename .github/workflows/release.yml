@@ -141,7 +141,7 @@ jobs:
 
   upload:
     needs: [release]
-    if: ${{ needs.release.outputs.new_release }}
+    if: ${{ needs.release.outputs.new_release == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -164,7 +164,7 @@ jobs:
 
   publish:
     needs: [release]
-    if: ${{ needs.release.outputs.new_release }}
+    if: ${{ needs.release.outputs.new_release == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
