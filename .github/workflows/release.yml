@@ -87,7 +87,7 @@ jobs:
       - name: Rename artifacts
         shell: bash
         run: |
-          find /target/${{ matrix.targets.target }}/release -maxdepth 1 \( -name '*.so' -o -name '*.dll' -o -name '*.dylib' \) -exec sh -c '
+          find target/${{ matrix.targets.target }}/release -maxdepth 1 \( -name '*.so' -o -name '*.dll' -o -name '*.dylib' \) -exec sh -c '
           for file; do
             if [ -e "$file" ]; then
               mv "$file" "${file%.*}_${{ matrix.targets.target }}.${file##*.}";
