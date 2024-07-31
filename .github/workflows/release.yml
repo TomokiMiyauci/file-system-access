@@ -59,23 +59,35 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-13, macOS-latest, windows-latest, ubuntu-latest]
+        os: [ubuntu-latest]
+        targets:
+          - target: x86_64-apple-darwin
+          - target: aarch64-apple-darwin
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - uses: actions-rust-lang/setup-rust-toolchain@v1
 
-      - name: Build
-        run: cargo build --release
+      - name: Install cross
+        run: cargo install cross --git https://github.com/cross-rs/cross
 
-      - name: Rename MacOS lib name
-        if: runner.os == 'MacOS'
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --release --target ${{ matrix.targets.target }}
+
+      - name: Rename artifacts
+        shell: bash
         run: |
-          mv target/release/libfile_dialog.dylib libfile_dialog.$(uname -m).dylib
+          mv target/${{ matrix.targets.target }}/release/file_dialog{,-${{ matrix.targets.target }}}
 
       - uses: actions/upload-artifact@v4
         with:
+          name: ${{ matrix.targets.target }}
           path: target
           overwrite: true
 
@@ -111,8 +123,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            target/artifact/release/lib*.dylib
-            target/artifact/release/*.dll
-            target/artifact/release/lib*.so
+            target/**/release/*.dylib
+            target/**/release/*.dll
+            target/**/release/*.so
           tag_name: ${{ steps.semantic.outputs.new_release_git_tag }}
           fail_on_unmatched_files: true
