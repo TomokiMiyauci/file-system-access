@@ -1,3 +1,10 @@
+# [1.0.0-beta.7](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.6...1.0.0-beta.7) (2024-07-31)
+
+
+### Features
+
+* **file_system_access:** add constructor for binding file system access API ([e258be3](https://github.com/TomokiMiyauci/file-system-access/commit/e258be3598b699d5c33099784ba95f65f7097666))
+
 # [1.0.0-beta.6](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.5...1.0.0-beta.6) (2024-07-31)
 
 
