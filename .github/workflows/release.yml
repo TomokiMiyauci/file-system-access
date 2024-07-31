@@ -86,7 +86,13 @@ jobs:
 
       - name: Rename artifacts
         shell: bash
-        run: for file in /target/${{ matrix.targets.target }}/release/*.{so,dylib,dll}; do mv "$file" "${file%.*}_${{ matrix.targets.target }}.${file##*.}"; done
+        run: |
+          find /target/${{ matrix.targets.target }}/release -maxdepth 1 \( -name '*.so' -o -name '*.dll' -o -name '*.dylib' \) -exec sh -c '
+          for file; do
+            if [ -e "$file" ]; then
+              mv "$file" "${file%.*}_${{ matrix.targets.target }}.${file##*.}";
+            fi
+          done' sh {} +
 
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
