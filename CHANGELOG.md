@@ -1,3 +1,12 @@
+# [1.0.0-beta.12](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.11...1.0.0-beta.12) (2024-07-31)
+
+
+### Features
+
+* add binary source of linux and windows ([3b8a7d0](https://github.com/TomokiMiyauci/file-system-access/commit/3b8a7d00c94d9f876dbc03636c518a834610e1d9))
+* **deno:** add deno adaptor ([d8830a1](https://github.com/TomokiMiyauci/file-system-access/commit/d8830a1c6a69c662ca40c8b47b2b131e4bf8374d))
+* **mod:** export related type ([c8f61eb](https://github.com/TomokiMiyauci/file-system-access/commit/c8f61eb01bd3dd2509ab46e44048e3663d1c152a))
+
 # [1.0.0-beta.11](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.10...1.0.0-beta.11) (2024-07-31)
 
 
