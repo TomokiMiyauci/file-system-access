@@ -89,8 +89,7 @@ jobs:
 
       - name: Rename artifacts
         shell: bash
-        run: |
-          mv target/${{ matrix.targets.target }}/release/file_dialog{,-${{ matrix.targets.target }}}
+        run: for file in /target/${{ matrix.targets.target }}/release/*.{so,dylib,dll}; do mv "$file" "${file%.*}_${{ matrix.targets.target }}.${file##*.}"; done
 
       - uses: actions/upload-artifact@v4
         with:
