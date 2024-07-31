@@ -108,7 +108,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            target/artifact/release/libfile_dialog.dylib
-            target/artifact/release/file_dialog.dll
-            target/artifact/release/libfile_dialog.so
+            target/artifact/release/lib*.dylib
+            target/artifact/release/*.dll
+            target/artifact/release/lib*.so
           tag_name: ${{ steps.semantic.outputs.new_release_git_tag }}
+          fail_on_unmatched_files: true
