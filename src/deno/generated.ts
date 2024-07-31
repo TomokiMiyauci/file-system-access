@@ -14,7 +14,7 @@ if (!("version" in denoJson) || typeof denoJson.version !== "string") {
 const baseURL =
   `https://github.com/TomokiMiyauci/file-system-access/releases/download/${denoJson.version}`;
 
-const options: FetchOptions = {
+const options = {
   name: "file_dialog",
   url: baseURL,
   suffixes: {
@@ -22,8 +22,16 @@ const options: FetchOptions = {
       aarch64: "_aarch64-apple-darwin",
       x86_64: "_x86_64-apple-darwin",
     },
+    linux: {
+      aarch64: "_aarch64-unknown-linux-gnu",
+      x86_64: "_x86_64-unknown-linux-gnu",
+    },
+    windows: {
+      aarch64: "_aarch64-pc-windows-msvc",
+      x86_64: "_x86_64-pc-windows-msvc",
+    },
   },
-};
+} satisfies FetchOptions;
 
 const { symbols } = await dlopen(options, fli);
 
