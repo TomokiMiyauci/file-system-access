@@ -122,6 +122,8 @@ jobs:
   release:
     needs: [lint, test, build]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     outputs:
       new_release: ${{ steps.semantic.outputs.new_release_published == 'true' }}
