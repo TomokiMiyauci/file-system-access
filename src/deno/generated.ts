@@ -57,6 +57,14 @@ function __Dialog_pick_directory(
   );
 }
 
+function __Dialog_save_file(
+  arg0: Deno.PointerObject | null,
+): Deno.PointerObject | null {
+  return symbols.__Dialog_save_file(
+    arg0,
+  );
+}
+
 function __Dialog_set_directory(
   arg0: Deno.PointerObject | null,
   arg1: Uint8Array,
@@ -123,6 +131,12 @@ export class Dialog {
 
   pick_directory(): Deno.PointerObject | null {
     return __Dialog_pick_directory(
+      this.ptr,
+    );
+  }
+
+  save_file(): Deno.PointerObject | null {
+    return __Dialog_save_file(
       this.ptr,
     );
   }

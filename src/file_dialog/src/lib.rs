@@ -75,6 +75,24 @@ impl Dialog {
         c_string.into_raw()
     }
 
+    pub fn save_file(&self) -> *mut c_char {
+        let path_buf = self.dialog.clone().save_file();
+
+        let result = match path_buf {
+            Some(path) => json!({
+              "success": true,
+              "data": path
+            }),
+            None => json!({
+              "success": false
+            }),
+        };
+
+        let c_string = CString::new(result.to_string()).unwrap();
+
+        c_string.into_raw()
+    }
+
     pub fn set_directory(&self, p: &[u8]) -> Dialog {
         let path_str = str::from_utf8(p).expect("Invalid UTF-8 sequence");
         let path = Path::new(path_str);

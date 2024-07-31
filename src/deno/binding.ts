@@ -25,6 +25,13 @@ export const symbols = {
     result: "pointer",
     nonblocking: false,
   },
+  __Dialog_save_file: {
+    parameters: [
+      "pointer",
+    ],
+    result: "pointer",
+    nonblocking: false,
+  },
   __Dialog_set_directory: {
     parameters: [
       "pointer",
