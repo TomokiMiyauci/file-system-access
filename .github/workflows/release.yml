@@ -139,6 +139,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
+      - run: echo ${{ steps.semantic.outputs.new_release_published == 'true' }} ${{steps.semantic.outputs.new_release_published}}
+
   upload:
     needs: [release]
     if: ${{ needs.release.outputs.new_release }}
