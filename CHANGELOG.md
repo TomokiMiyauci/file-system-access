@@ -1,3 +1,10 @@
+# [1.0.0-beta.11](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.10...1.0.0-beta.11) (2024-07-31)
+
+
+### Features
+
+* **ffi:** add ffi wrapper ([f2ee6cf](https://github.com/TomokiMiyauci/file-system-access/commit/f2ee6cfde5f2f34c163934bb2344e25a5e4c2d87))
+
 # [1.0.0-beta.10](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.9...1.0.0-beta.10) (2024-07-31)
 
 
