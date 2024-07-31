@@ -5,7 +5,6 @@ import {
   UnderlyingFileSystem,
 } from "@miyauci/file-system";
 import { isTooSensitiveOrDangerous } from "./algorithm.ts";
-import { rememberPickedDirectory } from "./show_open_file_picker.ts";
 import type { DirectoryPickerOptions, OpenDirectoryPicker } from "./type.ts";
 
 export function showDirectoryPickerWith(
@@ -52,7 +51,6 @@ export function showDirectoryPickerWith(
     });
 
     // 8. Remember a picked directory given options["id"], entry and environment.
-    rememberPickedDirectory;
 
     // 9. Let desc be a FileSystemPermissionDescriptor.
     // 10. Set desc["name"] to "file-system".
