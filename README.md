@@ -57,11 +57,15 @@ When using `DenoAdaptor`, the following flags are required.
 
 - `--unstable-ffi`
 
+##### Permissions
+
 It also requires the following permission.
 
+- `--allow-env`(`DENO_DIR`, `HOME`)
+- `--allow-net`(`github.com`)
 - `--allow-ffi`
-- `--allow-read`(When read directory or file)
-- `--allow-write`(When write file)
+- `--allow-read`(path to binary cache, target directories and files)
+- `--allow-write`(binary cache, target files)
 
 #### Node
 
