@@ -1,3 +1,10 @@
+# [1.0.0-beta.13](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.12...1.0.0-beta.13) (2024-07-31)
+
+
+### Features
+
+* export save file dialog feature via FFI ([7f7d5f2](https://github.com/TomokiMiyauci/file-system-access/commit/7f7d5f2c0b4304fbcd81c050c3701cf455c802a6))
+
 # [1.0.0-beta.12](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.11...1.0.0-beta.12) (2024-07-31)
 
 
