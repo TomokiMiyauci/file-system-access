@@ -1,3 +1,10 @@
+# [1.0.0-beta.8](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.7...1.0.0-beta.8) (2024-07-31)
+
+
+### Features
+
+* **mod:** export related module ([eaeb66a](https://github.com/TomokiMiyauci/file-system-access/commit/eaeb66a695393fe3a984af57524695ad21efc644))
+
 # [1.0.0-beta.7](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.6...1.0.0-beta.7) (2024-07-31)
 
 
