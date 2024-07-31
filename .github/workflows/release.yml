@@ -135,5 +135,8 @@ jobs:
         if: ${{ steps.semantic.outputs.new_release_published == 'true' }}
         uses: softprops/action-gh-release@v1
         with:
-          files: target/**/release/*.{dylib,dll,so}
+          files: |
+            target/**/release/*.dylib
+            target/**/release/*.dll
+            target/**/release/*.so
           tag_name: ${{ steps.semantic.outputs.new_release_git_tag }}
