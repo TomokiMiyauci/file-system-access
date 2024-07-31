@@ -56,13 +56,17 @@ jobs:
       #     token: ${{ secrets.CODECOV_TOKEN }}
 
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.targets.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
         targets:
           - target: x86_64-apple-darwin
+            os: macos-latest
+            use_cross: false
+
           - target: aarch64-apple-darwin
+            os: macos-latest
+            use_cross: false
 
     steps:
       - name: Checkout
@@ -70,11 +74,13 @@ jobs:
 
       - uses: actions-rust-lang/setup-rust-toolchain@v1
 
-      - name: Install cross
-        run: cargo install cross --git https://github.com/cross-rs/cross
+      - name: Install cached cross
+        uses: baptiste0928/cargo-install@v3
+        with:
+          crate: cross
 
       - name: Build
-        run: cross build --release --target ${{ matrix.targets.target }}
+        run: ${{ matrix.targets.use_cross && 'cross' || 'cargo' }} build --release --target ${{ matrix.targets.target }}
 
       - name: Rename artifacts
         shell: bash
