@@ -80,7 +80,7 @@ jobs:
           crate: cross
 
       - name: Build
-        run: ${{ matrix.targets.use_cross && 'cross' || 'cargo' }} build --release --target ${{ matrix.targets.target }}
+        run: ${{ matrix.targets.use_cross && 'cross' || 'cargo' }} build --release --target ${{ matrix.targets.target }} --locked
 
       - name: Rename artifacts
         shell: bash
