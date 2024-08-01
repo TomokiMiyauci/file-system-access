@@ -65,7 +65,7 @@ It also requires the following permission.
 - `--allow-net`(`github.com`)
 - `--allow-ffi`
 - `--allow-read`(path to binary cache, target directories and files)
-- `--allow-write`(binary cache, target files)
+- `--allow-write`(path to binary cache, target files)
 
 #### Node
 
