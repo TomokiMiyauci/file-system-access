@@ -1,3 +1,7 @@
+import type {
+  FileSystemDirectoryHandle,
+  FileSystemFileHandle,
+} from "@miyauci/file-system";
 import type { Adaptor } from "./type.ts";
 import { crateShowOpenFilePicker } from "./show_open_file_picker.ts";
 import type { DirectoryPickerOptions, OpenFilePickerOptions } from "./type.ts";
