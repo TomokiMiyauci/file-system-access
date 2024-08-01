@@ -10,7 +10,10 @@ import type {
   DirectoryEntry,
   FileEntry,
   FileSystemEntry,
+  FileSystemGetDirectoryOptions,
+  FileSystemGetFileOptions,
   FileSystemLocator,
+  FileSystemRemoveOptions,
   IO,
   UnderlyingFileSystem,
 } from "./type.ts";
@@ -116,8 +119,7 @@ function next(
   },
   next,
 })
-export class FileSystemDirectoryHandle extends FileSystemHandle
-  implements globalThis.FileSystemDirectoryHandle {
+export class FileSystemDirectoryHandle extends FileSystemHandle {
   override get kind(): "directory" {
     return "directory";
   }

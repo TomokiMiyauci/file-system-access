@@ -1,12 +1,15 @@
 import { releaseLock } from "./algorithm.ts";
-import type { FileEntry } from "./type.ts";
+import type {
+  AllowSharedBufferSource,
+  FileEntry,
+  FileSystemReadWriteOptions,
+} from "./type.ts";
 import { $file } from "./symbol.ts";
 import { concat } from "@std/bytes";
 
 const state = Symbol("[[state]]");
 
-export class FileSystemSyncAccessHandle
-  implements globalThis.FileSystemSyncAccessHandle {
+export class FileSystemSyncAccessHandle {
   /**
    * @see https://fs.spec.whatwg.org/#filesystemsyncaccesshandle-state
    */

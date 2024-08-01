@@ -1,3 +1,44 @@
+export interface FileSystemGetFileOptions {
+  create?: boolean;
+}
+
+export interface FileSystemGetDirectoryOptions {
+  create?: boolean;
+}
+
+export interface FileSystemRemoveOptions {
+  recursive?: boolean;
+}
+
+export interface FileSystemCreateWritableOptions {
+  keepExistingData?: boolean;
+}
+
+export type FileSystemHandleKind = "directory" | "file";
+
+export type AllowSharedBufferSource = ArrayBuffer | ArrayBufferView;
+
+export interface FileSystemReadWriteOptions {
+  at?: number;
+}
+
+export type FileSystemWriteChunkType =
+  | BufferSource
+  | Blob
+  | string
+  | WriteParams;
+
+export interface WriteParams {
+  data?: BufferSource | Blob | string | null;
+  position?: number | null;
+  size?: number | null;
+  type: WriteCommandType;
+}
+
+export type WriteCommandType = "seek" | "truncate" | "write";
+
+export type PermissionState = "denied" | "granted" | "prompt";
+
 interface BaseEntry {
   /**
    * @see https://fs.spec.whatwg.org/#entry-name

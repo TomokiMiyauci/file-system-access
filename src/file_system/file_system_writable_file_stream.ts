@@ -1,11 +1,14 @@
 import { releaseLock } from "./algorithm.ts";
-import type { FileEntry } from "./type.ts";
+import type {
+  FileEntry,
+  FileSystemWriteChunkType,
+  WriteParams,
+} from "./type.ts";
 import { $file, buffer, seekOffset } from "./symbol.ts";
 import { concat } from "@std/bytes";
 
 export class FileSystemWritableFileStream
-  extends WritableStream<FileSystemWriteChunkType>
-  implements globalThis.FileSystemWritableFileStream {
+  extends WritableStream<FileSystemWriteChunkType> {
   [$file]!: FileEntry;
   [seekOffset]: number = 0;
 

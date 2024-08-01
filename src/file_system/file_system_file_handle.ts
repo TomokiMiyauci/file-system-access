@@ -1,6 +1,7 @@
 import { FileSystemHandle } from "./file_system_handle.ts";
 import type {
   FileEntry,
+  FileSystemCreateWritableOptions,
   FileSystemEntry,
   FileSystemLocator,
   IO,
@@ -11,10 +12,13 @@ import { createFileSystemWritableFileStream } from "./file_system_writable_file_
 import { buffer, locator } from "./symbol.ts";
 import { extname } from "@std/path";
 import { typeByExtension } from "@std/media-types";
-import { createFileSystemSyncAccessHandle } from "./file_system_sync_access_handle.ts";
+import {
+  createFileSystemSyncAccessHandle,
+  type FileSystemSyncAccessHandle,
+} from "./file_system_sync_access_handle.ts";
+import type { FileSystemWritableFileStream } from "./file_system_writable_file_stream.ts";
 
-export class FileSystemFileHandle extends FileSystemHandle
-  implements globalThis.FileSystemFileHandle {
+export class FileSystemFileHandle extends FileSystemHandle {
   override get kind(): "file" {
     return "file";
   }

@@ -4,13 +4,6 @@
     "test": "deno test --doc"
   },
   "compilerOptions": {
-    "lib": [
-      "deno.window",
-      "dom",
-      "dom.asynciterable",
-      "webworker",
-      "deno.unstable"
-    ],
     "experimentalDecorators": false
   },
   "imports": {

@@ -1,4 +1,8 @@
-import type { IO, UnderlyingFileSystem } from "@miyauci/file-system";
+import type {
+  FileSystemHandle,
+  IO,
+  UnderlyingFileSystem,
+} from "@miyauci/file-system";
 
 export interface FilePickerOptions {
   types?: FilePickerAcceptType[];
@@ -32,6 +36,18 @@ export type WellKnownDirectory =
 export type FileSystemPermissionMode = "read" | "readwrite";
 
 export type StartInDirectory = WellKnownDirectory | FileSystemHandle;
+
+export interface PermissionDescriptor {
+  name: PermissionName;
+}
+
+export type PermissionName =
+  | "geolocation"
+  | "notifications"
+  | "persistent-storage"
+  | "push"
+  | "screen-wake-lock"
+  | "xr-spatial-tracking";
 
 export interface FileSystemPermissionDescriptor extends PermissionDescriptor {
   handle: FileSystemHandle;
