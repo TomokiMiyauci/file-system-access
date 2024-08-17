@@ -1,3 +1,10 @@
+# [1.0.0-beta.15](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.14...1.0.0-beta.15) (2024-08-17)
+
+
+### Features
+
+* switch to use external file system module ([e15a889](https://github.com/TomokiMiyauci/file-system-access/commit/e15a889fae260f7007cfd6e5453c426b116a7710))
+
 # [1.0.0-beta.14](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.13...1.0.0-beta.14) (2024-08-01)
 
 
