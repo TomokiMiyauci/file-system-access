@@ -1,15 +1,16 @@
 import {
-  createFileSystemFileHandle,
-  type FileSystemFileHandle,
-  type IO,
-  type UnderlyingFileSystem,
-} from "@miyauci/file-system";
+  FileSystemFileHandle,
+  type FileSystemFileOrDirectoryHandleContext,
+} from "@miyauci/fs";
 import { isTooSensitiveOrDangerous } from "./algorithm.ts";
 import type { OpenFileDialog, OpenFilePickerOptions } from "./type.ts";
+import { List } from "jsr:@miyauci/infra@1.0.0-beta.2";
 
 export function showOpenFilePickerWith(
-  fs: UnderlyingFileSystem,
-  io: IO,
+  context: Pick<
+    FileSystemFileOrDirectoryHandleContext,
+    "locateEntry" | "typeByEntry" | "userAgent"
+  >,
   openFileDialog: OpenFileDialog,
   options: OpenFilePickerOptions = {},
 ): Promise<FileSystemFileHandle[]> {
@@ -53,10 +54,15 @@ export function showOpenFilePickerWith(
         // 2. At the discretion of the user agent, either go back to the beginning of these in parallel steps, or reject p with an "AbortError" DOMException and abort.
       }
 
-      const path: string[] = [name];
-
       // 2. Add a new FileSystemFileHandle associated with entry to result.
-      result.push(createFileSystemFileHandle(root, path, fs, io));
+      result.push(
+        new FileSystemFileHandle({
+          locateEntry: context.locateEntry.bind(context),
+          locator: { kind: "file", path: new List([name]), root },
+          typeByEntry: context.typeByEntry.bind(context),
+          userAgent: context.userAgent,
+        }),
+      );
     }
 
     // 8. Remember a picked directory given options["id"], entries[0] and environment.
@@ -78,10 +84,12 @@ export function showOpenFilePickerWith(
 // ) {}
 
 export function crateShowOpenFilePicker(
-  fs: UnderlyingFileSystem,
-  io: IO,
+  context: Pick<
+    FileSystemFileOrDirectoryHandleContext,
+    "locateEntry" | "typeByEntry" | "userAgent"
+  >,
   open: OpenFileDialog,
 ) {
   return (options?: OpenFilePickerOptions) =>
-    showOpenFilePickerWith(fs, io, open, options);
+    showOpenFilePickerWith(context, open, options);
 }

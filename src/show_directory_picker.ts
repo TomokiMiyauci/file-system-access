@@ -1,15 +1,17 @@
 import {
   createFileSystemDirectoryHandle,
-  FileSystemDirectoryHandle,
-  type IO,
-  type UnderlyingFileSystem,
-} from "@miyauci/file-system";
+  type FileSystemDirectoryHandle,
+  type FileSystemFileOrDirectoryHandleContext,
+} from "@miyauci/fs";
+import { List } from "@miyauci/infra";
 import { isTooSensitiveOrDangerous } from "./algorithm.ts";
 import type { DirectoryPickerOptions, OpenDirectoryPicker } from "./type.ts";
 
 export function showDirectoryPickerWith(
-  fs: UnderlyingFileSystem,
-  io: IO,
+  context: Pick<
+    FileSystemFileOrDirectoryHandleContext,
+    "locateEntry" | "typeByEntry" | "userAgent"
+  >,
   openDirectoryPicker: OpenDirectoryPicker,
   options?: DirectoryPickerOptions,
 ): Promise<FileSystemDirectoryHandle> {
@@ -44,11 +46,11 @@ export function showDirectoryPickerWith(
     }
 
     // 7. Set result to a new FileSystemDirectoryHandle associated with entry.
-    const result = createFileSystemDirectoryHandle(root, [""], {
-      FileSystemDirectoryHandle,
-      fs,
-      io,
-    });
+    const result = createFileSystemDirectoryHandle(
+      root,
+      new List([""]),
+      context,
+    );
 
     // 8. Remember a picked directory given options["id"], entry and environment.
 
@@ -83,10 +85,12 @@ export function showDirectoryPickerWith(
 }
 
 export function createShowDirectoryPicker(
-  fs: UnderlyingFileSystem,
-  io: IO,
+  context: Pick<
+    FileSystemFileOrDirectoryHandleContext,
+    "locateEntry" | "typeByEntry" | "userAgent"
+  >,
   openDirectoryPicker: OpenDirectoryPicker,
 ) {
   return (options?: DirectoryPickerOptions) =>
-    showDirectoryPickerWith(fs, io, openDirectoryPicker, options);
+    showDirectoryPickerWith(context, openDirectoryPicker, options);
 }

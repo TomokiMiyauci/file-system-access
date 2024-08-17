@@ -4,6 +4,8 @@
     "specifiers": {
       "jsr:@denosaurs/plug": "jsr:@denosaurs/plug@1.0.6",
       "jsr:@denosaurs/plug@^1.0.6": "jsr:@denosaurs/plug@1.0.6",
+      "jsr:@miyauci/fs@1.0.0-beta.1": "jsr:@miyauci/fs@1.0.0-beta.1",
+      "jsr:@miyauci/infra@1.0.0-beta.2": "jsr:@miyauci/infra@1.0.0-beta.2",
       "jsr:@std/assert@^0.221.0": "jsr:@std/assert@0.221.0",
       "jsr:@std/bytes@^1.0.2": "jsr:@std/bytes@1.0.2",
       "jsr:@std/encoding@^0.221.0": "jsr:@std/encoding@0.221.0",
@@ -11,7 +13,9 @@
       "jsr:@std/fs@^0.221.0": "jsr:@std/fs@0.221.0",
       "jsr:@std/media-types@^1.0.2": "jsr:@std/media-types@1.0.2",
       "jsr:@std/path@^0.221.0": "jsr:@std/path@0.221.0",
-      "jsr:@std/path@^1.0.1": "jsr:@std/path@1.0.1"
+      "jsr:@std/path@^1.0.1": "jsr:@std/path@1.0.1",
+      "jsr:@std/path@^1.0.2": "jsr:@std/path@1.0.2",
+      "npm:@types/node": "npm:@types/node@18.16.19"
     },
     "jsr": {
       "@denosaurs/plug@1.0.6": {
@@ -22,6 +26,18 @@
           "jsr:@std/fs@^0.221.0",
           "jsr:@std/path@^0.221.0"
         ]
+      },
+      "@miyauci/fs@1.0.0-beta.1": {
+        "integrity": "0c2af5c5ced0946c216e7fbebcd02a802fd956a0f9aaa7b522612fc44e4c3903",
+        "dependencies": [
+          "jsr:@miyauci/infra@1.0.0-beta.2",
+          "jsr:@std/bytes@^1.0.2",
+          "jsr:@std/media-types@^1.0.2",
+          "jsr:@std/path@^1.0.2"
+        ]
+      },
+      "@miyauci/infra@1.0.0-beta.2": {
+        "integrity": "ad42a2378b9bd7ca2565cbbfc75ae0e5d792a0c13913e4c006e928995647c1bd"
       },
       "@std/assert@0.221.0": {
         "integrity": "a5f1aa6e7909dbea271754fd4ab3f4e687aeff4873b4cef9a320af813adb489a"
@@ -53,6 +69,15 @@
       },
       "@std/path@1.0.1": {
         "integrity": "e061ff02c28481ca49e3a14981875c345e9fc7e973190672782cd0ac8af70428"
+      },
+      "@std/path@1.0.2": {
+        "integrity": "a452174603f8c620bd278a380c596437a9eef50c891c64b85812f735245d9ec7"
+      }
+    },
+    "npm": {
+      "@types/node@18.16.19": {
+        "integrity": "sha512-IXl7o+R9iti9eBW4Wg2hx1xQDig183jj7YLn8F7udNceyfkbn1ZxmzZXuak20gR40D7pIkIY1kYGx5VIGbaHKA==",
+        "dependencies": {}
       }
     }
   },
@@ -60,6 +85,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@denosaurs/plug@^1.0.6",
+      "jsr:@miyauci/fs@1.0.0-beta.1",
       "jsr:@std/bytes@^1.0.2",
       "jsr:@std/media-types@^1.0.2",
       "jsr:@std/path@^1.0.1"
