@@ -1,5 +1,9 @@
 import { BucketFileSystem } from "@miyauci/fs/deno";
-import { openDirectoryDialog, openFileDialog } from "./ffi.ts";
+import {
+  openDirectoryDialog,
+  openFileDialog,
+  openSaveFileDialog,
+} from "./ffi.ts";
 import type { Adaptor, OpenDirectoryPicker, OpenFileDialog } from "../type.ts";
 
 export class DenoAdaptor implements Adaptor {
@@ -7,4 +11,5 @@ export class DenoAdaptor implements Adaptor {
   openDirectoryDialog: OpenDirectoryPicker = openDirectoryDialog;
 
   locateEntry = BucketFileSystem.prototype.locateEntry;
+  openSaveFileDialog = openSaveFileDialog;
 }

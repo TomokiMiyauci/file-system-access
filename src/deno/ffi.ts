@@ -58,9 +58,12 @@ class FileDialog {
   saveFile() {
     const ptr = this.dialog.save_file();
     const ptrView = new Deno.UnsafePointerView(ptr!);
-    const fullPath = ptrView.getCString();
+    const jsonStr = ptrView.getCString();
+    const result = JSON.parse(jsonStr) as Result<string>;
 
-    return fullPath;
+    if (result.success) return result.data;
+
+    throw new DOMException("The user aborted a request.", "AbortError");
   }
 
   addFilter(_: string, extensions: string[]): FileDialog {
@@ -104,6 +107,17 @@ export function openFileDialog(
   const fullPath = fileDialog.pickFile();
 
   return [toLoc(fullPath)];
+}
+
+export function openSaveFileDialog(): FileLocation {
+  using dialog = new Dialog();
+  const fileDialog = new FileDialog(dialog);
+
+  const path = fileDialog.saveFile();
+
+  Deno.writeFileSync(path, new Uint8Array());
+
+  return toLoc(path);
 }
 
 function getAllExts(accept: FilePickerAcceptType): string[] {

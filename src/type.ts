@@ -62,6 +62,10 @@ export interface OpenDirectoryPicker {
   (options?: DirectoryPickerOptions): FileLocation;
 }
 
+export interface OpenSaveFilePicker {
+  (): FileLocation;
+}
+
 export interface FileLocation {
   root: string;
   name: string;
@@ -74,6 +78,7 @@ export interface OpenFileDialog {
 export interface Adaptor {
   openFileDialog: OpenFileDialog;
   openDirectoryDialog: OpenDirectoryPicker;
+  openSaveFileDialog: OpenSaveFilePicker;
   locateEntry: LocateEntry;
 }
 
