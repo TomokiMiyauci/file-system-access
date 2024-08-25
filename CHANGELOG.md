@@ -1,3 +1,10 @@
+# [1.0.0-beta.16](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.15...1.0.0-beta.16) (2024-08-25)
+
+
+### Features
+
+* update deps, change adaptor interface ([605badc](https://github.com/TomokiMiyauci/file-system-access/commit/605badc2ac60ba55897c90c63a02e9abd594099f))
+
 # [1.0.0-beta.15](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.14...1.0.0-beta.15) (2024-08-17)
 
 
