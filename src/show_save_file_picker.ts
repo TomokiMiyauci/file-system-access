@@ -53,7 +53,7 @@ export function showSaveFilePickerWith(
       root,
       locateEntry,
       observations: new Set(),
-    }, new List(["", name]));
+    }, new List([name]));
 
     // 9. Remember a picked directory given options["id"], entry and environment.
 

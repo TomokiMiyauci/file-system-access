@@ -55,7 +55,7 @@ export function showDirectoryPickerWith(
     // 7. Set result to a new FileSystemDirectoryHandle associated with entry.
     const result = createNewFileSystemDirectoryHandle(
       fileSystem,
-      new List(["", name]),
+      new List([name]),
     );
 
     // 8. Remember a picked directory given options["id"], entry and environment.

@@ -58,7 +58,14 @@ export interface OpenFilePickerOptions extends FilePickerOptions {
   multiple?: boolean;
 }
 
+/**
+ * [File System Access](https://wicg.github.io/file-system-access/#dictdef-savefilepickeroptions)
+ */
 export interface SaveFilePickerOptions extends FilePickerOptions {
+  /** The suggested file name.
+   *
+   * [File System Access](https://wicg.github.io/file-system-access/#dom-savefilepickeroptions-suggestedname)
+   */
   suggestedName?: string;
 }
 
