@@ -8,13 +8,13 @@
   },
   "imports": {
     "@denosaurs/plug": "jsr:@denosaurs/plug@^1.0.6",
-    "@miyauci/fs": "jsr:@miyauci/fs@1.0.0-beta.1",
-    "@miyauci/infra": "jsr:@miyauci/infra@1.0.0-beta.2",
+    "@miyauci/file-system-access": "./src/mod.ts",
+    "@miyauci/file-system-access/deno": "./src/deno/mod.ts",
+    "@miyauci/fs": "jsr:@miyauci/fs@1.0.0-beta.13",
+    "@miyauci/infra": "jsr:@miyauci/infra@^1.0.0",
     "@std/bytes": "jsr:@std/bytes@^1.0.2",
     "@std/media-types": "jsr:@std/media-types@^1.0.2",
-    "@std/path": "jsr:@std/path@^1.0.1",
-    "@miyauci/file-system-access": "./src/mod.ts",
-    "@miyauci/file-system-access/deno": "./src/deno/mod.ts"
+    "@std/path": "jsr:@std/path@^1.0.1"
   },
   "exports": {
     ".": "./src/mod.ts",

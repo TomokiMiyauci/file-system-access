@@ -3,19 +3,19 @@ import type {
   FileSystemFileHandle,
 } from "@miyauci/fs";
 import type { Adaptor } from "./type.ts";
-import { crateShowOpenFilePicker } from "./show_open_file_picker.ts";
+import { createShowOpenFilePicker } from "./show_open_file_picker.ts";
 import type { DirectoryPickerOptions, OpenFilePickerOptions } from "./type.ts";
 import { createShowDirectoryPicker } from "./show_directory_picker.ts";
 
 export class FileSystemAccess {
   constructor(adaptor: Adaptor) {
-    this.showOpenFilePicker = crateShowOpenFilePicker(
-      adaptor,
+    this.showOpenFilePicker = createShowOpenFilePicker(
+      adaptor.locateEntry,
       adaptor.openFileDialog.bind(adaptor),
     );
 
     this.showDirectoryPicker = createShowDirectoryPicker(
-      adaptor,
+      adaptor.locateEntry,
       adaptor.openDirectoryDialog.bind(adaptor),
     );
   }

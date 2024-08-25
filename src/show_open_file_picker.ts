@@ -1,16 +1,18 @@
 import {
-  FileSystemFileHandle,
-  type FileSystemFileOrDirectoryHandleContext,
+  createNewFileSystemFileHandle,
+  type FileSystem,
+  type FileSystemFileHandle,
 } from "@miyauci/fs";
 import { isTooSensitiveOrDangerous } from "./algorithm.ts";
-import type { OpenFileDialog, OpenFilePickerOptions } from "./type.ts";
-import { List } from "jsr:@miyauci/infra@1.0.0-beta.2";
+import type {
+  LocateEntry,
+  OpenFileDialog,
+  OpenFilePickerOptions,
+} from "./type.ts";
+import { List, Set } from "@miyauci/infra";
 
 export function showOpenFilePickerWith(
-  context: Pick<
-    FileSystemFileOrDirectoryHandleContext,
-    "locateEntry" | "typeByEntry" | "userAgent"
-  >,
+  locateEntry: LocateEntry,
   openFileDialog: OpenFileDialog,
   options: OpenFilePickerOptions = {},
 ): Promise<FileSystemFileHandle[]> {
@@ -35,7 +37,6 @@ export function showOpenFilePickerWith(
     // When possible, this prompt should start out showing starting directory.
 
     // 3. Wait for the user to have made their selection.
-
     const entries = openFileDialog(options);
 
     // 4. If the user dismissed the prompt without making a selection, reject p with an "AbortError" DOMException and abort.
@@ -54,15 +55,17 @@ export function showOpenFilePickerWith(
         // 2. At the discretion of the user agent, either go back to the beginning of these in parallel steps, or reject p with an "AbortError" DOMException and abort.
       }
 
-      // 2. Add a new FileSystemFileHandle associated with entry to result.
-      result.push(
-        new FileSystemFileHandle({
-          locateEntry: context.locateEntry.bind(context),
-          locator: { kind: "file", path: new List([name]), root },
-          typeByEntry: context.typeByEntry.bind(context),
-          userAgent: context.userAgent,
-        }),
+      const fileSystem = {
+        locateEntry,
+        observations: new Set(),
+        root,
+      } satisfies FileSystem;
+      const handle = createNewFileSystemFileHandle(
+        fileSystem,
+        new List([name]),
       );
+      // 2. Add a new FileSystemFileHandle associated with entry to result.
+      result.push(handle);
     }
 
     // 8. Remember a picked directory given options["id"], entries[0] and environment.
@@ -83,13 +86,10 @@ export function showOpenFilePickerWith(
 //   environment: unknown,
 // ) {}
 
-export function crateShowOpenFilePicker(
-  context: Pick<
-    FileSystemFileOrDirectoryHandleContext,
-    "locateEntry" | "typeByEntry" | "userAgent"
-  >,
+export function createShowOpenFilePicker(
+  locateEntry: LocateEntry,
   open: OpenFileDialog,
 ) {
   return (options?: OpenFilePickerOptions) =>
-    showOpenFilePickerWith(context, open, options);
+    showOpenFilePickerWith(locateEntry, open, options);
 }

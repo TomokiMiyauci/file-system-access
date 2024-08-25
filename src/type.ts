@@ -1,6 +1,7 @@
 import type {
-  FileSystemFileOrDirectoryHandleContext,
+  FileSystemEntry,
   FileSystemHandle,
+  FileSystemPath,
 } from "@miyauci/fs";
 
 export interface FilePickerOptions {
@@ -65,11 +66,12 @@ export interface OpenFileDialog {
   (options?: OpenFilePickerOptions): { root: string; name: string }[];
 }
 
-export interface Adaptor extends
-  Pick<
-    FileSystemFileOrDirectoryHandleContext,
-    "locateEntry" | "typeByEntry" | "userAgent"
-  > {
+export interface Adaptor {
   openFileDialog: OpenFileDialog;
   openDirectoryDialog: OpenDirectoryPicker;
+  locateEntry: LocateEntry;
+}
+
+export interface LocateEntry {
+  (path: FileSystemPath): FileSystemEntry | null;
 }

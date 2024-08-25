@@ -1,17 +1,18 @@
 import {
-  createFileSystemDirectoryHandle,
+  createNewFileSystemDirectoryHandle,
+  type FileSystem,
   type FileSystemDirectoryHandle,
-  type FileSystemFileOrDirectoryHandleContext,
 } from "@miyauci/fs";
-import { List } from "@miyauci/infra";
+import { List, Set } from "@miyauci/infra";
 import { isTooSensitiveOrDangerous } from "./algorithm.ts";
-import type { DirectoryPickerOptions, OpenDirectoryPicker } from "./type.ts";
+import type {
+  DirectoryPickerOptions,
+  LocateEntry,
+  OpenDirectoryPicker,
+} from "./type.ts";
 
 export function showDirectoryPickerWith(
-  context: Pick<
-    FileSystemFileOrDirectoryHandleContext,
-    "locateEntry" | "typeByEntry" | "userAgent"
-  >,
+  locateEntry: LocateEntry,
   openDirectoryPicker: OpenDirectoryPicker,
   options?: DirectoryPickerOptions,
 ): Promise<FileSystemDirectoryHandle> {
@@ -45,11 +46,16 @@ export function showDirectoryPickerWith(
       // 2. At the discretion of the user agent, either go back to the beginning of these in parallel steps, or reject p with an "AbortError" DOMException and abort.
     }
 
-    // 7. Set result to a new FileSystemDirectoryHandle associated with entry.
-    const result = createFileSystemDirectoryHandle(
+    const fileSystem = {
+      locateEntry,
       root,
+      observations: new Set(),
+    } satisfies FileSystem;
+
+    // 7. Set result to a new FileSystemDirectoryHandle associated with entry.
+    const result = createNewFileSystemDirectoryHandle(
+      fileSystem,
       new List([""]),
-      context,
     );
 
     // 8. Remember a picked directory given options["id"], entry and environment.
@@ -85,12 +91,9 @@ export function showDirectoryPickerWith(
 }
 
 export function createShowDirectoryPicker(
-  context: Pick<
-    FileSystemFileOrDirectoryHandleContext,
-    "locateEntry" | "typeByEntry" | "userAgent"
-  >,
+  locateEntry: LocateEntry,
   openDirectoryPicker: OpenDirectoryPicker,
 ) {
   return (options?: DirectoryPickerOptions) =>
-    showDirectoryPickerWith(context, openDirectoryPicker, options);
+    showDirectoryPickerWith(locateEntry, openDirectoryPicker, options);
 }
