@@ -1,5 +1,6 @@
 import type {
   DirectoryPickerOptions,
+  FileLocation,
   FilePickerAcceptType,
   OpenFilePickerOptions,
   StartInDirectory,
@@ -46,6 +47,17 @@ class FileDialog {
   pickDirectory(): string {
     const ptr = this.dialog.pick_directory();
     const ptrView = new Deno.UnsafePointerView(ptr!);
+    const jsonStr = ptrView.getCString();
+    const result = JSON.parse(jsonStr) as Result<string>;
+
+    if (result.success) return result.data;
+
+    throw new DOMException("The user aborted a request.", "AbortError");
+  }
+
+  saveFile() {
+    const ptr = this.dialog.save_file();
+    const ptrView = new Deno.UnsafePointerView(ptr!);
     const fullPath = ptrView.getCString();
 
     return fullPath;
@@ -72,7 +84,7 @@ class FileDialog {
 
 export function openFileDialog(
   options?: OpenFilePickerOptions,
-): { root: string; name: string }[] {
+): FileLocation[] {
   using dialog = new Dialog();
   let fileDialog = new FileDialog(dialog);
 
@@ -86,27 +98,27 @@ export function openFileDialog(
     const paths = fileDialog.pickFiles();
     console.log(paths);
 
-    return paths.map(to);
+    return paths.map(toLoc);
   }
 
   const fullPath = fileDialog.pickFile();
 
-  return [to(fullPath)];
+  return [toLoc(fullPath)];
 }
 
 function getAllExts(accept: FilePickerAcceptType): string[] {
   return Object.values(accept.accept).flatMap((value) => value);
 }
 
-function to(path: string): { root: string; name: string } {
+function toLoc(path: string): FileLocation {
   const { base: name, dir: root } = parse(path);
 
   return { name, root };
 }
 
-export function openDirectoryDialog(options?: DirectoryPickerOptions): {
-  root: string;
-} {
+export function openDirectoryDialog(
+  options?: DirectoryPickerOptions,
+): FileLocation {
   const startIn = options?.startIn ? normalize(options.startIn) : null;
 
   using dialog = new Dialog();
@@ -115,12 +127,12 @@ export function openDirectoryDialog(options?: DirectoryPickerOptions): {
   if (typeof startIn === "string") {
     const fullPath = fileDialog.setDirectory(startIn).pickDirectory();
 
-    return { root: fullPath };
+    return toLoc(fullPath);
   }
 
   const fullPath = fileDialog.pickDirectory();
 
-  return { root: fullPath };
+  return toLoc(fullPath);
 }
 
 function normalize(startIn: StartInDirectory): string {

@@ -62,7 +62,7 @@ export function showOpenFilePickerWith(
       } satisfies FileSystem;
       const handle = createNewFileSystemFileHandle(
         fileSystem,
-        new List([name]),
+        new List(["", name]),
       );
       // 2. Add a new FileSystemFileHandle associated with entry to result.
       result.push(handle);

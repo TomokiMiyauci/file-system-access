@@ -37,7 +37,7 @@ export function showDirectoryPickerWith(
     // 4. If the user dismissed the prompt without making a selection, reject p with an "AbortError" DOMException and abort.
 
     // 5. Let entry be a directory entry representing the selected directory.
-    const { root } = openDirectoryPicker(options);
+    const { root, name } = openDirectoryPicker(options);
 
     // 6. If entry is deemed too sensitive or dangerous to be exposed to this website by the user agent:
     if (isTooSensitiveOrDangerous()) {
@@ -55,7 +55,7 @@ export function showDirectoryPickerWith(
     // 7. Set result to a new FileSystemDirectoryHandle associated with entry.
     const result = createNewFileSystemDirectoryHandle(
       fileSystem,
-      new List([""]),
+      new List(["", name]),
     );
 
     // 8. Remember a picked directory given options["id"], entry and environment.

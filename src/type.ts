@@ -59,11 +59,16 @@ export interface OpenFilePickerOptions extends FilePickerOptions {
 }
 
 export interface OpenDirectoryPicker {
-  (options?: DirectoryPickerOptions): { root: string };
+  (options?: DirectoryPickerOptions): FileLocation;
+}
+
+export interface FileLocation {
+  root: string;
+  name: string;
 }
 
 export interface OpenFileDialog {
-  (options?: OpenFilePickerOptions): { root: string; name: string }[];
+  (options?: OpenFilePickerOptions): FileLocation[];
 }
 
 export interface Adaptor {
