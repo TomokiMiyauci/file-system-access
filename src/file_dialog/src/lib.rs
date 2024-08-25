@@ -102,6 +102,14 @@ impl Dialog {
         Dialog { dialog }
     }
 
+    pub fn set_file_name(&self, file_name: &[u8]) -> Dialog {
+        let file_name = str::from_utf8(file_name).expect("Invalid UTF-8 sequence");
+
+        let dialog = self.dialog.clone().set_file_name(file_name);
+
+        Dialog { dialog }
+    }
+
     pub fn add_filter(&self, extensions: &[u8]) -> Dialog {
         // let name = str::from_utf8(name).expect("Invalid UTF-8 sequence");
         let json = str::from_utf8(extensions).expect("Invalid UTF-8 sequence");
