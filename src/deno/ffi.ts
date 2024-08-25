@@ -3,6 +3,7 @@ import type {
   FileLocation,
   FilePickerAcceptType,
   OpenFilePickerOptions,
+  SaveFilePickerOptions,
   StartInDirectory,
 } from "../type.ts";
 import { Dialog } from "./generated.ts";
@@ -83,6 +84,14 @@ class FileDialog {
 
     return new FileDialog(dialog);
   }
+
+  setFileName(fileName: string): FileDialog {
+    const u8 = new TextEncoder().encode(fileName);
+
+    const dialog = this.dialog.set_file_name(u8);
+
+    return new FileDialog(dialog);
+  }
 }
 
 export function openFileDialog(
@@ -109,9 +118,17 @@ export function openFileDialog(
   return [toLoc(fullPath)];
 }
 
-export function openSaveFileDialog(): FileLocation {
+export function openSaveFileDialog(
+  options?: SaveFilePickerOptions,
+): FileLocation {
   using dialog = new Dialog();
-  const fileDialog = new FileDialog(dialog);
+  let fileDialog = new FileDialog(dialog);
+
+  if (options) {
+    if (options.suggestedName) {
+      fileDialog = fileDialog.setFileName(options.suggestedName);
+    }
+  }
 
   const path = fileDialog.saveFile();
 

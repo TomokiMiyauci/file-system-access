@@ -41,6 +41,15 @@ export const symbols = {
     result: "pointer",
     nonblocking: false,
   },
+  __Dialog_set_file_name: {
+    parameters: [
+      "pointer",
+      "buffer",
+      "usize",
+    ],
+    result: "pointer",
+    nonblocking: false,
+  },
   __Dialog_add_filter: {
     parameters: [
       "pointer",
