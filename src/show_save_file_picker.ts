@@ -2,12 +2,17 @@ import {
   createNewFileSystemFileHandle,
   type FileSystemFileHandle,
 } from "@miyauci/fs";
-import type { LocateEntry, OpenSaveFilePicker } from "./type.ts";
+import type {
+  LocateEntry,
+  OpenSaveFilePicker,
+  SaveFilePickerOptions,
+} from "./type.ts";
 import { List, Set } from "@miyauci/infra";
 
 export function showSaveFilePickerWith(
   locateEntry: LocateEntry,
-  opnSaveFilePicker: OpenSaveFilePicker,
+  openSaveFilePicker: OpenSaveFilePicker,
+  options?: SaveFilePickerOptions,
 ): Promise<FileSystemFileHandle> {
   // 1. Let environment be this’s relevant settings object.
 
@@ -28,7 +33,7 @@ export function showSaveFilePickerWith(
     // When possible, this prompt should start out showing starting directory.
     // If options["suggestedName"] exists and is not null, the file picker prompt will be pre-filled with the options["suggestedName"] as the default name to save as. The interaction between the suggestedName and accepts options is implementation-defined. If the suggestedName is deemed too dangerous, user agents should ignore or sanitize the suggested file name, similar to the sanitization done when fetching something as a download.
 
-    const { root, name } = opnSaveFilePicker();
+    const { root, name } = openSaveFilePicker(options);
     // 3. Wait for the user to have made their selection.
 
     // 4. If the user dismissed the prompt without making a selection, reject p with an "AbortError" DOMException and abort.
@@ -67,5 +72,6 @@ export function createShowSaveFilePicker(
   locateEntry: LocateEntry,
   openShowFilePicker: OpenSaveFilePicker,
 ) {
-  return () => showSaveFilePickerWith(locateEntry, openShowFilePicker);
+  return (options?: SaveFilePickerOptions) =>
+    showSaveFilePickerWith(locateEntry, openShowFilePicker, options);
 }

@@ -58,12 +58,16 @@ export interface OpenFilePickerOptions extends FilePickerOptions {
   multiple?: boolean;
 }
 
+export interface SaveFilePickerOptions extends FilePickerOptions {
+  suggestedName?: string;
+}
+
 export interface OpenDirectoryPicker {
   (options?: DirectoryPickerOptions): FileLocation;
 }
 
 export interface OpenSaveFilePicker {
-  (): FileLocation;
+  (options?: SaveFilePickerOptions): FileLocation;
 }
 
 export interface FileLocation {
