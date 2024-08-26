@@ -4,7 +4,11 @@ import {
   openFileDialog,
   openSaveFileDialog,
 } from "./ffi.ts";
-import type { Adaptor, OpenDirectoryPicker, OpenFileDialog } from "../type.ts";
+import type {
+  Adaptor,
+  OpenDirectoryPicker,
+  OpenFileDialog,
+} from "../implementation_defined.ts";
 
 export class DenoAdaptor implements Adaptor {
   openFileDialog: OpenFileDialog = openFileDialog;
