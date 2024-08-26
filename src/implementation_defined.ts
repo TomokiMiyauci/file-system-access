@@ -6,7 +6,7 @@ export interface Options {
   startingDirectory: string;
 }
 
-export type AcceptOption = [description: string, filter: Filter];
+export type AcceptOption = [description: string, exts: string[]];
 
 export interface Filter {
   (filename: string, type: FilePickerAcceptType): boolean;

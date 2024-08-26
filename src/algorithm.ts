@@ -44,59 +44,59 @@ export function processAcceptTypes(options: FilePickerOptions): AcceptOption[] {
     }
 
     // 2. Let filter be these steps, given a filename (a string) and a type (a MIME type):
-    const filter: Filter = (_, __) => {
-      // // 1. For each typeString → suffixes of type["accept"]:
-      // for (const [typeString, suffixes] of Object.entries(type.accept)) {
-      //   // 2. Let parsedType be the result of parse a MIME type with typeString.
-      //   const parsedType = parse(typeString);
+    // const filter: Filter = (_, __) => {
+    // // 1. For each typeString → suffixes of type["accept"]:
+    // for (const [typeString, suffixes] of Object.entries(type.accept)) {
+    //   // 2. Let parsedType be the result of parse a MIME type with typeString.
+    //   const parsedType = parse(typeString);
 
-      //   // 1. If parsedType’s subtype is "*":
-      //   if (parsedType.subtype === "*") {
-      //     // 1. If parsedType’s type is "*", return true.
-      //     if (parsedType.type === "*") return true;
+    //   // 1. If parsedType’s subtype is "*":
+    //   if (parsedType.subtype === "*") {
+    //     // 1. If parsedType’s type is "*", return true.
+    //     if (parsedType.type === "*") return true;
 
-      //     // 2. If parsedType’s type is type’s type, return true.
-      //     if (parsedType.type === type.type) return true;
-      //   }
+    //     // 2. If parsedType’s type is type’s type, return true.
+    //     if (parsedType.type === type.type) return true;
+    //   }
 
-      //   // 2. parsedType’s essence is type’s essence, return true.
-      //   if (parsedType.essence === type.essence) return true;
+    //   // 2. parsedType’s essence is type’s essence, return true.
+    //   if (parsedType.essence === type.essence) return true;
 
-      //   // 3. If suffixes is a string, set suffixes to « suffixes ».
-      //   if (typeof suffixes === "string") suffixes = [suffixes];
+    //   // 3. If suffixes is a string, set suffixes to « suffixes ».
+    //   if (typeof suffixes === "string") suffixes = [suffixes];
 
-      //   // 4. For each suffix of suffixes:
-      //   for (const suffix of suffixes) {
-      //     // 1. If filename ends with suffix, return true.
-      //     if (filename.endsWith(suffix)) return true;
-      //   }
+    //   // 4. For each suffix of suffixes:
+    //   for (const suffix of suffixes) {
+    //     // 1. If filename ends with suffix, return true.
+    //     if (filename.endsWith(suffix)) return true;
+    //   }
 
-      //   // 3. Return false.
-      //   return false;
-      // }
+    //   // 3. Return false.
+    //   return false;
+    // }
 
-      return true;
-    };
+    // return true;
+    // };
 
     // 3. Let description be type["description"].
     // 4. If description is an empty string, set description to some user understandable string describing filter.
     const description = type.description || "custom filter";
 
     // 5. Append (description, filter) to accepts options.
-    acceptsOptions.push([description, filter]);
+    acceptsOptions.push([description, Object.values(type.accept).flat()]);
   }
 
-  // 3. If either accepts options is empty, or options["excludeAcceptAllOption"] is false:
-  if (!acceptsOptions.length || !options.excludeAcceptAllOption) {
-    // 1. Let description be a user understandable string describing "all files".
-    const description = "all files";
+  // // 3. If either accepts options is empty, or options["excludeAcceptAllOption"] is false:
+  // if (!acceptsOptions.length || !options.excludeAcceptAllOption) {
+  //   // 1. Let description be a user understandable string describing "all files".
+  //   const description = "all files";
 
-    // 1. Let filter be an algorithm that returns true.
-    const filter = () => true;
+  //   // 1. Let filter be an algorithm that returns true.
+  //   const filter = () => true;
 
-    // 2. Append (description, filter) to accepts options.
-    acceptsOptions.push([description, filter]);
-  }
+  //   // 2. Append (description, filter) to accepts options.
+  //   acceptsOptions.push([description, filter]);
+  // }
 
   // 4. If accepts options is empty, then throw a TypeError.
   if (!acceptsOptions.length) throw new TypeError();
