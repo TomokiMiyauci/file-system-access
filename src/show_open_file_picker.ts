@@ -13,8 +13,8 @@ import type {
   Environment,
   LocateEntry,
   OpenFileDialog,
-  OpenFilePickerOptions,
-} from "./type.ts";
+} from "./implementation_defined.ts";
+import type { OpenFilePickerOptions } from "./type.ts";
 import { List, Set } from "@miyauci/infra";
 
 export function showOpenFilePickerWith(

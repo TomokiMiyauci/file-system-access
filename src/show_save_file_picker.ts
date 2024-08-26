@@ -2,12 +2,12 @@ import {
   createNewFileSystemFileHandle,
   type FileSystemFileHandle,
 } from "@miyauci/fs";
+import type { SaveFilePickerOptions } from "./type.ts";
 import type {
   Environment,
   LocateEntry,
   OpenSaveFilePicker,
-  SaveFilePickerOptions,
-} from "./type.ts";
+} from "./implementation_defined.ts";
 import { List, Set } from "@miyauci/infra";
 import {
   determineDirectoryPickerStartIn,

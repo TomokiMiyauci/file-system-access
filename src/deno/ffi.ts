@@ -1,5 +1,9 @@
-import type { FileLocation, OpenFileDialogOptions, Options } from "../type.ts";
-import type { OpenSaveFilePickerOptions } from "../type.ts";
+import type {
+  FileLocation,
+  OpenFileDialogOptions,
+  OpenSaveFilePickerOptions,
+  Options,
+} from "../implementation_defined.ts";
 import { Dialog } from "./generated.ts";
 import { parse } from "@std/path";
 

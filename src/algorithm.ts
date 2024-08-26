@@ -1,14 +1,13 @@
 import { FileSystemHandle, type FileSystemLocator } from "@miyauci/fs";
 import { Map } from "@miyauci/infra";
+import { parseMediaType } from "@std/media-types";
+import { join } from "@std/path/join";
+import type { FilePickerOptions, StartInDirectory } from "./type.ts";
 import type {
   AcceptOption,
   Environment,
-  FilePickerOptions,
   Filter,
-  StartInDirectory,
-} from "./type.ts";
-import { parseMediaType } from "@std/media-types";
-import { join } from "@std/path/join";
+} from "./implementation_defined.ts";
 
 export function isTooSensitiveOrDangerous(): boolean {
   return false;

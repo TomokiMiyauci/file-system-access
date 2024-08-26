@@ -9,12 +9,12 @@ import {
   isTooSensitiveOrDangerous,
   rememberPickedDirectory,
 } from "./algorithm.ts";
+import type { DirectoryPickerOptions } from "./type.ts";
 import type {
-  DirectoryPickerOptions,
   Environment,
   LocateEntry,
   OpenDirectoryPicker,
-} from "./type.ts";
+} from "./implementation_defined.ts";
 
 export function showDirectoryPickerWith(
   environment: Environment,

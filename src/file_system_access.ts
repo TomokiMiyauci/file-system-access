@@ -6,12 +6,15 @@ import { Map } from "@miyauci/infra";
 import type {
   Adaptor,
   Environment as _Environment,
-  SaveFilePickerOptions,
   UserAgent as _UserAgent,
   WellKnownDirectoryRecord as _WellKnownDirectoryRecord,
-} from "./type.ts";
+} from "./implementation_defined.ts";
 import { createShowOpenFilePicker } from "./show_open_file_picker.ts";
-import type { DirectoryPickerOptions, OpenFilePickerOptions } from "./type.ts";
+import type {
+  DirectoryPickerOptions,
+  OpenFilePickerOptions,
+  SaveFilePickerOptions,
+} from "./type.ts";
 import { createShowDirectoryPicker } from "./show_directory_picker.ts";
 import { createShowSaveFilePicker } from "./show_save_file_picker.ts";
 import { homedir } from "node:os";
