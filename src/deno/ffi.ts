@@ -1,11 +1,5 @@
-import type {
-  DirectoryPickerOptions,
-  FileLocation,
-  FilePickerAcceptType,
-  OpenFilePickerOptions,
-  SaveFilePickerOptions,
-  StartInDirectory,
-} from "../type.ts";
+import type { FileLocation, OpenFileDialogOptions, Options } from "../type.ts";
+import type { OpenSaveFilePickerOptions } from "../type.ts";
 import { Dialog } from "./generated.ts";
 import { parse } from "@std/path";
 
@@ -95,20 +89,23 @@ class FileDialog {
 }
 
 export function openFileDialog(
-  options?: OpenFilePickerOptions,
+  options: OpenFileDialogOptions,
 ): FileLocation[] {
   using dialog = new Dialog();
   let fileDialog = new FileDialog(dialog);
 
-  const types = options?.types ?? [];
-  const allExts = types.flatMap(getAllExts);
-  const exts = allExts.map((ext) => ext.slice(1));
+  if (options.startingDirectory) {
+    fileDialog = fileDialog.setDirectory(options.startingDirectory);
+  }
 
-  fileDialog = fileDialog.addFilter("<unknown>", exts);
+  // const types = options?.types ?? [];
+  // const allExts = types.flatMap(getAllExts);
+  // const exts = allExts.map((ext) => ext.slice(1));
+
+  // fileDialog = fileDialog.addFilter("<unknown>", exts);
 
   if (options?.multiple) {
     const paths = fileDialog.pickFiles();
-    console.log(paths);
 
     return paths.map(toLoc);
   }
@@ -119,15 +116,17 @@ export function openFileDialog(
 }
 
 export function openSaveFileDialog(
-  options?: SaveFilePickerOptions,
+  options: OpenSaveFilePickerOptions,
 ): FileLocation {
   using dialog = new Dialog();
   let fileDialog = new FileDialog(dialog);
 
-  if (options) {
-    if (options.suggestedName) {
-      fileDialog = fileDialog.setFileName(options.suggestedName);
-    }
+  if (options.startingDirectory) {
+    fileDialog = fileDialog.setDirectory(options.startingDirectory);
+  }
+
+  if (options?.suggestedName) {
+    fileDialog = fileDialog.setFileName(options.suggestedName);
   }
 
   const path = fileDialog.saveFile();
@@ -137,9 +136,9 @@ export function openSaveFileDialog(
   return toLoc(path);
 }
 
-function getAllExts(accept: FilePickerAcceptType): string[] {
-  return Object.values(accept.accept).flatMap((value) => value);
-}
+// function getAllExts(accept: FilePickerAcceptType): string[] {
+//   return Object.values(accept.accept).flatMap((value) => value);
+// }
 
 function toLoc(path: string): FileLocation {
   const { base: name, dir: root } = parse(path);
@@ -148,28 +147,16 @@ function toLoc(path: string): FileLocation {
 }
 
 export function openDirectoryDialog(
-  options?: DirectoryPickerOptions,
+  options: Options,
 ): FileLocation {
-  const startIn = options?.startIn ? normalize(options.startIn) : null;
-
   using dialog = new Dialog();
-  const fileDialog = new FileDialog(dialog);
+  let fileDialog = new FileDialog(dialog);
 
-  if (typeof startIn === "string") {
-    const fullPath = fileDialog.setDirectory(startIn).pickDirectory();
-
-    return toLoc(fullPath);
+  if (options.startingDirectory) {
+    fileDialog = fileDialog.setDirectory(options.startingDirectory);
   }
 
   const fullPath = fileDialog.pickDirectory();
 
   return toLoc(fullPath);
-}
-
-function normalize(startIn: StartInDirectory): string {
-  if (typeof startIn === "string") {
-    throw new Error("unsupported");
-  }
-
-  throw new Error("unsupported");
 }
