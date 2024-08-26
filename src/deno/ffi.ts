@@ -66,7 +66,6 @@ class FileDialog {
   }
 
   addFilter(_: string, extensions: string[]): FileDialog {
-    // const decode = new TextEncoder().encode(description);
     const extensionsStr = JSON.stringify(extensions);
     const ext = new TextEncoder().encode(extensionsStr);
 
@@ -102,11 +101,13 @@ export function openFileDialog(
     fileDialog = fileDialog.setDirectory(options.startingDirectory);
   }
 
-  // const types = options?.types ?? [];
-  // const allExts = types.flatMap(getAllExts);
-  // const exts = allExts.map((ext) => ext.slice(1));
+  for (const [description, exts] of options.acceptsOptions) {
+    const extsWithoutDot = exts.map((ext) =>
+      ext.startsWith(".") ? ext.slice(1) : ext
+    );
 
-  // fileDialog = fileDialog.addFilter("<unknown>", exts);
+    fileDialog = fileDialog.addFilter(description, extsWithoutDot);
+  }
 
   if (options?.multiple) {
     const paths = fileDialog.pickFiles();
@@ -133,16 +134,20 @@ export function openSaveFileDialog(
     fileDialog = fileDialog.setFileName(options.suggestedName);
   }
 
+  for (const [description, exts] of options.acceptsOptions) {
+    const extsWithoutDot = exts.map((ext) =>
+      ext.startsWith(".") ? ext.slice(1) : ext
+    );
+
+    fileDialog = fileDialog.addFilter(description, extsWithoutDot);
+  }
+
   const path = fileDialog.saveFile();
 
   Deno.writeFileSync(path, new Uint8Array());
 
   return toLoc(path);
 }
-
-// function getAllExts(accept: FilePickerAcceptType): string[] {
-//   return Object.values(accept.accept).flatMap((value) => value);
-// }
 
 function toLoc(path: string): FileLocation {
   const { base: name, dir: root } = parse(path);
