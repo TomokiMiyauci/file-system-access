@@ -23,9 +23,10 @@ constructor requires [adaptor](#adaptors).
 import { type Adaptor, FileSystemAccess } from "@miyauci/file-system-access";
 
 declare const adaptor: Adaptor;
-const { showOpenFilePicker, showDirectoryPicker } = new FileSystemAccess(
-  adaptor,
-);
+const { showOpenFilePicker, showDirectoryPicker, showSaveFilePicker } =
+  new FileSystemAccess(
+    adaptor,
+  );
 
 const [handle] = await showOpenFilePicker();
 const writable = await handle.createWritable();
