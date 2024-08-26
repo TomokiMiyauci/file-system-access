@@ -7,6 +7,7 @@ import { List, Set } from "@miyauci/infra";
 import {
   determineDirectoryPickerStartIn,
   isTooSensitiveOrDangerous,
+  rememberPickedDirectory,
 } from "./algorithm.ts";
 import type {
   DirectoryPickerOptions,
@@ -69,6 +70,7 @@ export function showDirectoryPickerWith(
     );
 
     // 8. Remember a picked directory given options["id"], entry and environment.
+    rememberPickedDirectory(options?.id, result["locator"], environment);
 
     // 9. Let desc be a FileSystemPermissionDescriptor.
     // 10. Set desc["name"] to "file-system".

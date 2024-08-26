@@ -1,4 +1,4 @@
-import { FileSystemHandle } from "@miyauci/fs";
+import { FileSystemHandle, type FileSystemLocator } from "@miyauci/fs";
 import { Map } from "@miyauci/infra";
 import type {
   AcceptOption,
@@ -8,6 +8,7 @@ import type {
   StartInDirectory,
 } from "./type.ts";
 import { parseMediaType } from "@std/media-types";
+import { join } from "@std/path/join";
 
 export function isTooSensitiveOrDangerous(): boolean {
   return false;
@@ -140,6 +141,7 @@ export function validateSuffix(suffix: string): asserts suffix {
 
 export function rememberPickedDirectory(
   id: string | undefined,
+  locator: FileSystemLocator,
   environment: Environment,
 ): void {
   const { recentlyPickedDirectoryMap } = environment.userAgent;
@@ -154,7 +156,9 @@ export function rememberPickedDirectory(
   // 3. If id is not specified, let id be an empty string.
   id ??= "";
 
+  const path = join(locator.fileSystem.root, ...locator.path);
   // 4. Set recently picked directory map[origin][id] to the path on the local file system corresponding to entry, if such a path can be determined.
+  recentlyPickedDirectoryMap.get(origin)!.set(id, path);
 }
 
 /**

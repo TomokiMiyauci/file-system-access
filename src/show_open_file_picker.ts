@@ -7,6 +7,7 @@ import {
   determineDirectoryPickerStartIn,
   isTooSensitiveOrDangerous,
   processAcceptTypes,
+  rememberPickedDirectory,
 } from "./algorithm.ts";
 import type {
   Environment,
@@ -80,6 +81,7 @@ export function showOpenFilePickerWith(
     }
 
     // 8. Remember a picked directory given options["id"], entries[0] and environment.
+    rememberPickedDirectory(options.id, result[0]["locator"], environment);
 
     // 9. Perform the activation notification steps in global’s browsing context.
 

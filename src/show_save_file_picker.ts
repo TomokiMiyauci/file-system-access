@@ -73,7 +73,7 @@ export function showSaveFilePickerWith(
     }, new List([name]));
 
     // 9. Remember a picked directory given options["id"], entry and environment.
-    rememberPickedDirectory(options?.id, environment);
+    rememberPickedDirectory(options?.id, result["locator"], environment);
 
     // 10. Perform the activation notification steps in global’s browsing context.
 
