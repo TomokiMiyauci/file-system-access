@@ -1,3 +1,25 @@
+# [1.0.0-beta.17](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.16...1.0.0-beta.17) (2024-08-26)
+
+
+### Bug Fixes
+
+* fix to file system locator path ([28fcb83](https://github.com/TomokiMiyauci/file-system-access/commit/28fcb83d66b8f15274bd46ec3629a8dcdac05a17))
+* remove empty string from first path of file system ([2e38668](https://github.com/TomokiMiyauci/file-system-access/commit/2e38668e4b5a234854fb5891dbfd4db997b1c4ed))
+
+
+### Features
+
+* add `showSaveFilePicker` to FileSystemAccess ([88146f3](https://github.com/TomokiMiyauci/file-system-access/commit/88146f32b32104db45192eb9657683d0a88e1188))
+* add save file picker option interface ([8798be9](https://github.com/TomokiMiyauci/file-system-access/commit/8798be9451beaa8f37e3d2846e7c5e2a760e97ec))
+* add well-known directory map ([c395dd1](https://github.com/TomokiMiyauci/file-system-access/commit/c395dd13f3fe2662c9b880ba907e0aa5c810cd34))
+* **algorithm:** add non-standard local file path retrieval ([cff70b6](https://github.com/TomokiMiyauci/file-system-access/commit/cff70b60352def6bfd24036db4c7bcff0625de92))
+* **deno:** add filtering if types are specifiered ([59c9c8a](https://github.com/TomokiMiyauci/file-system-access/commit/59c9c8ae9f0460948651313c61da75efa59347d6))
+* **deno:** support starting directory ([cbb6da9](https://github.com/TomokiMiyauci/file-system-access/commit/cbb6da9a4955b5045961f1d37784581acaf60f7e))
+* **deno:** update ffi binding ([f3cd1e3](https://github.com/TomokiMiyauci/file-system-access/commit/f3cd1e32354f33e8eb56ab25c5f0b69e3f43c1b6))
+* **lib:** export dialog set_file_name ([1656105](https://github.com/TomokiMiyauci/file-system-access/commit/1656105165717e2dfd5e4866f983b0e36e74d418))
+* pass `multiple` flag to openFileDialog ([ba3f317](https://github.com/TomokiMiyauci/file-system-access/commit/ba3f317ee440b2afc339f3215ad3f30438793caa))
+* **src:** support id option to memory handle's local file path ([72e2ad4](https://github.com/TomokiMiyauci/file-system-access/commit/72e2ad47ce115d0240a4e7952c4e55bac8d7a74d))
+
 # [1.0.0-beta.16](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.15...1.0.0-beta.16) (2024-08-25)
 
 
