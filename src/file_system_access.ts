@@ -40,10 +40,18 @@ export class FileSystemAccess {
     );
   }
 
+  /** Shows a file picker that lets a user select a single existing file, returning a handle for the selected file.
+   *
+   * [File System Access](https://wicg.github.io/file-system-access/#dom-window-showopenfilepicker)
+   */
   showOpenFilePicker: (
     options?: OpenFilePickerOptions,
   ) => Promise<FileSystemFileHandle[]>;
 
+  /** Shows a directory picker that lets the user select a single directory, returning a handle for the selected directory if the user grants read permission.
+   *
+   * [File System Access](https://wicg.github.io/file-system-access/#dom-window-showdirectorypicker)
+   */
   showDirectoryPicker: (
     options?: DirectoryPickerOptions,
   ) => Promise<FileSystemDirectoryHandle>;
