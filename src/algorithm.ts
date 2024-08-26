@@ -3,11 +3,7 @@ import { Map } from "@miyauci/infra";
 import { parseMediaType } from "@std/media-types";
 import { join } from "@std/path/join";
 import type { FilePickerOptions, StartInDirectory } from "./type.ts";
-import type {
-  AcceptOption,
-  Environment,
-  Filter,
-} from "./implementation_defined.ts";
+import type { AcceptOption, Environment } from "./implementation_defined.ts";
 
 export function isTooSensitiveOrDangerous(): boolean {
   return false;
@@ -99,7 +95,7 @@ export function processAcceptTypes(options: FilePickerOptions): AcceptOption[] {
   // }
 
   // 4. If accepts options is empty, then throw a TypeError.
-  if (!acceptsOptions.length) throw new TypeError();
+  // if (!acceptsOptions.length) throw new TypeError();
 
   // 5. Return accepts options.
   return acceptsOptions;
