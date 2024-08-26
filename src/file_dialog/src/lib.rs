@@ -111,14 +111,14 @@ impl Dialog {
     }
 
     pub fn add_filter(&self, extensions: &[u8]) -> Dialog {
-        // let name = str::from_utf8(name).expect("Invalid UTF-8 sequence");
+        // let name: &str = str::from_utf8(name).expect("Invalid UTF-8 sequence");
         let json = str::from_utf8(extensions).expect("Invalid UTF-8 sequence");
         let parsed: Value = serde_json::from_str(json).unwrap();
 
         let x = parsed.as_array().unwrap();
         let y: Vec<&str> = x.iter().filter_map(|v| v.as_str()).collect();
 
-        let dialog = self.dialog.clone().add_filter("fff", &y);
+        let dialog = self.dialog.clone().add_filter("", &y);
 
         Dialog { dialog }
     }
