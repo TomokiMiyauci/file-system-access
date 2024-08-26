@@ -49,7 +49,11 @@ export function showOpenFilePickerWith(
     // When possible, this prompt should start out showing starting directory.
 
     // 3. Wait for the user to have made their selection.
-    const entries = openFileDialog({ startingDirectory, acceptsOptions });
+    const entries = openFileDialog({
+      startingDirectory,
+      acceptsOptions,
+      multiple: options.multiple ?? false,
+    });
 
     // 4. If the user dismissed the prompt without making a selection, reject p with an "AbortError" DOMException and abort.
 

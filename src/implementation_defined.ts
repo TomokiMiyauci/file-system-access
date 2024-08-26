@@ -32,7 +32,7 @@ export interface FileLocation {
 
 export interface OpenFileDialogOptions extends Options {
   acceptsOptions: AcceptOption[];
-  multiple?: boolean;
+  multiple: boolean;
 }
 
 export interface OpenFileDialog {
