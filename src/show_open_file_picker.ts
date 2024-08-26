@@ -3,8 +3,13 @@ import {
   type FileSystem,
   type FileSystemFileHandle,
 } from "@miyauci/fs";
-import { isTooSensitiveOrDangerous } from "./algorithm.ts";
+import {
+  determineDirectoryPickerStartIn,
+  isTooSensitiveOrDangerous,
+  processAcceptTypes,
+} from "./algorithm.ts";
 import type {
+  Environment,
   LocateEntry,
   OpenFileDialog,
   OpenFilePickerOptions,
@@ -12,6 +17,7 @@ import type {
 import { List, Set } from "@miyauci/infra";
 
 export function showOpenFilePickerWith(
+  environment: Environment,
   locateEntry: LocateEntry,
   openFileDialog: OpenFileDialog,
   options: OpenFilePickerOptions = {},
@@ -19,9 +25,14 @@ export function showOpenFilePickerWith(
   // 1. Let environment be this’s relevant settings object.
 
   // 2. Let accepts options be the result of processing accept types given options.
-  // const acceptsOptions = processAcceptTypes(options);
+  const acceptsOptions = processAcceptTypes(options);
 
   // 3. Let starting directory be the result of determining the directory the picker will start in given options["id"], options["startIn"], and environment.
+  const startingDirectory = determineDirectoryPickerStartIn(
+    options?.id,
+    options?.startIn,
+    environment,
+  );
 
   // 4. Let global be environment’s global object.
 
@@ -37,7 +48,7 @@ export function showOpenFilePickerWith(
     // When possible, this prompt should start out showing starting directory.
 
     // 3. Wait for the user to have made their selection.
-    const entries = openFileDialog(options);
+    const entries = openFileDialog({ startingDirectory, acceptsOptions });
 
     // 4. If the user dismissed the prompt without making a selection, reject p with an "AbortError" DOMException and abort.
 
@@ -80,16 +91,11 @@ export function showOpenFilePickerWith(
   return p;
 }
 
-// export function rememberPickedDirectory(
-//   id?: string,
-//   entry: FileSystemEntry,
-//   environment: unknown,
-// ) {}
-
 export function createShowOpenFilePicker(
+  environment: Environment,
   locateEntry: LocateEntry,
   open: OpenFileDialog,
 ) {
   return (options?: OpenFilePickerOptions) =>
-    showOpenFilePickerWith(locateEntry, open, options);
+    showOpenFilePickerWith(environment, locateEntry, open, options);
 }

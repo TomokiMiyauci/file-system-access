@@ -1,4 +1,12 @@
-import type { FilePickerAcceptType, FilePickerOptions } from "./type.ts";
+import { FileSystemHandle } from "@miyauci/fs";
+import { Map } from "@miyauci/infra";
+import type {
+  AcceptOption,
+  Environment,
+  FilePickerOptions,
+  Filter,
+  StartInDirectory,
+} from "./type.ts";
 import { parseMediaType } from "@std/media-types";
 
 export function isTooSensitiveOrDangerous(): boolean {
@@ -97,12 +105,6 @@ export function processAcceptTypes(options: FilePickerOptions): AcceptOption[] {
   return acceptsOptions;
 }
 
-type AcceptOption = [description: string, filter: Filter];
-
-interface Filter {
-  (filename: string, type: FilePickerAcceptType): boolean;
-}
-
 export function parse(input: string): MIMEType {
   const [essence, parameters = {}] = parseMediaType(input);
   const [type, subtype] = divideBy(essence, "/");
@@ -134,4 +136,95 @@ export function validateSuffix(suffix: string): asserts suffix {
 
   // If suffix’s length is more than 16, then throw a TypeError.
   if (suffix.length > 16) throw new TypeError();
+}
+
+export function rememberPickedDirectory(
+  id: string | undefined,
+  environment: Environment,
+): void {
+  const { recentlyPickedDirectoryMap } = environment.userAgent;
+  // 1. Let origin be environment’s origin.
+  const origin = environment.origin;
+
+  // 2. If recently picked directory map[origin] does not exist, then set recently picked directory map[origin] to an empty path id map.
+  if (!recentlyPickedDirectoryMap.exists(origin)) {
+    recentlyPickedDirectoryMap.set(origin, new Map());
+  }
+
+  // 3. If id is not specified, let id be an empty string.
+  id ??= "";
+
+  // 4. Set recently picked directory map[origin][id] to the path on the local file system corresponding to entry, if such a path can be determined.
+}
+
+/**
+ * [File System Access](https://wicg.github.io/file-system-access/#valid-path-id)
+ */
+export function isValidPathId(id: string): boolean {
+  return /^[a-zA-Z0-9_-]+$/.test(id);
+}
+
+export function determineDirectoryPickerStartIn(
+  id: string | undefined,
+  startIn: StartInDirectory | undefined,
+  environment: Environment,
+): string {
+  const { userAgent } = environment;
+  const { recentlyPickedDirectoryMap } = userAgent;
+
+  // 1. If id given, and is not a valid path id, then throw a TypeError.
+  if (typeof id === "string" && !isValidPathId(id)) throw new TypeError();
+
+  // 2. If id’s length is more than 32, then throw a TypeError.
+  if (typeof id === "string" && 32 < id.length) throw new TypeError();
+
+  // 3. Let origin be environment’s origin.
+  const origin = environment.origin;
+
+  // 4. If startIn is a FileSystemHandle and startIn is not in a bucket file system:
+  if (startIn instanceof FileSystemHandle && !isBucketFileSystem(startIn)) {
+    // 1. Let entry be the result of locating an entry given startIn’s locator.
+    // const entry = locateEntry(startIn["locator"]);
+
+    // 2. If entry is a file entry, return the path of entry’s parent in the local file system.
+
+    // 3. If entry is a directory entry, return entry’s path in the local file system.
+  }
+
+  // 5. If id is non-empty:
+  if (id) {
+    // 1. If recently picked directory map[origin] exists:
+    if (recentlyPickedDirectoryMap.exists(origin)) {
+      // 1. Let path map be recently picked directory map[origin].
+      const pathMap = recentlyPickedDirectoryMap.get(origin)!;
+
+      // 2. If path map[id] exists, then return path map[id].
+      if (pathMap.exists(id)) return pathMap.get(id)!;
+    }
+  }
+
+  // 6. If startIn is a WellKnownDirectory:
+  if (typeof startIn === "string") {
+    // 1. Return a user agent defined path corresponding to the WellKnownDirectory value of startIn.
+    return userAgent.wellKnownDirectory[startIn];
+  }
+
+  // 7. If id is not specified, or is an empty string:
+  if (!id) {
+    // 1. If recently picked directory map[origin] exists:
+    if (recentlyPickedDirectoryMap.exists(origin)) {
+      // 1. Let path map be recently picked directory map[origin].
+      const pathMap = recentlyPickedDirectoryMap.get(origin)!;
+
+      // 2. If path map[""] exists, then return path map[""].
+      if (pathMap.exists("")) return pathMap.get("")!;
+    }
+  }
+
+  // 8. Return a default path in a user agent specific manner.
+  return userAgent.defaultPath;
+}
+
+function isBucketFileSystem(handle: FileSystemHandle): boolean {
+  return handle["locator"].path[0] === "";
 }

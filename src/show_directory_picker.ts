@@ -4,14 +4,19 @@ import {
   type FileSystemDirectoryHandle,
 } from "@miyauci/fs";
 import { List, Set } from "@miyauci/infra";
-import { isTooSensitiveOrDangerous } from "./algorithm.ts";
+import {
+  determineDirectoryPickerStartIn,
+  isTooSensitiveOrDangerous,
+} from "./algorithm.ts";
 import type {
   DirectoryPickerOptions,
+  Environment,
   LocateEntry,
   OpenDirectoryPicker,
 } from "./type.ts";
 
 export function showDirectoryPickerWith(
+  environment: Environment,
   locateEntry: LocateEntry,
   openDirectoryPicker: OpenDirectoryPicker,
   options?: DirectoryPickerOptions,
@@ -19,6 +24,11 @@ export function showDirectoryPickerWith(
   // 1. Let environment be this’s relevant settings object.
 
   // 2. Let starting directory be the result of determining the directory the picker will start in given options["id"], options["startIn"] and environment.
+  const startingDirectory = determineDirectoryPickerStartIn(
+    options?.id,
+    options?.startIn,
+    environment,
+  );
 
   // 3. Let global be environment’s global object.
 
@@ -37,7 +47,7 @@ export function showDirectoryPickerWith(
     // 4. If the user dismissed the prompt without making a selection, reject p with an "AbortError" DOMException and abort.
 
     // 5. Let entry be a directory entry representing the selected directory.
-    const { root, name } = openDirectoryPicker(options);
+    const { root, name } = openDirectoryPicker({ startingDirectory });
 
     // 6. If entry is deemed too sensitive or dangerous to be exposed to this website by the user agent:
     if (isTooSensitiveOrDangerous()) {
@@ -91,9 +101,15 @@ export function showDirectoryPickerWith(
 }
 
 export function createShowDirectoryPicker(
+  environment: Environment,
   locateEntry: LocateEntry,
   openDirectoryPicker: OpenDirectoryPicker,
 ) {
   return (options?: DirectoryPickerOptions) =>
-    showDirectoryPickerWith(locateEntry, openDirectoryPicker, options);
+    showDirectoryPickerWith(
+      environment,
+      locateEntry,
+      openDirectoryPicker,
+      options,
+    );
 }

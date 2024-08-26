@@ -3,6 +3,7 @@ import type {
   FileSystemHandle,
   FileSystemPath,
 } from "@miyauci/fs";
+import type { Map } from "@miyauci/infra";
 
 export interface FilePickerOptions {
   types?: FilePickerAcceptType[];
@@ -69,12 +70,27 @@ export interface SaveFilePickerOptions extends FilePickerOptions {
   suggestedName?: string;
 }
 
+export interface Options {
+  startingDirectory: string;
+}
+
+export type AcceptOption = [description: string, filter: Filter];
+
+export interface Filter {
+  (filename: string, type: FilePickerAcceptType): boolean;
+}
+
 export interface OpenDirectoryPicker {
-  (options?: DirectoryPickerOptions): FileLocation;
+  (options: Options): FileLocation;
+}
+
+export interface OpenSaveFilePickerOptions extends Options {
+  suggestedName?: string;
+  acceptsOptions: AcceptOption[];
 }
 
 export interface OpenSaveFilePicker {
-  (options?: SaveFilePickerOptions): FileLocation;
+  (options: OpenSaveFilePickerOptions): FileLocation;
 }
 
 export interface FileLocation {
@@ -82,8 +98,12 @@ export interface FileLocation {
   name: string;
 }
 
+interface OpenFileDialogOptions extends Options {
+  acceptsOptions: AcceptOption[];
+}
+
 export interface OpenFileDialog {
-  (options?: OpenFilePickerOptions): FileLocation[];
+  (options: OpenFileDialogOptions): FileLocation[];
 }
 
 export interface Adaptor {
@@ -95,4 +115,26 @@ export interface Adaptor {
 
 export interface LocateEntry {
   (path: FileSystemPath): FileSystemEntry | null;
+}
+
+export interface UserAgent {
+  recentlyPickedDirectoryMap: Map<unknown, Map<string, string>>;
+  defaultPath: string;
+  wellKnownDirectory: WellKnownDirectoryRecord;
+}
+
+export interface WellKnownDirectoryRecord {
+  get desktop(): string;
+
+  get documents(): string;
+
+  get downloads(): string;
+  get music(): string;
+  get pictures(): string;
+  get videos(): string;
+}
+
+export interface Environment {
+  origin: unknown;
+  userAgent: UserAgent;
 }
