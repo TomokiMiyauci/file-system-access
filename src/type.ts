@@ -98,8 +98,9 @@ export interface FileLocation {
   name: string;
 }
 
-interface OpenFileDialogOptions extends Options {
+export interface OpenFileDialogOptions extends Options {
   acceptsOptions: AcceptOption[];
+  multiple?: boolean;
 }
 
 export interface OpenFileDialog {

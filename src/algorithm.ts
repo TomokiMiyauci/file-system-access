@@ -156,7 +156,9 @@ export function rememberPickedDirectory(
   // 3. If id is not specified, let id be an empty string.
   id ??= "";
 
-  const path = join(locator.fileSystem.root, ...locator.path);
+  const path = locator.kind === "file"
+    ? join(locator.fileSystem.root, ...[...locator.path].slice(1))
+    : join(locator.fileSystem.root, ...locator.path);
   // 4. Set recently picked directory map[origin][id] to the path on the local file system corresponding to entry, if such a path can be determined.
   recentlyPickedDirectoryMap.get(origin)!.set(id, path);
 }
@@ -188,11 +190,15 @@ export function determineDirectoryPickerStartIn(
   // 4. If startIn is a FileSystemHandle and startIn is not in a bucket file system:
   if (startIn instanceof FileSystemHandle && !isBucketFileSystem(startIn)) {
     // 1. Let entry be the result of locating an entry given startIn’s locator.
-    // const entry = locateEntry(startIn["locator"]);
+    const locator = startIn["locator"];
 
     // 2. If entry is a file entry, return the path of entry’s parent in the local file system.
+    if (locator.kind === "file") {
+      return join(locator.fileSystem.root, ...[...locator.path].slice(1));
+    }
 
     // 3. If entry is a directory entry, return entry’s path in the local file system.
+    return join(locator.fileSystem.root, ...locator.path);
   }
 
   // 5. If id is non-empty:
