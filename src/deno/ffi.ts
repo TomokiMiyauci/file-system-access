@@ -19,10 +19,10 @@ interface Failure {
 }
 
 class FileDialog {
-  constructor(private dialog: Dialog) {}
+  #dialog: Dialog = new Dialog();
 
   pickFile(): string {
-    const ptr = this.dialog.pick_file();
+    const ptr = this.#dialog.pick_file();
     const ptrView = new Deno.UnsafePointerView(ptr!);
     const fullPath = ptrView.getCString();
     const json = JSON.parse(fullPath) as Result<string>;
@@ -33,7 +33,7 @@ class FileDialog {
   }
 
   pickFiles(): string[] {
-    const ptr = this.dialog.pick_files();
+    const ptr = this.#dialog.pick_files();
     const ptrView = new Deno.UnsafePointerView(ptr!);
     const jsonStr = ptrView.getCString();
     const result = JSON.parse(jsonStr) as Result<string[]>;
@@ -44,7 +44,7 @@ class FileDialog {
   }
 
   pickDirectory(): string {
-    const ptr = this.dialog.pick_directory();
+    const ptr = this.#dialog.pick_directory();
     const ptrView = new Deno.UnsafePointerView(ptr!);
     const jsonStr = ptrView.getCString();
     const result = JSON.parse(jsonStr) as Result<string>;
@@ -54,8 +54,8 @@ class FileDialog {
     throw new DOMException("The user aborted a request.", "AbortError");
   }
 
-  saveFile() {
-    const ptr = this.dialog.save_file();
+  saveFile(): string {
+    const ptr = this.#dialog.save_file();
     const ptrView = new Deno.UnsafePointerView(ptr!);
     const jsonStr = ptrView.getCString();
     const result = JSON.parse(jsonStr) as Result<string>;
@@ -65,40 +65,50 @@ class FileDialog {
     throw new DOMException("The user aborted a request.", "AbortError");
   }
 
-  addFilter(_: string, extensions: string[]): FileDialog {
+  addFilter(_: string, extensions: string[]): void {
     const extensionsStr = JSON.stringify(extensions);
     const ext = new TextEncoder().encode(extensionsStr);
+    const dialog = this.#dialog.add_filter(ext);
 
-    const dialog = this.dialog.add_filter(ext);
-
-    return new FileDialog(dialog);
+    this.#update(dialog);
   }
 
-  setDirectory(path: string): FileDialog {
+  setDirectory(path: string): void {
     const u8 = new TextEncoder().encode(path);
+    const dialog = this.#dialog.set_directory(u8);
 
-    const dialog = this.dialog.set_directory(u8);
-
-    return new FileDialog(dialog);
+    this.#update(dialog);
   }
 
-  setFileName(fileName: string): FileDialog {
+  setFileName(fileName: string): void {
     const u8 = new TextEncoder().encode(fileName);
+    const dialog = this.#dialog.set_file_name(u8);
 
-    const dialog = this.dialog.set_file_name(u8);
+    this.#update(dialog);
+  }
 
-    return new FileDialog(dialog);
+  #release(): void {
+    this.#dialog[Symbol.dispose]();
+  }
+
+  #update(dialog: Dialog): void {
+    this.#release();
+
+    this.#dialog = dialog;
+  }
+
+  [Symbol.dispose](): void {
+    this.#release();
   }
 }
 
 export function openFileDialog(
   options: OpenFileDialogOptions,
 ): FileLocation[] {
-  using dialog = new Dialog();
-  let fileDialog = new FileDialog(dialog);
+  using fileDialog = new FileDialog();
 
   if (options.startingDirectory) {
-    fileDialog = fileDialog.setDirectory(options.startingDirectory);
+    fileDialog.setDirectory(options.startingDirectory);
   }
 
   for (const [description, exts] of options.acceptsOptions) {
@@ -106,7 +116,7 @@ export function openFileDialog(
       ext.startsWith(".") ? ext.slice(1) : ext
     );
 
-    fileDialog = fileDialog.addFilter(description, extsWithoutDot);
+    fileDialog.addFilter(description, extsWithoutDot);
   }
 
   if (options?.multiple) {
@@ -123,15 +133,14 @@ export function openFileDialog(
 export function openSaveFileDialog(
   options: OpenSaveFilePickerOptions,
 ): FileLocation {
-  using dialog = new Dialog();
-  let fileDialog = new FileDialog(dialog);
+  using fileDialog = new FileDialog();
 
   if (options.startingDirectory) {
-    fileDialog = fileDialog.setDirectory(options.startingDirectory);
+    fileDialog.setDirectory(options.startingDirectory);
   }
 
   if (options?.suggestedName) {
-    fileDialog = fileDialog.setFileName(options.suggestedName);
+    fileDialog.setFileName(options.suggestedName);
   }
 
   for (const [description, exts] of options.acceptsOptions) {
@@ -139,7 +148,7 @@ export function openSaveFileDialog(
       ext.startsWith(".") ? ext.slice(1) : ext
     );
 
-    fileDialog = fileDialog.addFilter(description, extsWithoutDot);
+    fileDialog.addFilter(description, extsWithoutDot);
   }
 
   const path = fileDialog.saveFile();
@@ -158,11 +167,10 @@ function toLoc(path: string): FileLocation {
 export function openDirectoryDialog(
   options: Options,
 ): FileLocation {
-  using dialog = new Dialog();
-  let fileDialog = new FileDialog(dialog);
+  const fileDialog = new FileDialog();
 
   if (options.startingDirectory) {
-    fileDialog = fileDialog.setDirectory(options.startingDirectory);
+    fileDialog.setDirectory(options.startingDirectory);
   }
 
   const fullPath = fileDialog.pickDirectory();
