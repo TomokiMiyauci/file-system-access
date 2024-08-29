@@ -1,3 +1,10 @@
+# [1.0.0-beta.19](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.18...1.0.0-beta.19) (2024-08-29)
+
+
+### Features
+
+* **node:** add node adaptor ([b3bf0e0](https://github.com/TomokiMiyauci/file-system-access/commit/b3bf0e07534cd2a877f2e2f4ee06b3217cfc7a8f))
+
 # [1.0.0-beta.18](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.17...1.0.0-beta.18) (2024-08-29)
 
 
