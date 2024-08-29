@@ -55,72 +55,8 @@ jobs:
       #     files: cov_profile.lcov
       #     token: ${{ secrets.CODECOV_TOKEN }}
 
-  build:
-    runs-on: ${{ matrix.targets.os }}
-    strategy:
-      matrix:
-        targets:
-          - target: aarch64-unknown-linux-gnu
-            os: ubuntu-latest
-            cross: true
-
-          - target: x86_64-unknown-linux-gnu
-            os: ubuntu-latest
-            cross: true
-
-          - target: x86_64-apple-darwin
-            os: macos-latest
-
-          - target: aarch64-apple-darwin
-            os: macos-latest
-
-          - target: x86_64-pc-windows-msvc
-            os: windows-latest
-
-          - target: aarch64-pc-windows-msvc
-            os: windows-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          target: ${{ matrix.targets.target }}
-
-      # - uses: actions/cache@v4
-      #   with:
-      #     path: |
-      #       ~/.cargo/registry
-      #       ~/.cargo/git
-      #       target
-      #     key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Install cached cross
-        uses: baptiste0928/cargo-install@v3
-        with:
-          crate: cross
-
-      - name: Build
-        run: ${{ matrix.targets.cross && 'cross' || 'cargo' }} build --release --target ${{ matrix.targets.target }} --locked
-
-      - name: Rename artifacts
-        shell: bash
-        run: |
-          find target/${{ matrix.targets.target }}/release -maxdepth 1 \( -name '*.so' -o -name '*.dll' -o -name '*.dylib' \) -exec sh -c '
-          for file; do
-            if [ -e "$file" ]; then
-              mv "$file" "${file%.*}_${{ matrix.targets.target }}.${file##*.}";
-            fi
-          done' sh {} +
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.targets.target }}
-          path: target
-
   release:
-    needs: [lint, test, build]
+    needs: [lint, test]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -136,29 +72,6 @@ jobs:
 
       - uses: cycjimmy/semantic-release-action@v4
         id: semantic
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
-  upload:
-    needs: [release]
-    if: ${{ needs.release.outputs.new_release == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - uses: actions/download-artifact@v4
-        with:
-          path: target
-
-      - name: Upload releases
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ needs.release.outputs.new_tag }}
-          files: |
-            target/**/release/*.dylib
-            target/**/release/*.dll
-            target/**/release/*.so
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
