@@ -181,7 +181,6 @@
   "remote": {},
   "workspace": {
     "dependencies": [
-      "jsr:@denosaurs/plug@^1.0.6",
       "jsr:@miyauci/fs@1.0.0-beta.13",
       "jsr:@miyauci/infra@^1.0.0",
       "jsr:@miyauci/rfd@^1.0.0-beta.9",
