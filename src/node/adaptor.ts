@@ -97,7 +97,7 @@ export function openDirectoryDialog(
     fileDialog.setDirectory(options.startingDirectory);
   }
 
-  const fullPath = fileDialog.pickDirectory();
+  const fullPath = fileDialog.pickFolder();
 
   if (!fullPath) return null;
 
