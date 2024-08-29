@@ -1,3 +1,16 @@
+# [1.0.0-beta.18](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.17...1.0.0-beta.18) (2024-08-29)
+
+
+### Bug Fixes
+
+* **ffi:** release ffi instance that are not used ([3ad345b](https://github.com/TomokiMiyauci/file-system-access/commit/3ad345b3e6d76ed59a6265b2116d6edf8bb18f14))
+
+
+### Features
+
+* **deno:** use external file dialog, remove duplicated ([0a8782c](https://github.com/TomokiMiyauci/file-system-access/commit/0a8782cdb375a48cba59705aa7e8377fd5f12b40))
+* **mod:** export related types ([61fb754](https://github.com/TomokiMiyauci/file-system-access/commit/61fb7547c6157cc54cd74be633231d3ec6ce36d1))
+
 # [1.0.0-beta.17](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.16...1.0.0-beta.17) (2024-08-26)
 
 
