@@ -1,3 +1,10 @@
+# [1.0.0-beta.20](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.19...1.0.0-beta.20) (2024-08-29)
+
+
+### Features
+
+* update deps version, chagne method name ([4d37bfe](https://github.com/TomokiMiyauci/file-system-access/commit/4d37bfe753e4d9a2c4788ed0ddc806f233a3b8e3))
+
 # [1.0.0-beta.19](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.18...1.0.0-beta.19) (2024-08-29)
 
 
