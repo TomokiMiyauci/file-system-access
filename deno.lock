@@ -7,8 +7,11 @@
       "jsr:@miyauci/format@^1.1.0": "jsr:@miyauci/format@1.1.0",
       "jsr:@miyauci/fs@1.0.0-beta.13": "jsr:@miyauci/fs@1.0.0-beta.13",
       "jsr:@miyauci/infra@^1.0.0": "jsr:@miyauci/infra@1.0.0",
+      "jsr:@miyauci/node-esm-resolution@^1.0.0-beta.6": "jsr:@miyauci/node-esm-resolution@1.0.0-beta.6",
+      "jsr:@miyauci/rfd@^1.0.0-beta.9": "jsr:@miyauci/rfd@1.0.0-beta.9",
       "jsr:@std/assert@^0.221.0": "jsr:@std/assert@0.221.0",
       "jsr:@std/bytes@^1.0.2": "jsr:@std/bytes@1.0.2",
+      "jsr:@std/collections@^0.221.0": "jsr:@std/collections@0.221.0",
       "jsr:@std/encoding@^0.221.0": "jsr:@std/encoding@0.221.0",
       "jsr:@std/fmt@^0.221.0": "jsr:@std/fmt@0.221.0",
       "jsr:@std/fs@^0.221.0": "jsr:@std/fs@0.221.0",
@@ -18,7 +21,9 @@
       "jsr:@std/path@^1.0.1": "jsr:@std/path@1.0.2",
       "jsr:@std/path@^1.0.2": "jsr:@std/path@1.0.2",
       "jsr:@std/regexp@^0.221.0": "jsr:@std/regexp@0.221.0",
-      "npm:@types/node": "npm:@types/node@18.16.19"
+      "jsr:@std/url@^0.221.0": "jsr:@std/url@0.221.0",
+      "npm:@types/node": "npm:@types/node@18.16.19",
+      "npm:write-file-safe@^2.0.3": "npm:write-file-safe@2.0.3"
     },
     "jsr": {
       "@denosaurs/plug@1.0.6": {
@@ -50,11 +55,32 @@
       "@miyauci/infra@1.0.0": {
         "integrity": "033cb39b6347182011a3a194d5ee2df67243e35397e7089e214c47adc5335a9d"
       },
+      "@miyauci/node-esm-resolution@1.0.0-beta.6": {
+        "integrity": "a692639bf13123f62b8f4ed35dc15b292da7d60b3fd403b9f19528831115872f",
+        "dependencies": [
+          "jsr:@miyauci/format@^1.1.0",
+          "jsr:@std/collections@^0.221.0",
+          "jsr:@std/path@^0.221.0",
+          "jsr:@std/regexp@^0.221.0",
+          "jsr:@std/url@^0.221.0"
+        ]
+      },
+      "@miyauci/rfd@1.0.0-beta.9": {
+        "integrity": "e5319b18337a03f415a0cd4de2d2bd6b8840471ad003511e36c4d50fb3eda32d",
+        "dependencies": [
+          "jsr:@denosaurs/plug@^1.0.6",
+          "jsr:@miyauci/node-esm-resolution@^1.0.0-beta.6",
+          "npm:write-file-safe@^2.0.3"
+        ]
+      },
       "@std/assert@0.221.0": {
         "integrity": "a5f1aa6e7909dbea271754fd4ab3f4e687aeff4873b4cef9a320af813adb489a"
       },
       "@std/bytes@1.0.2": {
         "integrity": "fbdee322bbd8c599a6af186a1603b3355e59a5fb1baa139f8f4c3c9a1b3e3d57"
+      },
+      "@std/collections@0.221.0": {
+        "integrity": "789a365bb79b06c4da79d2b93fe32ddfe03b93ab083e72c1de96303d12f84be5"
       },
       "@std/encoding@0.221.0": {
         "integrity": "d1dd76ef0dc5d14088411e6dc1dede53bf8308c95d1537df1214c97137208e45"
@@ -89,12 +115,66 @@
       },
       "@std/regexp@0.221.0": {
         "integrity": "6ef49d56386414ed448252aeda15573087b69eb2c4b59dd7390506cc76ac7f6d"
+      },
+      "@std/url@0.221.0": {
+        "integrity": "ff19961e6ef86c934cffb788a3e8cd1db7460729c88acf6d5cd4daab52cfa1ad",
+        "dependencies": [
+          "jsr:@std/path@^0.221.0"
+        ]
       }
     },
     "npm": {
       "@types/node@18.16.19": {
         "integrity": "sha512-IXl7o+R9iti9eBW4Wg2hx1xQDig183jj7YLn8F7udNceyfkbn1ZxmzZXuak20gR40D7pIkIY1kYGx5VIGbaHKA==",
         "dependencies": {}
+      },
+      "char-to-string@2.0.0": {
+        "integrity": "sha512-PN6XD9jZ/DmKlyp9F2cCeEHY/CUdpsVG4pBLX5Y0uTc8DCDAhJzbLOocr3ejXMc0wL6/ea5uvlcA0Qk6+OwVZQ==",
+        "dependencies": {}
+      },
+      "detect-newline@4.0.1": {
+        "integrity": "sha512-qE3Veg1YXzGHQhlA6jzebZN2qVf6NX+A7m7qlhCGG30dJixrAQhYOsJjsnBjJkCSmuOPpCk30145fr8FV0bzog==",
+        "dependencies": {}
+      },
+      "ends-with-string@2.0.0": {
+        "integrity": "sha512-c82jLyJORw/yJ7Z3nKyp+WOxN3WGULnSByJAsanu+8I/H6WlZIa2D9bz5rEmRKCKhCNVK1NKsKoHXEcE4LEdbA==",
+        "dependencies": {
+          "char-to-string": "char-to-string@2.0.0"
+        }
+      },
+      "is-path-inside@4.0.0": {
+        "integrity": "sha512-lJJV/5dYS+RcL8uQdBDW9c9uWFLLBNRyFhnAKXw5tVqLlKZ4RMGZKv+YQ/IA3OhD+RpbJa1LLFM1FQPGyIXvOA==",
+        "dependencies": {}
+      },
+      "read-file-safe@2.1.1": {
+        "integrity": "sha512-Qge8x3UzI/0hEcfsvG60Bvw5DX9BUHS0gIunXPAo/7gEZRTzMLVHbI9Uv5VQvNS9eBrrqOX0pkdP9Pzr3m9xFg==",
+        "dependencies": {}
+      },
+      "remove-file-safe@3.0.0": {
+        "integrity": "sha512-JkgTbVCca0UQjWSAhpSPFR+ZT4Fr+2qkvQ5hMa8WMZGDLI56jztX+ZQpdCvzc+MBxyj4vlZs/dCln2DIvHS43w==",
+        "dependencies": {
+          "is-path-inside": "is-path-inside@4.0.0"
+        }
+      },
+      "terminating-newline@2.0.0": {
+        "integrity": "sha512-H8yf0+0aQ9WzDE//BvRE9onDMpu5gPX/rUo6EJlZ2G9dmy+sbZVQJvA1NIBqYeQBivviw++K0YKZMqf4A7j/tA==",
+        "dependencies": {
+          "detect-newline": "detect-newline@4.0.1",
+          "ends-with-string": "ends-with-string@2.0.0"
+        }
+      },
+      "write-dir-safe@2.0.1": {
+        "integrity": "sha512-rL5prgKDZlPC/A1XDbAVsH3nDwKKMLPor6NcKk10zz1jN/GxyRZFrhIDUsTKrhxT/dj5fMBOZ+2uo04vVC+m7w==",
+        "dependencies": {}
+      },
+      "write-file-safe@2.0.3": {
+        "integrity": "sha512-KL/0O4M3cSpTKGbudiS0q2aHUyegDVna7/RDqjaQlEPtG/Kzs3AmUeHkpG55yYkxP09euOZAMG+jJL+pmYEDDQ==",
+        "dependencies": {
+          "read-file-safe": "read-file-safe@2.1.1",
+          "remove-file-safe": "remove-file-safe@3.0.0",
+          "terminating-newline": "terminating-newline@2.0.0",
+          "write-dir-safe": "write-dir-safe@2.0.1"
+        }
       }
     }
   },
@@ -104,6 +184,7 @@
       "jsr:@denosaurs/plug@^1.0.6",
       "jsr:@miyauci/fs@1.0.0-beta.13",
       "jsr:@miyauci/infra@^1.0.0",
+      "jsr:@miyauci/rfd@^1.0.0-beta.9",
       "jsr:@std/bytes@^1.0.2",
       "jsr:@std/media-types@^1.0.2",
       "jsr:@std/path@^1.0.1"

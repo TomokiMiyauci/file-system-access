@@ -3,6 +3,7 @@ import {
   type FileSystem,
   type FileSystemFileHandle,
 } from "@miyauci/fs";
+import { List, Set } from "@miyauci/infra";
 import {
   determineDirectoryPickerStartIn,
   isTooSensitiveOrDangerous,
@@ -15,7 +16,6 @@ import type {
   OpenFileDialog,
 } from "./implementation_defined.ts";
 import type { OpenFilePickerOptions } from "./type.ts";
-import { List, Set } from "@miyauci/infra";
 
 export function showOpenFilePickerWith(
   environment: Environment,
@@ -41,7 +41,7 @@ export function showOpenFilePickerWith(
 
   // 6. Let p be a new promise.
   // 7. Run the following steps in parallel:
-  const p = new Promise<FileSystemFileHandle[]>((resolve) => {
+  const p = new Promise<FileSystemFileHandle[]>((resolve, reject) => {
     // 1. Optionally, wait until any prior execution of this algorithm has terminated.
 
     // 2. Display a prompt to the user requesting that the user pick some files. If options["multiple"] is false, there must be no more than one file selected; otherwise any number may be selected.
@@ -56,6 +56,11 @@ export function showOpenFilePickerWith(
     });
 
     // 4. If the user dismissed the prompt without making a selection, reject p with an "AbortError" DOMException and abort.
+    if (!entries) {
+      return reject(
+        new DOMException("The user aborted a request.", "AbortError"),
+      );
+    }
 
     // 5. Let entries be a list of file entries representing the selected files or directories.
 

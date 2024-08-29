@@ -37,18 +37,25 @@ export function showDirectoryPickerWith(
 
   // 5. Let p be a new promise.
   // 6. Run the following steps in parallel:
-  const p = new Promise<FileSystemDirectoryHandle>((resolve) => {
+  const p = new Promise<FileSystemDirectoryHandle>((resolve, reject) => {
     // 1. Optionally, wait until any prior execution of this algorithm has terminated.
 
     // 2. Display a prompt to the user requesting that the user pick a directory.
     // When possible, this prompt should start out showing starting directory.
 
     // 3. Wait for the user to have made their selection.
+    const entry = openDirectoryPicker({ startingDirectory });
 
     // 4. If the user dismissed the prompt without making a selection, reject p with an "AbortError" DOMException and abort.
+    if (!entry) {
+      return reject(
+        new DOMException("The user aborted a request.", "AbortError"),
+      );
+    }
+
+    const { root, name } = entry;
 
     // 5. Let entry be a directory entry representing the selected directory.
-    const { root, name } = openDirectoryPicker({ startingDirectory });
 
     // 6. If entry is deemed too sensitive or dangerous to be exposed to this website by the user agent:
     if (isTooSensitiveOrDangerous()) {
