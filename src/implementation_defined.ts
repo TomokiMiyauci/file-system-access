@@ -13,7 +13,7 @@ export interface Filter {
 }
 
 export interface OpenDirectoryPicker {
-  (options: Options): FileLocation;
+  (options: Options): FileLocation | null;
 }
 
 export interface OpenSaveFilePickerOptions extends Options {
@@ -22,7 +22,7 @@ export interface OpenSaveFilePickerOptions extends Options {
 }
 
 export interface OpenSaveFilePicker {
-  (options: OpenSaveFilePickerOptions): FileLocation;
+  (options: OpenSaveFilePickerOptions): FileLocation | null;
 }
 
 export interface FileLocation {
@@ -36,7 +36,7 @@ export interface OpenFileDialogOptions extends Options {
 }
 
 export interface OpenFileDialog {
-  (options: OpenFileDialogOptions): FileLocation[];
+  (options: OpenFileDialogOptions): FileLocation[] | null;
 }
 
 export interface Adaptor {
