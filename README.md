@@ -1,8 +1,5 @@
 # file-system-access
 
-> 🚧 WIP at
-> [beta branch](https://github.com/TomokiMiyauci/file-system-access/tree/beta)
-
 [File System Access](https://wicg.github.io/file-system-access/) ponyfill for
 server side runtime.
 
@@ -23,19 +20,9 @@ constructor requires [adaptor](#adaptors).
 import { type Adaptor, FileSystemAccess } from "@miyauci/file-system-access";
 
 declare const adaptor: Adaptor;
-const { showOpenFilePicker, showDirectoryPicker, showSaveFilePicker } =
-  new FileSystemAccess(
-    adaptor,
-  );
+const { showOpenFilePicker } = new FileSystemAccess(adaptor);
 
 const [handle] = await showOpenFilePicker();
-const writable = await handle.createWritable();
-await writable.write("hello");
-await writable.write("world");
-await writable.close();
-
-const file = await handle.getFile();
-await file.text(); // helloworld;
 ```
 
 ### Adaptors
