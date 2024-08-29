@@ -55,10 +55,6 @@ It also requires the following permission.
 - `--allow-read`(path to binary cache, target directories and files)
 - `--allow-write`(path to binary cache, target files)
 
-#### Node
-
-// TODO
-
 #### Bun
 
 // TODO

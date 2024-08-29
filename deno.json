@@ -16,7 +16,8 @@
   },
   "exports": {
     ".": "./src/mod.ts",
-    "./deno": "./src/deno/mod.ts"
+    "./deno": "./src/deno/mod.ts",
+    "./node": "./src/node/mod.ts"
   },
   "exclude": ["CHANGELOG.md"],
   "version": "0.1.0-placeholder"
