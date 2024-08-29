@@ -9,7 +9,7 @@
     "@miyauci/fs": "jsr:@miyauci/fs@1.0.0-beta.13",
     "@miyauci/infra": "jsr:@miyauci/infra@^1.0.0",
     "@miyauci/permissions": "./src/permissions/mod.ts",
-    "@miyauci/rfd": "jsr:@miyauci/rfd@^1.0.0-beta.10",
+    "@miyauci/rfd": "jsr:@miyauci/rfd@^1.0.0-beta.11",
     "@std/bytes": "jsr:@std/bytes@^1.0.2",
     "@std/media-types": "jsr:@std/media-types@^1.0.2",
     "@std/path": "jsr:@std/path@^1.0.1"
