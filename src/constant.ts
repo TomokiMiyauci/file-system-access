@@ -6,4 +6,5 @@ export const enum Msg {
   InvalidSuffix = "Extension '{suffix}' contains invalid characters.",
   InvalidSuffixLength =
     "Extension '{suffix}' cannot be longer than 16 characters.",
+  AbortRequest = "The user aborted a request.",
 }

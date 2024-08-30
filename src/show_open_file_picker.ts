@@ -16,6 +16,7 @@ import type {
   OpenFileDialog,
 } from "./implementation_defined.ts";
 import type { OpenFilePickerOptions } from "./type.ts";
+import { Msg } from "./constant.ts";
 
 export function showOpenFilePickerWith(
   environment: Environment,
@@ -57,9 +58,7 @@ export function showOpenFilePickerWith(
 
     // 4. If the user dismissed the prompt without making a selection, reject p with an "AbortError" DOMException and abort.
     if (!entries) {
-      return reject(
-        new DOMException("The user aborted a request.", "AbortError"),
-      );
+      return reject(new DOMException(Msg.AbortRequest, "AbortError"));
     }
 
     // 5. Let entries be a list of file entries representing the selected files or directories.

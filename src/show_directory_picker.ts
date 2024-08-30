@@ -15,6 +15,7 @@ import type {
   LocateEntry,
   OpenDirectoryPicker,
 } from "./implementation_defined.ts";
+import { Msg } from "./constant.ts";
 
 export function showDirectoryPickerWith(
   environment: Environment,
@@ -48,9 +49,7 @@ export function showDirectoryPickerWith(
 
     // 4. If the user dismissed the prompt without making a selection, reject p with an "AbortError" DOMException and abort.
     if (!entry) {
-      return reject(
-        new DOMException("The user aborted a request.", "AbortError"),
-      );
+      return reject(new DOMException(Msg.AbortRequest, "AbortError"));
     }
 
     const { root, name } = entry;

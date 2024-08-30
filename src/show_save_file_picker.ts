@@ -14,6 +14,7 @@ import {
   processAcceptTypes,
   rememberPickedDirectory,
 } from "./algorithm.ts";
+import { Msg } from "./constant.ts";
 
 export function showSaveFilePickerWith(
   environment: Environment,
@@ -54,11 +55,7 @@ export function showSaveFilePickerWith(
     // 3. Wait for the user to have made their selection.
 
     // 4. If the user dismissed the prompt without making a selection, reject p with an "AbortError" DOMException and abort.
-    if (!entry) {
-      return reject(
-        new DOMException("The user aborted a request.", "AbortError"),
-      );
-    }
+    if (!entry) return reject(new DOMException(Msg.AbortRequest, "AbortError"));
 
     // 5. Let entry be a file entry representing the selected file.
     const { root, name } = entry;
