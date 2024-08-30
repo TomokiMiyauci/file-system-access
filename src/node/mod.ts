@@ -1,1 +1,1 @@
-export { UserAgent } from "./adaptor.ts";
+export { UserAgent } from "./user_agent.ts";
