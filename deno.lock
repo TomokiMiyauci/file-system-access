@@ -9,7 +9,7 @@
       "jsr:@miyauci/infra@^1.0.0": "jsr:@miyauci/infra@1.0.0",
       "jsr:@miyauci/node-esm-resolution@^1.0.0-beta.6": "jsr:@miyauci/node-esm-resolution@1.0.0-beta.6",
       "jsr:@miyauci/rfd@^1.0.0-beta.10": "jsr:@miyauci/rfd@1.0.0-beta.10",
-      "jsr:@miyauci/rfd@^1.0.0-beta.11": "jsr:@miyauci/rfd@1.0.0-beta.11",
+      "jsr:@miyauci/rfd@^1.0.0-beta.12": "jsr:@miyauci/rfd@1.0.0-beta.12",
       "jsr:@std/assert@^0.221.0": "jsr:@std/assert@0.221.0",
       "jsr:@std/bytes@^1.0.2": "jsr:@std/bytes@1.0.2",
       "jsr:@std/collections@^0.221.0": "jsr:@std/collections@0.221.0",
@@ -76,8 +76,8 @@
           "npm:write-file-safe@^2.0.3"
         ]
       },
-      "@miyauci/rfd@1.0.0-beta.11": {
-        "integrity": "f0401631a13d4aac129e8aecaa314aeea2fcbec3941e27674231868f2693c368",
+      "@miyauci/rfd@1.0.0-beta.12": {
+        "integrity": "d6512c49b48d625e457ca04d03961d1f52a37c7b840744ca5b68444f7da552ff",
         "dependencies": [
           "jsr:@denosaurs/plug@^1.0.6"
         ]
@@ -287,7 +287,7 @@
     "dependencies": [
       "jsr:@miyauci/fs@1.0.0-beta.13",
       "jsr:@miyauci/infra@^1.0.0",
-      "jsr:@miyauci/rfd@^1.0.0-beta.11",
+      "jsr:@miyauci/rfd@^1.0.0-beta.12",
       "jsr:@std/bytes@^1.0.2",
       "jsr:@std/media-types@^1.0.2",
       "jsr:@std/path@^1.0.1"
