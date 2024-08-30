@@ -79,7 +79,9 @@
       "@miyauci/rfd@1.0.0-beta.12": {
         "integrity": "d6512c49b48d625e457ca04d03961d1f52a37c7b840744ca5b68444f7da552ff",
         "dependencies": [
-          "jsr:@denosaurs/plug@^1.0.6"
+          "jsr:@denosaurs/plug@^1.0.6",
+          "jsr:@miyauci/node-esm-resolution@^1.0.0-beta.6",
+          "npm:write-file-safe@^2.0.3"
         ]
       },
       "@std/assert@0.221.0": {
@@ -285,6 +287,7 @@
   "remote": {},
   "workspace": {
     "dependencies": [
+      "jsr:@miyauci/format@^1.1.0",
       "jsr:@miyauci/fs@1.0.0-beta.13",
       "jsr:@miyauci/infra@^1.0.0",
       "jsr:@miyauci/rfd@^1.0.0-beta.12",

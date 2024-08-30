@@ -2,8 +2,10 @@ import { FileSystemHandle, type FileSystemLocator } from "@miyauci/fs";
 import { Map } from "@miyauci/infra";
 import { parseMediaType } from "@std/media-types";
 import { join } from "@std/path/join";
+import { format } from "@miyauci/format";
 import type { FilePickerOptions, StartInDirectory } from "./type.ts";
 import type { AcceptOption, Environment } from "./implementation_defined.ts";
+import { Msg } from "./constant.ts";
 
 export function isTooSensitiveOrDangerous(): boolean {
   return false;
@@ -121,17 +123,58 @@ interface MIMEType {
   parameters: Record<string, string>;
 }
 
+function isAsciiAlphanumeric(codePoint: number): boolean {
+  return (
+    (0x30 <= codePoint && codePoint <= 0x39) || // '0' to '9'
+    (0x41 <= codePoint && codePoint <= 0x5A) || // 'A' to 'Z'
+    (0x61 <= codePoint && codePoint <= 0x7A) // 'a' to 'z'
+  );
+}
+
+/**
+ * [File System Access](https://wicg.github.io/file-system-access/#valid-suffix-code-point)
+ */
+function isValidSuffixCodePoints(codePoint: number): boolean {
+  if (isAsciiAlphanumeric(codePoint)) return true;
+
+  // U+002B ('+')
+  if (codePoint === 0x002B) return true;
+
+  // U+002E ('.')
+  if (codePoint === 0x002E) return true;
+
+  return false;
+}
+
+/**
+ * [File System Access](https://wicg.github.io/file-system-access/#validate-a-suffix)
+ */
 export function validateSuffix(suffix: string): asserts suffix {
   // If suffix does not start with ".", then throw a TypeError.
-  if (!suffix.startsWith(".")) throw new TypeError();
+  if (!suffix.startsWith(".")) {
+    throw new TypeError(
+      format(Msg.InvalidSuffixNotStatsWithPeriod, { suffix }),
+    );
+  }
 
   // If suffix contains any code points that are not valid suffix code points, then throw a TypeError.
+  for (const str of suffix) {
+    const codePoint = str.codePointAt(0)!;
+
+    if (!isValidSuffixCodePoints(codePoint)) {
+      throw new TypeError(format(Msg.InvalidSuffix, { suffix }));
+    }
+  }
 
   // If suffix ends with ".", then throw a TypeError.
-  if (suffix.endsWith(".")) throw new TypeError();
+  if (suffix.endsWith(".")) {
+    throw new TypeError(format(Msg.InvalidSuffixEndsWithPeriod, { suffix }));
+  }
 
   // If suffix’s length is more than 16, then throw a TypeError.
-  if (suffix.length > 16) throw new TypeError();
+  if (16 < suffix.length) {
+    throw new TypeError(format(Msg.InvalidSuffixLength, { suffix }));
+  }
 }
 
 export function rememberPickedDirectory(
@@ -174,10 +217,14 @@ export function determineDirectoryPickerStartIn(
   const { recentlyPickedDirectoryMap } = userAgent;
 
   // 1. If id given, and is not a valid path id, then throw a TypeError.
-  if (typeof id === "string" && !isValidPathId(id)) throw new TypeError();
+  if (typeof id === "string" && !isValidPathId(id)) {
+    throw new TypeError(format(Msg.InvalidId, { id }));
+  }
 
   // 2. If id’s length is more than 32, then throw a TypeError.
-  if (typeof id === "string" && 32 < id.length) throw new TypeError();
+  if (typeof id === "string" && 32 < id.length) {
+    throw new TypeError(format(Msg.InvalidIdLength, { id }));
+  }
 
   // 3. Let origin be environment’s origin.
   const origin = environment.origin;
