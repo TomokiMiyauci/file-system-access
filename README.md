@@ -1,20 +1,13 @@
 # file-system-access
 
-[File System Access](https://wicg.github.io/file-system-access/) ponyfill for
-server side runtime.
-
-This allows the native file dialog and the file system handle API to be used on
-the server side.
-
-Complies with
-[WICG, File System Access](https://github.com/WICG/file-system-access) and
-[File System Standard](https://github.com/whatwg/fs).
+[File System Access](https://wicg.github.io/file-system-access/), based on WICG
+spec reference implementation.
 
 ## Usage
 
-`FileSystemAccess` binds the
-[File System Access API](https://wicg.github.io/file-system-access/). The
-constructor requires [adaptor](#adaptors).
+`createFileSystemAccess` binds the
+[File System Access API](https://wicg.github.io/file-system-access/). This
+requires [user agent](#user-agent).
 
 ```ts
 import {
@@ -22,29 +15,36 @@ import {
   type UserAgent,
 } from "@miyauci/file-system-access";
 
-declare const agent: UserAgent;
-const { showOpenFilePicker } = createFileSystemAccess(agent);
+declare const UA: UserAgent;
+const { showOpenFilePicker } = createFileSystemAccess(UA);
 
 const [handle] = await showOpenFilePicker();
 ```
 
-### Adaptors
+`createFileSystemAccess` returns the following API:
 
-Adaptor is an abstraction that absorbs runtime differences.
+- [showOpenFilePicker](https://wicg.github.io/file-system-access/#api-showopenfilepicker)
+- [showSaveFilePicker](https://wicg.github.io/file-system-access/#api-showsavefilepicker)
+- [showDirectoryPicker](https://wicg.github.io/file-system-access/#api-showdirectorypicker)
+
+### User Agent
+
+`UserAgent` is different for each runtime. Only execution at the respective
+runtime is guaranteed.
 
 #### Deno
 
 ```ts
 import { UserAgent } from "@miyauci/file-system-access/deno";
 
-const agent = new UserAgent();
+const UA = new UserAgent();
 ```
 
 When using `UserAgent`, the following flags are required.
 
 - `--unstable-ffi`
 
-##### Permissions
+##### Permission Flags
 
 It also requires the following permission.
 
@@ -54,9 +54,13 @@ It also requires the following permission.
 - `--allow-read`(path to binary cache, target directories and files)
 - `--allow-write`(path to binary cache, target files)
 
-#### Bun
+#### Node.js
 
-// TODO
+```ts
+import { UserAgent } from "@miyauci/file-system-access/node";
+
+const UA = new UserAgent();
+```
 
 ## Contributing
 
