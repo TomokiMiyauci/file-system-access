@@ -1,3 +1,18 @@
+# [1.0.0-beta.22](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.21...1.0.0-beta.22) (2024-08-30)
+
+
+### Bug Fixes
+
+* **adaptor:** add return type to public api ([8999764](https://github.com/TomokiMiyauci/file-system-access/commit/8999764e9da6de7729f0582b6c3a884ba9d8c99e))
+
+
+### Features
+
+* improve error message ([dcac3c4](https://github.com/TomokiMiyauci/file-system-access/commit/dcac3c4695eddbb2ca9ac3ceb79319e409ee041f))
+* **mod:** export related type ([774542c](https://github.com/TomokiMiyauci/file-system-access/commit/774542c2adfb8941feb4c127428edf9ef60bfbf6))
+* rename module, change adaptor to user agent ([dc6b9a2](https://github.com/TomokiMiyauci/file-system-access/commit/dc6b9a227416ce24602b561f95f7b658fa6fdeb6))
+* update deps version ([8711758](https://github.com/TomokiMiyauci/file-system-access/commit/87117580348c8582aa9a5e16cf7bae26633226ea))
+
 # [1.0.0-beta.21](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.20...1.0.0-beta.21) (2024-08-29)
 
 
