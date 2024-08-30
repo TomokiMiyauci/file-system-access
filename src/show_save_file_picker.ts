@@ -9,11 +9,11 @@ import type {
   LocateEntry,
   OpenSaveFilePicker,
 } from "./implementation_defined.ts";
+import { processAcceptTypes } from "./algorithm.ts";
 import {
   determineDirectoryPickerStartIn,
-  processAcceptTypes,
   rememberPickedDirectory,
-} from "./algorithm.ts";
+} from "./starting_directory.ts";
 import { Msg } from "./constant.ts";
 
 export function showSaveFilePickerWith(

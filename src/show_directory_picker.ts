@@ -4,11 +4,11 @@ import {
   type FileSystemDirectoryHandle,
 } from "@miyauci/fs";
 import { List, Set } from "@miyauci/infra";
+import { isTooSensitiveOrDangerous } from "./algorithm.ts";
 import {
   determineDirectoryPickerStartIn,
-  isTooSensitiveOrDangerous,
   rememberPickedDirectory,
-} from "./algorithm.ts";
+} from "./starting_directory.ts";
 import type { DirectoryPickerOptions } from "./type.ts";
 import type {
   Environment,
