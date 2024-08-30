@@ -10,17 +10,11 @@ import {
   rememberPickedDirectory,
 } from "./starting_directory.ts";
 import type { DirectoryPickerOptions } from "./type.ts";
-import type {
-  Environment,
-  LocateEntry,
-  OpenDirectoryPicker,
-} from "./implementation_defined.ts";
+import type { Environment } from "./implementation_defined.ts";
 import { Msg } from "./constant.ts";
 
 export function showDirectoryPickerWith(
   environment: Environment,
-  locateEntry: LocateEntry,
-  openDirectoryPicker: OpenDirectoryPicker,
   options?: DirectoryPickerOptions,
 ): Promise<FileSystemDirectoryHandle> {
   // 1. Let environment be this’s relevant settings object.
@@ -45,7 +39,9 @@ export function showDirectoryPickerWith(
     // When possible, this prompt should start out showing starting directory.
 
     // 3. Wait for the user to have made their selection.
-    const entry = openDirectoryPicker({ startingDirectory });
+    const entry = environment.userAgent.openDirectoryDialog({
+      startingDirectory,
+    });
 
     // 4. If the user dismissed the prompt without making a selection, reject p with an "AbortError" DOMException and abort.
     if (!entry) {
@@ -64,7 +60,9 @@ export function showDirectoryPickerWith(
     }
 
     const fileSystem = {
-      locateEntry,
+      locateEntry(path) {
+        return environment.userAgent.locateEntry(root, path);
+      },
       root,
       observations: new Set(),
     } satisfies FileSystem;
@@ -108,16 +106,7 @@ export function showDirectoryPickerWith(
   return p;
 }
 
-export function createShowDirectoryPicker(
-  environment: Environment,
-  locateEntry: LocateEntry,
-  openDirectoryPicker: OpenDirectoryPicker,
-) {
+export function createShowDirectoryPicker(environment: Environment) {
   return (options?: DirectoryPickerOptions) =>
-    showDirectoryPickerWith(
-      environment,
-      locateEntry,
-      openDirectoryPicker,
-      options,
-    );
+    showDirectoryPickerWith(environment, options);
 }

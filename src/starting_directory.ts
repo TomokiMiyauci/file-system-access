@@ -13,6 +13,9 @@ export function isValidPathId(id: string): boolean {
   return /^[a-zA-Z0-9_-]+$/.test(id);
 }
 
+/**
+ * [File System Access](https://wicg.github.io/file-system-access/#wellknowndirectory-determine-the-directory-the-picker-will-start-in)
+ */
 export function determineDirectoryPickerStartIn(
   id: string | undefined,
   startIn: StartInDirectory | undefined,
@@ -63,7 +66,7 @@ export function determineDirectoryPickerStartIn(
   // 6. If startIn is a WellKnownDirectory:
   if (typeof startIn === "string") {
     // 1. Return a user agent defined path corresponding to the WellKnownDirectory value of startIn.
-    return userAgent.wellKnownDirectory[startIn];
+    return userAgent.wellKnownDirectories[startIn];
   }
 
   // 7. If id is not specified, or is an empty string:
@@ -82,6 +85,9 @@ export function determineDirectoryPickerStartIn(
   return userAgent.defaultPath;
 }
 
+/**
+ * [File System Access](https://wicg.github.io/file-system-access/#wellknowndirectory-remember-a-picked-directory)
+ */
 export function rememberPickedDirectory(
   id: string | undefined,
   locator: FileSystemLocator,

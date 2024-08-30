@@ -1,1 +1,1 @@
-export { NodeAdaptor } from "./adaptor.ts";
+export { UserAgent } from "./adaptor.ts";

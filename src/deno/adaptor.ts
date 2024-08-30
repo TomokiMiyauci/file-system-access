@@ -1,22 +1,60 @@
 import { BucketFileSystem } from "@miyauci/fs/deno";
 import { FileDialog } from "@miyauci/rfd/deno";
 import { parse } from "@std/path/parse";
+import { Map } from "@miyauci/infra";
+import { homedir } from "node:os";
+import { join } from "@std/path/join";
+import type { FileSystemPath } from "@miyauci/fs";
 import type {
-  Adaptor,
   FileLocation,
   OpenDirectoryPicker,
   OpenFileDialog,
   OpenFileDialogOptions,
   OpenSaveFilePickerOptions,
   Options,
+  UserAgent as IUserAgent,
+  WellKnownDirectoryMap as IWellKnownDirectoryMap,
 } from "../implementation_defined.ts";
 
-export class DenoAdaptor implements Adaptor {
+export class UserAgent implements IUserAgent {
   openFileDialog: OpenFileDialog = openFileDialog;
   openDirectoryDialog: OpenDirectoryPicker = openDirectoryDialog;
 
-  locateEntry = BucketFileSystem.prototype.locateEntry;
+  locateEntry(root: string, path: FileSystemPath) {
+    const fs = new BucketFileSystem(root);
+
+    return fs.locateEntry(path);
+  }
   openSaveFileDialog = openSaveFileDialog;
+  wellKnownDirectories: IWellKnownDirectoryMap = new WellKnownDirectoryMap();
+  recentlyPickedDirectoryMap: Map<unknown, Map<string, string>> = new Map();
+  defaultPath: string = "";
+}
+
+class WellKnownDirectoryMap implements IWellKnownDirectoryMap {
+  get desktop() {
+    return join(homedir(), "Desktop");
+  }
+
+  get documents() {
+    return join(homedir(), "Documents");
+  }
+
+  get downloads() {
+    return join(homedir(), "Downloads");
+  }
+
+  get music() {
+    return join(homedir(), "Music");
+  }
+
+  get pictures() {
+    return join(homedir(), "Pictures");
+  }
+
+  get videos() {
+    return join(homedir(), "Videos");
+  }
 }
 
 export function openFileDialog(

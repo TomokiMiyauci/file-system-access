@@ -39,32 +39,42 @@ export interface OpenFileDialog {
   (options: OpenFileDialogOptions): FileLocation[] | null;
 }
 
-export interface Adaptor {
-  openFileDialog: OpenFileDialog;
-  openDirectoryDialog: OpenDirectoryPicker;
-  openSaveFileDialog: OpenSaveFilePicker;
-  locateEntry: LocateEntry;
-}
-
 export interface LocateEntry {
-  (path: FileSystemPath): FileSystemEntry | null;
+  (root: string, path: FileSystemPath): FileSystemEntry | null;
 }
 
 export interface UserAgent {
+  /**
+   * [File System Access](https://wicg.github.io/file-system-access/#recently-picked-directory-map)
+   */
   recentlyPickedDirectoryMap: Map<unknown, Map<string, string>>;
+
+  /** Default path in a user agent specific manner.
+   *
+   * [File System Access, 8](https://wicg.github.io/file-system-access/#wellknowndirectory-determine-the-directory-the-picker-will-start-in)
+   */
   defaultPath: string;
-  wellKnownDirectory: WellKnownDirectoryRecord;
+
+  openDirectoryDialog: OpenDirectoryPicker;
+  openFileDialog: OpenFileDialog;
+  openSaveFileDialog: OpenSaveFilePicker;
+  locateEntry: LocateEntry;
+
+  /**
+   * [File System Access](https://wicg.github.io/file-system-access/#enumdef-wellknowndirectory)
+   */
+  wellKnownDirectories: WellKnownDirectoryMap;
 }
 
-export interface WellKnownDirectoryRecord {
-  get desktop(): string;
+export interface WellKnownDirectoryMap {
+  readonly desktop: string;
 
-  get documents(): string;
+  readonly documents: string;
 
-  get downloads(): string;
-  get music(): string;
-  get pictures(): string;
-  get videos(): string;
+  readonly downloads: string;
+  readonly music: string;
+  readonly pictures: string;
+  readonly videos: string;
 }
 
 export interface Environment {

@@ -17,10 +17,13 @@ Complies with
 constructor requires [adaptor](#adaptors).
 
 ```ts
-import { type Adaptor, FileSystemAccess } from "@miyauci/file-system-access";
+import {
+  createFileSystemAccess,
+  type UserAgent,
+} from "@miyauci/file-system-access";
 
-declare const adaptor: Adaptor;
-const { showOpenFilePicker } = new FileSystemAccess(adaptor);
+declare const agent: UserAgent;
+const { showOpenFilePicker } = createFileSystemAccess(agent);
 
 const [handle] = await showOpenFilePicker();
 ```
@@ -31,17 +34,13 @@ Adaptor is an abstraction that absorbs runtime differences.
 
 #### Deno
 
-Adaptor for deno runtime with asynchronous BLOB.
-
 ```ts
-import { DenoAdaptor } from "@miyauci/file-system-access/deno";
-import { FileSystemAccess } from "@miyauci/file-system-access";
+import { UserAgent } from "@miyauci/file-system-access/deno";
 
-const adaptor = new DenoAdaptor();
-const { showOpenFilePicker } = new FileSystemAccess(adaptor);
+const agent = new UserAgent();
 ```
 
-When using `DenoAdaptor`, the following flags are required.
+When using `UserAgent`, the following flags are required.
 
 - `--unstable-ffi`
 

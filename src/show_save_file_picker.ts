@@ -4,11 +4,7 @@ import {
 } from "@miyauci/fs";
 import { List, Set } from "@miyauci/infra";
 import type { SaveFilePickerOptions } from "./type.ts";
-import type {
-  Environment,
-  LocateEntry,
-  OpenSaveFilePicker,
-} from "./implementation_defined.ts";
+import type { Environment } from "./implementation_defined.ts";
 import { processAcceptTypes } from "./algorithm.ts";
 import {
   determineDirectoryPickerStartIn,
@@ -18,8 +14,6 @@ import { Msg } from "./constant.ts";
 
 export function showSaveFilePickerWith(
   environment: Environment,
-  locateEntry: LocateEntry,
-  openSaveFilePicker: OpenSaveFilePicker,
   options: SaveFilePickerOptions = {},
 ): Promise<FileSystemFileHandle> {
   // 1. Let environment be this’s relevant settings object.
@@ -46,7 +40,7 @@ export function showSaveFilePickerWith(
     // 2. Display a prompt to the user requesting that the user pick exactly one file. The displayed prompt should let the user pick one of the accepts options to filter the list of displayed files. Exactly how this is implemented, and what this prompt looks like is implementation-defined. If accepts options are displayed in the UI, the selected option should also be used to suggest an extension to append to a user provided file name, but this is not required. In particular user agents are free to ignore potentially dangerous suffixes such as those ending in ".lnk" or ".local".
     // When possible, this prompt should start out showing starting directory.
     // If options["suggestedName"] exists and is not null, the file picker prompt will be pre-filled with the options["suggestedName"] as the default name to save as. The interaction between the suggestedName and accepts options is implementation-defined. If the suggestedName is deemed too dangerous, user agents should ignore or sanitize the suggested file name, similar to the sanitization done when fetching something as a download.
-    const entry = openSaveFilePicker({
+    const entry = environment.userAgent.openSaveFileDialog({
       startingDirectory,
       suggestedName: options?.suggestedName,
       acceptsOptions,
@@ -71,7 +65,9 @@ export function showSaveFilePickerWith(
     // 8. Set result to a new FileSystemFileHandle associated with entry.
     const result = createNewFileSystemFileHandle({
       root,
-      locateEntry,
+      locateEntry(path) {
+        return environment.userAgent.locateEntry(root, path);
+      },
       observations: new Set(),
     }, new List([name]));
 
@@ -88,16 +84,7 @@ export function showSaveFilePickerWith(
   return p;
 }
 
-export function createShowSaveFilePicker(
-  environment: Environment,
-  locateEntry: LocateEntry,
-  openShowFilePicker: OpenSaveFilePicker,
-) {
+export function createShowSaveFilePicker(environment: Environment) {
   return (options?: SaveFilePickerOptions) =>
-    showSaveFilePickerWith(
-      environment,
-      locateEntry,
-      openShowFilePicker,
-      options,
-    );
+    showSaveFilePickerWith(environment, options);
 }

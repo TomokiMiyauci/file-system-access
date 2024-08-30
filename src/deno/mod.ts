@@ -1,1 +1,1 @@
-export { DenoAdaptor } from "./adaptor.ts";
+export { UserAgent } from "./adaptor.ts";

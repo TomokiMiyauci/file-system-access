@@ -9,18 +9,12 @@ import {
   determineDirectoryPickerStartIn,
   rememberPickedDirectory,
 } from "./starting_directory.ts";
-import type {
-  Environment,
-  LocateEntry,
-  OpenFileDialog,
-} from "./implementation_defined.ts";
+import type { Environment } from "./implementation_defined.ts";
 import type { OpenFilePickerOptions } from "./type.ts";
 import { Msg } from "./constant.ts";
 
 export function showOpenFilePickerWith(
   environment: Environment,
-  locateEntry: LocateEntry,
-  openFileDialog: OpenFileDialog,
   options: OpenFilePickerOptions = {},
 ): Promise<FileSystemFileHandle[]> {
   // 1. Let environment be this’s relevant settings object.
@@ -49,7 +43,7 @@ export function showOpenFilePickerWith(
     // When possible, this prompt should start out showing starting directory.
 
     // 3. Wait for the user to have made their selection.
-    const entries = openFileDialog({
+    const entries = environment.userAgent.openFileDialog({
       startingDirectory,
       acceptsOptions,
       multiple: options.multiple ?? false,
@@ -75,7 +69,9 @@ export function showOpenFilePickerWith(
       }
 
       const fileSystem = {
-        locateEntry,
+        locateEntry(path) {
+          return environment.userAgent.locateEntry(root, path);
+        },
         observations: new Set(),
         root,
       } satisfies FileSystem;
@@ -100,11 +96,7 @@ export function showOpenFilePickerWith(
   return p;
 }
 
-export function createShowOpenFilePicker(
-  environment: Environment,
-  locateEntry: LocateEntry,
-  open: OpenFileDialog,
-) {
+export function createShowOpenFilePicker(environment: Environment) {
   return (options?: OpenFilePickerOptions) =>
-    showOpenFilePickerWith(environment, locateEntry, open, options);
+    showOpenFilePickerWith(environment, options);
 }
