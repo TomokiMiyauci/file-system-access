@@ -4,7 +4,7 @@ import { Map } from "@miyauci/infra";
 import { join, parse } from "node:path";
 import { writeFileSync } from "node:fs";
 import { homedir } from "node:os";
-import type { FileSystemPath } from "@miyauci/fs";
+import type { FileSystemEntry, FileSystemPath } from "@miyauci/fs";
 import type {
   FileLocation,
   OpenDirectoryPicker,
@@ -20,7 +20,7 @@ export class UserAgent implements IUserAgent {
   openFileDialog: OpenFileDialog = openFileDialog;
   openDirectoryDialog: OpenDirectoryPicker = openDirectoryDialog;
 
-  locateEntry(root: string, path: FileSystemPath) {
+  locateEntry(root: string, path: FileSystemPath): FileSystemEntry | null {
     const fs = new BucketFileSystem(root);
 
     return fs.locateEntry(path);
