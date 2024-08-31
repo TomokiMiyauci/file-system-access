@@ -1,4 +1,8 @@
-import { FileSystemHandle, type FileSystemLocator } from "@miyauci/fs";
+import {
+  FileSystemHandle,
+  type FileSystemLocator,
+  isInBucketFileSystem,
+} from "@miyauci/fs";
 import { join } from "@std/path/join";
 import { Map } from "@miyauci/infra";
 import { format } from "@miyauci/format";
@@ -38,7 +42,7 @@ export function determineDirectoryPickerStartIn(
   const origin = environment.origin;
 
   // 4. If startIn is a FileSystemHandle and startIn is not in a bucket file system:
-  if (startIn instanceof FileSystemHandle && !isBucketFileSystem(startIn)) {
+  if (startIn instanceof FileSystemHandle && !isInBucketFileSystem(startIn)) {
     // 1. Let entry be the result of locating an entry given startIn’s locator.
     const locator = startIn["locator"];
 
@@ -110,8 +114,4 @@ export function rememberPickedDirectory(
     : join(locator.fileSystem.root, ...locator.path);
   // 4. Set recently picked directory map[origin][id] to the path on the local file system corresponding to entry, if such a path can be determined.
   recentlyPickedDirectoryMap.get(origin)!.set(id, path);
-}
-
-function isBucketFileSystem(handle: FileSystemHandle): boolean {
-  return handle["locator"].path[0] === "";
 }

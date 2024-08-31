@@ -8,7 +8,7 @@
     "@miyauci/file-system-access/deno": "./src/deno/mod.ts",
     "@miyauci/file-system-access/node": "./src/node/mod.ts",
     "@miyauci/format": "jsr:@miyauci/format@^1.1.0",
-    "@miyauci/fs": "jsr:@miyauci/fs@1.0.0-beta.13",
+    "@miyauci/fs": "jsr:@miyauci/fs@1.0.0-beta.15",
     "@miyauci/infra": "jsr:@miyauci/infra@^1.0.0",
     "@miyauci/permissions": "./src/permissions/mod.ts",
     "@miyauci/rfd": "jsr:@miyauci/rfd@^1.0.0-beta.12",

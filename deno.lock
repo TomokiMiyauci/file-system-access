@@ -6,6 +6,7 @@
       "jsr:@denosaurs/plug@^1.0.6": "jsr:@denosaurs/plug@1.0.6",
       "jsr:@miyauci/format@^1.1.0": "jsr:@miyauci/format@1.1.0",
       "jsr:@miyauci/fs@1.0.0-beta.13": "jsr:@miyauci/fs@1.0.0-beta.13",
+      "jsr:@miyauci/fs@1.0.0-beta.15": "jsr:@miyauci/fs@1.0.0-beta.15",
       "jsr:@miyauci/infra@^1.0.0": "jsr:@miyauci/infra@1.0.0",
       "jsr:@miyauci/node-esm-resolution@^1.0.0-beta.6": "jsr:@miyauci/node-esm-resolution@1.0.0-beta.6",
       "jsr:@miyauci/rfd@^1.0.0-beta.10": "jsr:@miyauci/rfd@1.0.0-beta.10",
@@ -53,6 +54,17 @@
           "jsr:@std/media-types@^1.0.2",
           "jsr:@std/path@^1.0.2",
           "npm:chokidar@^3.6.0"
+        ]
+      },
+      "@miyauci/fs@1.0.0-beta.15": {
+        "integrity": "06ac5ac41ea5552f0ec6907573234c38f55b3f6994c1f5cd3a50270c77fc1d41",
+        "dependencies": [
+          "jsr:@miyauci/format@^1.1.0",
+          "jsr:@miyauci/infra@^1.0.0",
+          "jsr:@std/bytes@^1.0.2",
+          "jsr:@std/fs@^1.0.1",
+          "jsr:@std/media-types@^1.0.2",
+          "jsr:@std/path@^1.0.2"
         ]
       },
       "@miyauci/infra@1.0.0": {
