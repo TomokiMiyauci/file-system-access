@@ -144,6 +144,12 @@ function isValidSuffixCodePoints(codePoint: number): boolean {
 }
 
 /**
+ * @throws {TypeError}
+ * - If {@link suffix} does not start with ".".
+ * - If {@link suffix} contains not [valid suffix code points](https://wicg.github.io/file-system-access/#valid-suffix-code-point).
+ * - If {@link suffix} ends with ".".
+ * - If {@link suffix} length is more than 16.
+ *
  * [File System Access](https://wicg.github.io/file-system-access/#validate-a-suffix)
  */
 export function validateSuffix(suffix: string): asserts suffix {
