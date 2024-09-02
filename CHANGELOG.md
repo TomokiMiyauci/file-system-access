@@ -1,3 +1,12 @@
+# [1.0.0-beta.23](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.22...1.0.0-beta.23) (2024-09-02)
+
+
+### Features
+
+* add override type signature to showOpenFilePicker ([43a12d0](https://github.com/TomokiMiyauci/file-system-access/commit/43a12d03cccfe9cd57528b50afea6e5d1fd45e00))
+* change export modules, remove user agent export ([e9442ab](https://github.com/TomokiMiyauci/file-system-access/commit/e9442abbf41d983007212256ef0e0910edb2a7b1))
+* update deps version, remove duplicated ([d941a4a](https://github.com/TomokiMiyauci/file-system-access/commit/d941a4a4a2808585bf0b19a6bf2b3b2a10bf6839))
+
 # [1.0.0-beta.22](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.21...1.0.0-beta.22) (2024-08-30)
 
 
