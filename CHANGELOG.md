@@ -1,3 +1,16 @@
+# [1.0.0-beta.24](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.23...1.0.0-beta.24) (2024-09-02)
+
+
+### Bug Fixes
+
+* **type:** fix to typo of WebIDL types ([a37f97a](https://github.com/TomokiMiyauci/file-system-access/commit/a37f97a8ff8d0ac9199f2bf0b7ed4b436be304a3))
+
+
+### Features
+
+* add querying permission before reading directory ([9ab4901](https://github.com/TomokiMiyauci/file-system-access/commit/9ab49011fdbc9e1cb4ca68dabcfe2faf61a5712b))
+* **file_system_handle:** add partial file system handle types ([eaadb72](https://github.com/TomokiMiyauci/file-system-access/commit/eaadb7229359eb64dc0f7f155c58e1707c15ec46))
+
 # [1.0.0-beta.23](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.22...1.0.0-beta.23) (2024-09-02)
 
 
