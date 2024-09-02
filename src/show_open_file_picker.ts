@@ -4,11 +4,12 @@ import {
   type FileSystemFileHandle,
 } from "@miyauci/fs";
 import { List, Set } from "@miyauci/infra";
-import { isTooSensitiveOrDangerous, processAcceptTypes } from "./algorithm.ts";
+import { isTooSensitiveOrDangerous } from "./algorithm.ts";
 import {
   determineDirectoryPickerStartIn,
+  processAcceptTypes,
   rememberPickedDirectory,
-} from "./starting_directory.ts";
+} from "./file_picker_option.ts";
 import type { Environment } from "./implementation_defined.ts";
 import type { OpenFilePickerOptions } from "./type.ts";
 import { Msg } from "./constant.ts";

@@ -5,11 +5,11 @@ import {
 import { List, Set } from "@miyauci/infra";
 import type { SaveFilePickerOptions } from "./type.ts";
 import type { Environment } from "./implementation_defined.ts";
-import { processAcceptTypes } from "./algorithm.ts";
 import {
   determineDirectoryPickerStartIn,
+  processAcceptTypes,
   rememberPickedDirectory,
-} from "./starting_directory.ts";
+} from "./file_picker_option.ts";
 import { Msg } from "./constant.ts";
 
 export function showSaveFilePickerWith(

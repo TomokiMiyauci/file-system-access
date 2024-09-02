@@ -8,7 +8,7 @@ import { isTooSensitiveOrDangerous } from "./algorithm.ts";
 import {
   determineDirectoryPickerStartIn,
   rememberPickedDirectory,
-} from "./starting_directory.ts";
+} from "./file_picker_option.ts";
 import type {
   DirectoryPickerOptions,
   FileSystemPermissionDescriptor,
