@@ -62,7 +62,9 @@ export interface UserAgent {
   openFileDialog: OpenFileDialog;
   openSaveFileDialog: OpenSaveFilePicker;
   locateEntry: LocateEntry;
-  query(desc: FileSystemPermissionDescriptor): "granted" | "denied" | "prompt";
+  requestPermissionToUse(
+    desc: FileSystemPermissionDescriptor,
+  ): "granted" | "denied";
 
   /**
    * [File System Access](https://wicg.github.io/file-system-access/#enumdef-wellknowndirectory)

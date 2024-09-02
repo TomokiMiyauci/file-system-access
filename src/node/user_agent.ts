@@ -86,7 +86,7 @@ export class UserAgent implements IUserAgent {
     return toLoc(path);
   }
 
-  query(): "granted" | "denied" | "prompt" {
+  requestPermissionToUse(): "granted" | "denied" {
     return "granted";
   }
 

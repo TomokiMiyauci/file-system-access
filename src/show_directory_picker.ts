@@ -90,11 +90,11 @@ export function showDirectoryPickerWith(
     } satisfies FileSystemPermissionDescriptor;
 
     // 13. Let status be the result of running create a PermissionStatus for desc.
-    const status = environment.userAgent.query(desc);
 
     // 14. Perform the activation notification steps in global’s browsing context.
 
     // 15. Request permission to use desc.
+    const status = environment.userAgent.requestPermissionToUse(desc);
 
     // 16. Run the default permission query algorithm on desc and status.
 
