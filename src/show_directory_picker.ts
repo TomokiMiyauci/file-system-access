@@ -114,8 +114,3 @@ export function showDirectoryPickerWith(
   // 7. Return p.
   return p;
 }
-
-export function createShowDirectoryPicker(environment: Environment) {
-  return (options?: DirectoryPickerOptions) =>
-    showDirectoryPickerWith(environment, options);
-}

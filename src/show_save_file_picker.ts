@@ -83,8 +83,3 @@ export function showSaveFilePickerWith(
   // 8. Return p.
   return p;
 }
-
-export function createShowSaveFilePicker(environment: Environment) {
-  return (options?: SaveFilePickerOptions) =>
-    showSaveFilePickerWith(environment, options);
-}

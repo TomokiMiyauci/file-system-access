@@ -95,8 +95,3 @@ export function showOpenFilePickerWith(
   // 8. Return p.
   return p;
 }
-
-export function createShowOpenFilePicker(environment: Environment) {
-  return (options?: OpenFilePickerOptions) =>
-    showOpenFilePickerWith(environment, options);
-}
