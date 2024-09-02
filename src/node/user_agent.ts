@@ -1,5 +1,5 @@
 import { BucketFileSystem } from "@miyauci/fs/node";
-import { FileDialog } from "@miyauci/rfd/node";
+import { FileDialog, load } from "@miyauci/rfd/node";
 import { Map } from "@miyauci/infra";
 import { join, parse } from "node:path";
 import { writeFileSync } from "node:fs";
@@ -13,6 +13,8 @@ import type {
   UserAgent as IUserAgent,
   WellKnownDirectoryMap as IWellKnownDirectoryMap,
 } from "../implementation_defined.ts";
+
+await load();
 
 export class UserAgent implements IUserAgent {
   openFileDialog(options: OpenFileDialogOptions): FileLocation[] | null {

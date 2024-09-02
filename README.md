@@ -5,44 +5,29 @@ spec reference implementation.
 
 ## Usage
 
-`createFileSystemAccess` binds the
-[File System Access API](https://wicg.github.io/file-system-access/). This
-requires [user agent](#user-agent).
-
 ```ts
 import {
-  createFileSystemAccess,
-  type UserAgent,
-} from "@miyauci/file-system-access";
-
-declare const UA: UserAgent;
-const { showOpenFilePicker } = createFileSystemAccess(UA);
+  showDirectoryPicker,
+  showOpenFilePicker,
+  showSaveFilePicker,
+} from "@miyauci/file-system-access/$RUNTIME";
 
 const [handle] = await showOpenFilePicker();
 ```
 
-`createFileSystemAccess` returns the following API:
+### Deno
 
-- [showOpenFilePicker](https://wicg.github.io/file-system-access/#api-showopenfilepicker)
-- [showSaveFilePicker](https://wicg.github.io/file-system-access/#api-showsavefilepicker)
-- [showDirectoryPicker](https://wicg.github.io/file-system-access/#api-showdirectorypicker)
+#### Unstable Features Flag
 
-### User Agent
-
-`UserAgent` is different for each runtime. Only execution at the respective
-runtime is guaranteed.
-
-#### Deno
-
-```ts
-import { UserAgent } from "@miyauci/file-system-access/deno";
-
-const UA = new UserAgent();
-```
-
-When using `UserAgent`, the following flags are required.
+The following flags are required.
 
 - `--unstable-ffi`
+
+```ts
+import { showSaveFilePicker } from "@miyauci/file-system-access/deno";
+
+const handle = await showSaveFilePicker();
+```
 
 ##### Permission Flags
 
@@ -57,9 +42,9 @@ It also requires the following permission.
 #### Node.js
 
 ```ts
-import { UserAgent } from "@miyauci/file-system-access/node";
+import { showDirectoryPicker } from "@miyauci/file-system-access/node";
 
-const UA = new UserAgent();
+const dir = await showDirectoryPicker();
 ```
 
 ## Contributing

@@ -7,11 +7,12 @@
     "@miyauci/file-system-access": "./src/mod.ts",
     "@miyauci/file-system-access/deno": "./src/deno/mod.ts",
     "@miyauci/file-system-access/node": "./src/node/mod.ts",
+    "@miyauci/file-system-access/$RUNTIME": "./src/deno/mod.ts",
     "@miyauci/format": "jsr:@miyauci/format@^1.1.0",
     "@miyauci/fs": "jsr:@miyauci/fs@1.0.0-beta.15",
     "@miyauci/infra": "jsr:@miyauci/infra@^1.0.0",
     "@miyauci/permissions": "./src/permissions/mod.ts",
-    "@miyauci/rfd": "jsr:@miyauci/rfd@^1.0.0-beta.12",
+    "@miyauci/rfd": "jsr:@miyauci/rfd@^1.0.0-beta.17",
     "@std/bytes": "jsr:@std/bytes@^1.0.2",
     "@std/media-types": "jsr:@std/media-types@^1.0.2",
     "@std/path": "jsr:@std/path@^1.0.1"

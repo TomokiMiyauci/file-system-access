@@ -1,5 +1,5 @@
 import { BucketFileSystem } from "@miyauci/fs/deno";
-import { FileDialog } from "@miyauci/rfd/deno";
+import { FileDialog, load } from "@miyauci/rfd/deno";
 import { parse } from "@std/path/parse";
 import { Map } from "@miyauci/infra";
 import { homedir } from "node:os";
@@ -13,6 +13,8 @@ import type {
   UserAgent as IUserAgent,
   WellKnownDirectoryMap as IWellKnownDirectoryMap,
 } from "../implementation_defined.ts";
+
+await load();
 
 export class UserAgent implements IUserAgent {
   openFileDialog(options: OpenFileDialogOptions): FileLocation[] | null {
