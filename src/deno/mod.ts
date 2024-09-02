@@ -18,6 +18,14 @@ const environment = {
   userAgent: new UserAgent(),
 } satisfies Environment;
 
+/** Shows a file picker that lets a user select a single existing file, returning a handle for the selected file. */
+export function showOpenFilePicker(
+  options?: OpenFilePickerOptions & { multiple?: false },
+): Promise<[FileSystemFileHandle]>;
+/** Shows a file picker that lets a user select multiple existing files, returning handles for the selected files. */
+export function showOpenFilePicker(
+  options?: OpenFilePickerOptions & { multiple?: true },
+): Promise<FileSystemFileHandle[]>;
 export function showOpenFilePicker(
   options?: OpenFilePickerOptions,
 ): Promise<FileSystemFileHandle[]> {
