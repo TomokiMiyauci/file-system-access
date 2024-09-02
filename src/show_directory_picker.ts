@@ -9,7 +9,10 @@ import {
   determineDirectoryPickerStartIn,
   rememberPickedDirectory,
 } from "./starting_directory.ts";
-import type { DirectoryPickerOptions } from "./type.ts";
+import type {
+  DirectoryPickerOptions,
+  FileSystemPermissionDescriptor,
+} from "./type.ts";
 import type { Environment } from "./implementation_defined.ts";
 import { Msg } from "./constant.ts";
 
@@ -77,16 +80,17 @@ export function showDirectoryPickerWith(
     rememberPickedDirectory(options?.id, result["locator"], environment);
 
     // 9. Let desc be a FileSystemPermissionDescriptor.
-    // 10. Set desc["name"] to "file-system".
-    // 11. Set desc["handle"] to result.
-    // 12. Set desc["mode"] to options["mode"].
-    // const desc = {
-    //   // name: "file-system",
-    //   handle: result,
-    //   // mode,
-    // } satisfies FileSystemPermissionDescriptor;
+    const desc = {
+      // 10. Set desc["name"] to "file-system".
+      name: "file-system",
+      // 11. Set desc["handle"] to result.
+      handle: result,
+      // 12. Set desc["mode"] to options["mode"].
+      mode: options?.mode ?? "read",
+    } satisfies FileSystemPermissionDescriptor;
 
     // 13. Let status be the result of running create a PermissionStatus for desc.
+    const status = environment.userAgent.query(desc);
 
     // 14. Perform the activation notification steps in global’s browsing context.
 
@@ -95,6 +99,11 @@ export function showDirectoryPickerWith(
     // 16. Run the default permission query algorithm on desc and status.
 
     // 17. If status is not "granted", reject result with a "AbortError" DOMException and abort.
+    if (status !== "granted") {
+      return reject(
+        new DOMException("The user aborted a request.", "AbortError"),
+      );
+    }
 
     // 18. Perform the activation notification steps in global’s browsing context.
 

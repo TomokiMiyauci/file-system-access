@@ -1,6 +1,9 @@
 import type { FileSystemEntry, FileSystemPath } from "@miyauci/fs";
 import type { Map } from "@miyauci/infra";
-import type { FilePickerAcceptType } from "./type.ts";
+import type {
+  FilePickerAcceptType,
+  FileSystemPermissionDescriptor,
+} from "./type.ts";
 
 export interface Options {
   startingDirectory: string;
@@ -59,6 +62,7 @@ export interface UserAgent {
   openFileDialog: OpenFileDialog;
   openSaveFileDialog: OpenSaveFilePicker;
   locateEntry: LocateEntry;
+  query(desc: FileSystemPermissionDescriptor): "granted" | "denied" | "prompt";
 
   /**
    * [File System Access](https://wicg.github.io/file-system-access/#enumdef-wellknowndirectory)

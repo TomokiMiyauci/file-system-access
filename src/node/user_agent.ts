@@ -86,6 +86,10 @@ export class UserAgent implements IUserAgent {
     return toLoc(path);
   }
 
+  query(): "granted" | "denied" | "prompt" {
+    return "granted";
+  }
+
   locateEntry(root: string, path: FileSystemPath): FileSystemEntry | null {
     const fs = new BucketFileSystem(root);
 

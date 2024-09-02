@@ -13,6 +13,10 @@ import type {
   UserAgent as IUserAgent,
   WellKnownDirectoryMap as IWellKnownDirectoryMap,
 } from "../implementation_defined.ts";
+import {
+  FileSystemPermissionDescriptor,
+  FileSystemPermissionMode,
+} from "../type.ts";
 
 await load();
 
@@ -89,6 +93,31 @@ export class UserAgent implements IUserAgent {
     Deno.writeFileSync(path, new Uint8Array());
 
     return toLoc(path);
+  }
+
+  query(desc: FileSystemPermissionDescriptor): "granted" | "denied" | "prompt" {
+    const { fileSystem } = desc.handle["locator"];
+    const path = join(fileSystem.root, ...desc.handle["locator"].path);
+
+    switch (desc.mode) {
+      case "read": {
+        const result = Deno.permissions.requestSync({ name: "read", path });
+
+        return result.state;
+      }
+      case "readwrite": {
+        const result = Deno.permissions.requestSync({ name: "read", path });
+
+        if (result.state !== "granted") return result.state;
+
+        const writeResult = Deno.permissions.requestSync({
+          name: "write",
+          path,
+        });
+
+        return writeResult.state;
+      }
+    }
   }
 
   locateEntry(root: string, path: FileSystemPath): FileSystemEntry | null {
