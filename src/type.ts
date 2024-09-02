@@ -141,5 +141,5 @@ export interface SaveFilePickerOptions extends FilePickerOptions {
    *
    * [File System Access](https://wicg.github.io/file-system-access/#dom-savefilepickeroptions-suggestedname)
    */
-  suggestedName?: string;
+  suggestedName?: string | null;
 }

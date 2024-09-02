@@ -20,7 +20,7 @@ export interface OpenDirectoryPicker {
 }
 
 export interface OpenSaveFilePickerOptions extends Options {
-  suggestedName?: string;
+  suggestedName: string | undefined | null;
   acceptsOptions: AcceptOption[];
 }
 
