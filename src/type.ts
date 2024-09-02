@@ -1,5 +1,5 @@
 import type { FileSystemHandle } from "@miyauci/fs";
-import type { PermissionDescriptor } from "./permissions/type.ts";
+import type { PermissionDescriptor } from "@miyauci/permissions";
 
 /**
  * [File System Access](https://wicg.github.io/file-system-access/#dictdef-filepickeroptions)
