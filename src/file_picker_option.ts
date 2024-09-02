@@ -5,33 +5,13 @@ import {
 } from "@miyauci/fs";
 import { join } from "@std/path/join";
 import { Map } from "@miyauci/infra";
-import { parseMediaType } from "@std/media-types/parse-media-type";
 import { format } from "@miyauci/format";
+import { parseMIMEType } from "@miyauci/mimesniff";
 import { isValidSuffixCodePoints } from "./algorithm.ts";
 import { Msg } from "./constant.ts";
 import type { FilePickerOptions, StartInDirectory } from "./type.ts";
 import type { AcceptOption } from "./implementation_defined.ts";
 import type { Environment } from "./implementation_defined.ts";
-
-interface MIMEType {
-  type: string;
-  subtype: string;
-  essence: string;
-  parameters: Record<string, string>;
-}
-
-function parse(input: string): MIMEType {
-  const [essence, parameters = {}] = parseMediaType(input);
-  const [type, subtype] = divideBy(essence, "/");
-
-  return { type, subtype, essence, parameters };
-}
-
-function divideBy(input: string, divider: string): [string, string] {
-  const [head, ...tails] = input.split(divider);
-
-  return [head, tails.join("")];
-}
 
 export function processAcceptTypes(options: FilePickerOptions): AcceptOption[] {
   // 1. Let accepts options be a empty list of tuples consisting of a description and a filter.
@@ -42,7 +22,7 @@ export function processAcceptTypes(options: FilePickerOptions): AcceptOption[] {
     // 1. For each typeString → suffixes of type["accept"]:
     for (const [typeString, suffixes] of Object.entries(type.accept)) {
       // 1. Let parsedType be the result of parse a MIME type with typeString.
-      const parsedType = parse(typeString);
+      const parsedType = parseMIMEType(typeString);
 
       // 2. If parsedType is failure, then throw a TypeError.
 
