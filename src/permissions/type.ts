@@ -8,4 +8,5 @@ export type PermissionName =
   | "persistent-storage"
   | "push"
   | "screen-wake-lock"
-  | "xr-spatial-tracking";
+  | "xr-spatial-tracking"
+  | "file-system";
