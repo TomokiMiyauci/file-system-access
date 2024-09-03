@@ -254,7 +254,7 @@ export function rememberPickedDirectory(
   id ??= "";
 
   const path = locator.kind === "file"
-    ? join(locator.fileSystem.root, ...[...locator.path].slice(1))
+    ? join(locator.fileSystem.root, ...[...locator.path].slice(0, -1))
     : join(locator.fileSystem.root, ...locator.path);
   // 4. Set recently picked directory map[origin][id] to the path on the local file system corresponding to entry, if such a path can be determined.
   recentlyPickedDirectoryMap.get(origin)!.set(id, path);
