@@ -1,3 +1,17 @@
+# [1.0.0-beta.25](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.24...1.0.0-beta.25) (2024-09-03)
+
+
+### Bug Fixes
+
+* **file_picker_option:** fix local file system path algorithm ([6677643](https://github.com/TomokiMiyauci/file-system-access/commit/6677643604880291d29c948ca4ad1f17813f4dc7))
+* **file_picker_option:** fix to validate path id ([c2be789](https://github.com/TomokiMiyauci/file-system-access/commit/c2be789f187739fb0b7904361aa141adcf65c63d))
+
+
+### Features
+
+* **drag_and_drop:** add definition for `DataTransferItem` ([d55de68](https://github.com/TomokiMiyauci/file-system-access/commit/d55de68a1349d363136e748b0ae7f98522a91da4))
+* export related types ([5557751](https://github.com/TomokiMiyauci/file-system-access/commit/5557751dc20b952ef2b54fb0796dd3f4e241f307))
+
 # [1.0.0-beta.24](https://github.com/TomokiMiyauci/file-system-access/compare/1.0.0-beta.23...1.0.0-beta.24) (2024-09-02)
 
 
