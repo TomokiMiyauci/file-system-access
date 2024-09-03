@@ -13,6 +13,23 @@ import type { FilePickerOptions, StartInDirectory } from "./type.ts";
 import type { AcceptOption } from "./implementation_defined.ts";
 import type { Environment } from "./implementation_defined.ts";
 
+/**
+ * [File System Access](https://wicg.github.io/file-system-access/#recently-picked-directory-map)
+ */
+export type RecentlyPickedDirectoryMap = Map<unknown, PathIdMap>;
+
+/** A {@link Map map} of {@link ValidPathId valid path} ids to paths.
+ *
+ * [File System Access](https://wicg.github.io/file-system-access/#path-id-map)
+ */
+export type PathIdMap = Map<ValidPathId, string>;
+
+/** A string where each character is [ASCII alphanumeric](https://infra.spec.whatwg.org/#ascii-alphanumeric) or "_" or "-".
+ *
+ * [File System Access](https://wicg.github.io/file-system-access/#valid-path-id)
+ */
+export type ValidPathId = string;
+
 export function processAcceptTypes(options: FilePickerOptions): AcceptOption[] {
   // 1. Let accepts options be a empty list of tuples consisting of a description and a filter.
   const acceptsOptions: AcceptOption[] = [];
@@ -142,10 +159,7 @@ export function validateSuffix(suffix: string): asserts suffix {
   }
 }
 
-/**
- * [File System Access](https://wicg.github.io/file-system-access/#valid-path-id)
- */
-export function isValidPathId(id: string): boolean {
+function isValidPathId(id: string): id is ValidPathId {
   return /^[a-zA-Z0-9_-]+$/.test(id);
 }
 

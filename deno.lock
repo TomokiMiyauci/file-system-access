@@ -11,17 +11,24 @@
       "jsr:@miyauci/rfd@^1.0.0-beta.10": "jsr:@miyauci/rfd@1.0.0-beta.10",
       "jsr:@miyauci/rfd@^1.0.0-beta.17": "jsr:@miyauci/rfd@1.0.0-beta.17",
       "jsr:@std/assert@^0.221.0": "jsr:@std/assert@0.221.0",
+      "jsr:@std/assert@^1.0.3": "jsr:@std/assert@1.0.3",
       "jsr:@std/bytes@^1.0.2": "jsr:@std/bytes@1.0.2",
       "jsr:@std/collections@^0.221.0": "jsr:@std/collections@0.221.0",
+      "jsr:@std/data-structures@^1.0.2": "jsr:@std/data-structures@1.0.2",
       "jsr:@std/encoding@^0.221.0": "jsr:@std/encoding@0.221.0",
+      "jsr:@std/expect@^1.0.1": "jsr:@std/expect@1.0.1",
       "jsr:@std/fmt@^0.221.0": "jsr:@std/fmt@0.221.0",
       "jsr:@std/fs@^0.221.0": "jsr:@std/fs@0.221.0",
       "jsr:@std/fs@^1.0.1": "jsr:@std/fs@1.0.2",
+      "jsr:@std/fs@^1.0.2": "jsr:@std/fs@1.0.2",
+      "jsr:@std/internal@^1.0.2": "jsr:@std/internal@1.0.2",
       "jsr:@std/media-types@^1.0.2": "jsr:@std/media-types@1.0.3",
       "jsr:@std/path@^0.221.0": "jsr:@std/path@0.221.0",
       "jsr:@std/path@^1.0.1": "jsr:@std/path@1.0.3",
       "jsr:@std/path@^1.0.2": "jsr:@std/path@1.0.3",
+      "jsr:@std/path@^1.0.3": "jsr:@std/path@1.0.3",
       "jsr:@std/regexp@^0.221.0": "jsr:@std/regexp@0.221.0",
+      "jsr:@std/testing@^1.0.1": "jsr:@std/testing@1.0.1",
       "jsr:@std/url@^0.221.0": "jsr:@std/url@0.221.0",
       "npm:@types/node": "npm:@types/node@18.16.19",
       "npm:chokidar@^3.6.0": "npm:chokidar@3.6.0",
@@ -87,14 +94,30 @@
       "@std/assert@0.221.0": {
         "integrity": "a5f1aa6e7909dbea271754fd4ab3f4e687aeff4873b4cef9a320af813adb489a"
       },
+      "@std/assert@1.0.3": {
+        "integrity": "b0d03ce1ced880df67132eea140623010d415848df66f6aa5df76507ca7c26d8",
+        "dependencies": [
+          "jsr:@std/internal@^1.0.2"
+        ]
+      },
       "@std/bytes@1.0.2": {
         "integrity": "fbdee322bbd8c599a6af186a1603b3355e59a5fb1baa139f8f4c3c9a1b3e3d57"
       },
       "@std/collections@0.221.0": {
         "integrity": "789a365bb79b06c4da79d2b93fe32ddfe03b93ab083e72c1de96303d12f84be5"
       },
+      "@std/data-structures@1.0.2": {
+        "integrity": "d586efced05ed91923514a192996d23673f32f695f7ebc37f0cc1e17928be600"
+      },
       "@std/encoding@0.221.0": {
         "integrity": "d1dd76ef0dc5d14088411e6dc1dede53bf8308c95d1537df1214c97137208e45"
+      },
+      "@std/expect@1.0.1": {
+        "integrity": "44075d9c2cb701ddfc4d5a260da2fb26ba3cfd94c45d3a0359f63cabbf85a058",
+        "dependencies": [
+          "jsr:@std/assert@^1.0.3",
+          "jsr:@std/internal@^1.0.2"
+        ]
       },
       "@std/fmt@0.221.0": {
         "integrity": "379fed69bdd9731110f26b9085aeb740606b20428ce6af31ef6bd45ef8efa62a"
@@ -110,7 +133,13 @@
         "integrity": "d6914ca2c21abe591f733b31dbe6331e446815e513e2451b3b9e472daddfefcb"
       },
       "@std/fs@1.0.2": {
-        "integrity": "af57555c7a224a6f147d5cced5404692974f7a628ced8eda67e0d22d92d474ec"
+        "integrity": "af57555c7a224a6f147d5cced5404692974f7a628ced8eda67e0d22d92d474ec",
+        "dependencies": [
+          "jsr:@std/path@^1.0.3"
+        ]
+      },
+      "@std/internal@1.0.2": {
+        "integrity": "f4cabe2021352e8bfc24e6569700df87bf070914fc38d4b23eddd20108ac4495"
       },
       "@std/media-types@1.0.2": {
         "integrity": "abb78dc8f7d88141cba8c4d60fc1e8b421e5c7b0d7c84f2f708bc666cad46784"
@@ -135,6 +164,16 @@
       },
       "@std/regexp@0.221.0": {
         "integrity": "6ef49d56386414ed448252aeda15573087b69eb2c4b59dd7390506cc76ac7f6d"
+      },
+      "@std/testing@1.0.1": {
+        "integrity": "9c25841137ee818933e1722091bb9ed5fdc251c35e84c97979a52196bdb6c5c3",
+        "dependencies": [
+          "jsr:@std/assert@^1.0.3",
+          "jsr:@std/data-structures@^1.0.2",
+          "jsr:@std/fs@^1.0.2",
+          "jsr:@std/internal@^1.0.2",
+          "jsr:@std/path@^1.0.3"
+        ]
       },
       "@std/url@0.221.0": {
         "integrity": "ff19961e6ef86c934cffb788a3e8cd1db7460729c88acf6d5cd4daab52cfa1ad",
@@ -292,8 +331,10 @@
       "jsr:@miyauci/infra@^1.0.0",
       "jsr:@miyauci/rfd@^1.0.0-beta.17",
       "jsr:@std/bytes@^1.0.2",
+      "jsr:@std/expect@^1.0.1",
       "jsr:@std/media-types@^1.0.2",
-      "jsr:@std/path@^1.0.1"
+      "jsr:@std/path@^1.0.1",
+      "jsr:@std/testing@^1.0.1"
     ]
   }
 }
