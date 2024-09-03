@@ -1,6 +1,12 @@
-import { describe, it } from "@std/testing/bdd";
+import { beforeEach, describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
-import { validateSuffix } from "./file_picker_option.ts";
+import { createNewFileSystemHandle } from "@miyauci/fs";
+import {
+  determineDirectoryPickerStartIn,
+  validateSuffix,
+} from "./file_picker_option.ts";
+import type { Environment } from "./implementation_defined.ts";
+import { List, Map, Set } from "@miyauci/infra";
 
 describe("validateSuffix", () => {
   it("should throw error if suffix does not start with period", () => {
@@ -30,4 +36,187 @@ describe("validateSuffix", () => {
       expect(validateSuffix(suffix)).toBeFalsy();
     }
   });
+});
+
+describe("determineDirectoryPickerStartIn", () => {
+  interface Context {
+    env: Environment;
+  }
+  beforeEach<Context>(function () {
+    this.env = {
+      origin: {},
+      userAgent: {
+        defaultPath: "/",
+        locateEntry() {
+          return null;
+        },
+        openDirectoryDialog() {
+          return null;
+        },
+        openFileDialog() {
+          return null;
+        },
+        openSaveFileDialog() {
+          return null;
+        },
+        requestPermissionToUse() {
+          return "granted";
+        },
+        recentlyPickedDirectoryMap: new Map(),
+        wellKnownDirectories: {
+          desktop: "/desktop",
+          documents: "/documents",
+          downloads: "/downloads",
+          music: "/music",
+          pictures: "/pictures",
+          videos: "/videos",
+        },
+      },
+    } satisfies Environment;
+  });
+
+  it<Context>("should throw error if id is invalid", function () {
+    expect(() => determineDirectoryPickerStartIn(" ", "desktop", this.env))
+      .toThrow(TypeError);
+  });
+
+  it<Context>("should throw error if id is greater than 32", function () {
+    expect(() =>
+      determineDirectoryPickerStartIn("a".repeat(33), "desktop", this.env)
+    ).toThrow(TypeError);
+  });
+
+  it<Context>("should return default path", function () {
+    expect(
+      determineDirectoryPickerStartIn(undefined, undefined, this.env),
+    ).toBe(this.env.userAgent.defaultPath);
+  });
+
+  it<Context>("should return default path if id does not exist", function () {
+    expect(
+      determineDirectoryPickerStartIn("", undefined, this.env),
+    ).toBe(this.env.userAgent.defaultPath);
+  });
+
+  it<Context>(
+    "should return desktop path if startIn is wellknown directory",
+    function () {
+      expect(
+        determineDirectoryPickerStartIn("", "desktop", this.env),
+      ).toBe(this.env.userAgent.wellKnownDirectories.desktop);
+    },
+  );
+
+  it<Context>(
+    "should return recently picked directory path if id provided",
+    function () {
+      const id = "";
+      const pathIdMap = new Map<string, string>();
+      pathIdMap.set(id, "/default");
+      this.env.userAgent.recentlyPickedDirectoryMap.set(
+        this.env.origin,
+        pathIdMap,
+      );
+
+      expect(
+        determineDirectoryPickerStartIn(id, undefined, this.env),
+      ).toBe("/default");
+    },
+  );
+
+  it<Context>(
+    "should return recently picked directory path if id provided 2",
+    function () {
+      const id = "abcd";
+      const pathIdMap = new Map<string, string>();
+      pathIdMap.set(id, "/default");
+      this.env.userAgent.recentlyPickedDirectoryMap.set(
+        this.env.origin,
+        pathIdMap,
+      );
+
+      expect(
+        determineDirectoryPickerStartIn(id, undefined, this.env),
+      ).toBe("/default");
+    },
+  );
+
+  it<Context>(
+    "should return recently picked directory path",
+    function () {
+      const pathIdMap = new Map<string, string>();
+      pathIdMap.set("", "/default");
+      this.env.userAgent.recentlyPickedDirectoryMap.set(
+        this.env.origin,
+        pathIdMap,
+      );
+
+      expect(
+        determineDirectoryPickerStartIn(undefined, undefined, this.env),
+      ).toBe("/default");
+    },
+  );
+
+  it<Context>(
+    "should return parent local file system path via file handle",
+    function () {
+      const fileSystemHandle = createNewFileSystemHandle(
+        {
+          locateEntry() {
+            return null;
+          },
+          observations: new Set(),
+          root: "/path/to",
+        },
+        new List(["dir", "file.txt"]),
+        "file",
+      );
+
+      expect(
+        determineDirectoryPickerStartIn(undefined, fileSystemHandle, this.env),
+      ).toBe("/path/to/dir");
+    },
+  );
+
+  it<Context>(
+    "should return local file system path via directory handle",
+    function () {
+      const fileSystemHandle = createNewFileSystemHandle(
+        {
+          locateEntry() {
+            return null;
+          },
+          observations: new Set(),
+          root: "/path/to",
+        },
+        new List(["dir", "file.txt"]),
+        "directory",
+      );
+
+      expect(
+        determineDirectoryPickerStartIn(undefined, fileSystemHandle, this.env),
+      ).toBe("/path/to/dir/file.txt");
+    },
+  );
+
+  it<Context>(
+    "should skip file system handle if this is in bucket file system",
+    function () {
+      const fileSystemHandle = createNewFileSystemHandle(
+        {
+          locateEntry() {
+            return null;
+          },
+          observations: new Set(),
+          root: "/path/to",
+        },
+        new List(["", "dir", "file.txt"]),
+        "directory",
+      );
+
+      expect(
+        determineDirectoryPickerStartIn(undefined, fileSystemHandle, this.env),
+      ).toBe(this.env.userAgent.defaultPath);
+    },
+  );
 });

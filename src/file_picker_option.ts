@@ -1,8 +1,4 @@
-import {
-  FileSystemHandle,
-  type FileSystemLocator,
-  isInBucketFileSystem,
-} from "@miyauci/fs";
+import { type FileSystemLocator, isInBucketFileSystem } from "@miyauci/fs";
 import { join } from "@std/path/join";
 import { Map } from "@miyauci/infra";
 import { format } from "@miyauci/format";
@@ -160,7 +156,7 @@ export function validateSuffix(suffix: string): asserts suffix {
 }
 
 function isValidPathId(id: string): id is ValidPathId {
-  return /^[a-zA-Z0-9_-]+$/.test(id);
+  return /^[a-zA-Z0-9_-]*$/.test(id);
 }
 
 /**
@@ -188,13 +184,15 @@ export function determineDirectoryPickerStartIn(
   const origin = environment.origin;
 
   // 4. If startIn is a FileSystemHandle and startIn is not in a bucket file system:
-  if (startIn instanceof FileSystemHandle && !isInBucketFileSystem(startIn)) {
+  if (
+    startIn && typeof startIn !== "string" && !isInBucketFileSystem(startIn)
+  ) {
     // 1. Let entry be the result of locating an entry given startIn’s locator.
     const locator = startIn["locator"];
 
     // 2. If entry is a file entry, return the path of entry’s parent in the local file system.
     if (locator.kind === "file") {
-      return join(locator.fileSystem.root, ...[...locator.path].slice(1));
+      return join(locator.fileSystem.root, ...[...locator.path].slice(0, -1));
     }
 
     // 3. If entry is a directory entry, return entry’s path in the local file system.
