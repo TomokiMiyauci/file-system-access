@@ -101,7 +101,7 @@ export function showDirectoryPickerWith(
     // 17. If status is not "granted", reject result with a "AbortError" DOMException and abort.
     if (status !== "granted") {
       return reject(
-        new DOMException("The user aborted a request.", "AbortError"),
+        new DOMException(Msg.AbortRequest, "AbortError"),
       );
     }
 
